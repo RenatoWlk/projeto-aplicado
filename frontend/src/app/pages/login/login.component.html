@@ -1,1 +1,24 @@
-<p>login works!</p>
+<div class="login-container">
+  <form class="login-box" (ngSubmit)="login()" [formGroup]="loginForm">
+    <h2>Bem-vindo</h2>
+
+    <div class="input-group">
+      <label for="login">Login (email ou usuário)</label>
+      <input type="text" id="login" formControlName="login" required />
+    </div>
+
+    <div class="input-group">
+      <label for="password">Senha</label>
+      <input type="password" id="password" formControlName="password" required />
+    </div>
+
+    <div class="actions">
+      <button type="submit">Entrar</button>
+      <a href="#" class="forgot">Esqueci minha senha</a>
+    </div>
+
+    <div class="divider"></div>
+
+    <button type="button" class="register" (click)="goToRegister()">Criar Conta</button>
+  </form>
+</div>

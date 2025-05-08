@@ -1,0 +1,115 @@
+$primary-color: #2575fc;
+$primary-hover: #1a5ed9;
+$error-color: red;
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #6a11cb, $primary-color);
+  height: 100vh;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  .login-box {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #444;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        transition: border 0.3s;
+
+        &:focus {
+          border-color: $primary-color;
+          outline: none;
+        }
+      }
+
+      .error {
+        color: $error-color;
+        font-size: 13px;
+        margin-top: 4px;
+      }
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+
+      button {
+        background-color: $primary-color;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: $primary-hover;
+        }
+      }
+
+      .forgot {
+        color: $primary-color;
+        font-size: 14px;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .divider {
+      border-top: 1px solid #ddd;
+      margin: 20px 0;
+    }
+
+    .register {
+      width: 100%;
+      background-color: #fff;
+      color: $primary-color;
+      padding: 10px;
+      border: 2px solid $primary-color;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        background-color: #f0f8ff;
+      }
+    }
+  }
+}
