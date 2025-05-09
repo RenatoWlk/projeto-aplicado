@@ -1,0 +1,74 @@
+# ============================
+# GLOBAL
+# ============================
+HELP.md
+*.log
+*.env
+.env.local
+.DS_Store
+Thumbs.db
+
+# ============================
+# BACKEND - Java / Spring Boot
+# ============================
+.gradle
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Gradle
+.gradle/
+build/
+gradlew
+gradlew.bat
+
+# Java Binaries
+bin
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Spring Tool Suite (STS)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ============================
+# FRONTEND - Angular
+# ============================
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.angular/cache/
+/frontend/.angular/config.json
+/frontend/.env
+/frontend/.env.*.local
+
+# npm / yarn logs
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+# Angular build artifacts
+/frontend/.output/
+
+# VS Code
+.vscode/
