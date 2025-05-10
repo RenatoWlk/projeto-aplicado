@@ -1,7 +1,7 @@
 package com.projeto.aplicado.backend.controller;
 
-import com.projeto.aplicado.backend.dto.AuthRequest;
-import com.projeto.aplicado.backend.dto.AuthResponse;
+import com.projeto.aplicado.backend.dto.auth.AuthRequest;
+import com.projeto.aplicado.backend.dto.auth.AuthResponse;
 import com.projeto.aplicado.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
     private final AuthService authService;
 
     @PostMapping("/login")

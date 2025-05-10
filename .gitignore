@@ -7,6 +7,7 @@ HELP.md
 .env.local
 .DS_Store
 Thumbs.db
+frontend/yarn.lock
 
 # ============================
 # BACKEND - Java / Spring Boot
