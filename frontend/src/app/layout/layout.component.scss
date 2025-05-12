@@ -1,0 +1,34 @@
+.app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.layout-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.mat-sidenav-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    padding: 1rem;
+}
+
+footer {
+    flex-shrink: 0;
+    background-color: white;
+}
