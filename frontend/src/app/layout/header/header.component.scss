@@ -1,0 +1,67 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: anchor-center;
+  padding: 10px;
+  background: #54B9CC;  
+  color: white;
+  width: 100%;
+  position: relative;
+
+  .mat-icon {
+    display: contents;
+    font-size: 30px;
+  }
+
+  .right {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    p {
+      padding-left: 6px;
+      margin: 0;
+      font-size: 36px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: bold;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+
+    }
+
+    .arrow-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+
+    }
+
+  }
+
+  .left {
+    padding-right: 30px;    
+    .settings-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: auto;
+
+    }
+
+  }
+
+  .mat-icon.mat-ligature-font[fontIcon]::before {
+    content: none;
+  }
+}

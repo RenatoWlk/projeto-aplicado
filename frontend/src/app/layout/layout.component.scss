@@ -1,0 +1,55 @@
+app-root {
+    display:block;
+    height: 100vh;
+    width: 100vw;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.layout-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.mat-sidenav-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+footer {
+    flex-shrink: 0;
+    background-color: white;
+}

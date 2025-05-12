@@ -1,0 +1,23 @@
+<div class="app-container">
+    <app-header 
+        (toggleSidenav)="toggleSidenav()"
+        [isSidenavOpen]="isSidenavOpen"
+        ></app-header>
+    <mat-sidenav-container class="layout-container">
+        
+        <mat-sidenav mode="side" [(opened)]="isSidenavOpen">
+            <app-aside></app-aside>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <div class="content-wrapper">
+            <main>
+                <app-content></app-content>
+            </main>
+            <footer>
+                <app-footer></app-footer>
+            </footer>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>
