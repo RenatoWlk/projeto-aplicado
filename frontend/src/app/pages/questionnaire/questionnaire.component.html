@@ -1,1 +1,91 @@
-<p>questionnaire works!</p>
+<div class="wrapper">
+  <div class="sidebar">
+    <h2>4 vidas</h2>
+    <div class="sidebar-links">
+      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/conta">Conta</a>
+      <a routerLink="/questionnaire">Questionário</a>
+      <a routerLink="/mapa">Mapa</a>
+      <a routerLink="/calendario">Calendário</a>
+      <button class="btn-sair" (click)="sair()">
+        <img src="assets/imagens/images-removebg-preview.png" alt="Sair" />
+        Sair
+      </button>
+    </div>
+  </div>
+
+  <h1>Questionário de Elegibilidade para Doação de Sangue</h1>
+  <form (ngSubmit)="verificarElegibilidade()" #form="ngForm">
+    <div class="age-wrapper">
+      <label for="age">Qual a sua idade?</label><br />
+      <input
+        type="number"
+        id="age"
+        name="age"
+        [(ngModel)]="dados.age"
+        min="0"
+        maxlength="3"
+      />
+      Anos<br /><br />
+    </div>
+
+    <div class="weight-wrapper">
+      <label for="weight">Qual o seu peso em kg?</label><br />
+      <input
+        type="number"
+        id="weight"
+        name="weight"
+        [(ngModel)]="dados.weight"
+        min="0"
+        maxlength="3"
+      />
+      Kg<br /><br />
+    </div>
+
+    <div class="perguntas">
+      <label>Você está se sentindo bem de saúde hoje?</label><br />
+      <input type="radio" id="health_yes" name="health" value="yes" [(ngModel)]="dados.health" />
+      <label for="health_yes">Sim</label><br />
+      <input type="radio" id="health_no" name="health" value="no" [(ngModel)]="dados.health" />
+      <label for="health_no">Não</label><br /><br />
+
+      <label>Você dorme uma média de pelo menos 6 horas por noite?</label><br />
+      <input type="radio" id="sleep_yes" name="sleep" value="yes" [(ngModel)]="dados.sleep" />
+      <label for="sleep_yes">Sim</label><br />
+      <input type="radio" id="sleep_no" name="sleep" value="no" [(ngModel)]="dados.sleep" />
+      <label for="sleep_no">Não</label><br /><br />
+
+      <label>Consome alimentos de alto teor de gordura com frequência?</label><br />
+      <input type="radio" id="food_yes" name="food" value="yes" [(ngModel)]="dados.food" />
+      <label for="food_yes">Sim</label><br />
+      <input type="radio" id="food_no" name="food" value="no" [(ngModel)]="dados.food" />
+      <label for="food_no">Não</label><br /><br />
+
+      <label>Você possui um documento original com foto recente?</label><br />
+      <input type="radio" id="id_yes" name="id" value="yes" [(ngModel)]="dados.id" />
+      <label for="id_yes">Sim</label><br />
+      <input type="radio" id="id_no" name="id" value="no" [(ngModel)]="dados.id" />
+      <label for="id_no">Não</label><br /><br />
+
+      <label>Você tomou as vacinas obrigatórias?</label><br />
+      <input type="radio" id="vaccine_yes" name="vaccine" value="yes" [(ngModel)]="dados.vaccine" />
+      <label for="vaccine_yes">Sim</label><br />
+      <input type="radio" id="vaccine_no" name="vaccine" value="no" [(ngModel)]="dados.vaccine" />
+      <label for="vaccine_no">Não</label><br /><br />
+
+      <label>Você possui alguma dessas doenças?</label><br />
+      <label id="doenças">
+        doenças hematológicas, cardíacas, renais, pulmonares, hepáticas, autoimunes, diabetes,
+        hipertireoidismo, hanseníase, tuberculose, câncer, sangramentos anormais, convulsões, ou
+        é portador de doenças infecciosas transmissíveis pelo sangue como Doença de Chagas,
+        Hepatite, AIDS, Sífilis.
+      </label><br />
+      <input type="radio" id="disease_yes" name="disease" value="yes" [(ngModel)]="dados.disease" />
+      <label for="disease_yes">Sim</label><br />
+      <input type="radio" id="disease_no" name="disease" value="no" [(ngModel)]="dados.disease" />
+      <label for="disease_no">Não</label><br /><br />
+    </div>
+
+    <button type="submit">Enviar</button>
+  </form>
+</div>
