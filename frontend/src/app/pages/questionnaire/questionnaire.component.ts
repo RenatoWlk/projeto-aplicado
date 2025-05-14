@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'app-questionnaire',
   templateUrl: './questionnaire.component.html',
-  styleUrls: ['./questionnaire.component.scss']
+  styleUrls: ['./questionnaire.component.scss'],
+  imports: [CommonModule, FormsModule], // Adicione os módulos necessários
 })
 
 export class QuestionnaireComponent {
@@ -23,9 +27,9 @@ export class QuestionnaireComponent {
     const { age, weight, health, sleep, food, id, vaccine, disease } = this.dados;
 
     if (
-      age >= 16 &&
+      age !== null && age >= 16 &&
       age <= 69 &&
-      weight > 50 &&
+      weight !== null && weight > 50 &&
       health === 'yes' &&
       sleep === 'yes' &&
       food === 'no' &&
