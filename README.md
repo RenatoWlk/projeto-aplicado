@@ -19,6 +19,7 @@ https://github.com/RenatoWlk/projeto-aplicado
 ## Features:
 
 * Login
+* Calendário
 * Banco de Dados
 
 ### Estrutura de Pastas
