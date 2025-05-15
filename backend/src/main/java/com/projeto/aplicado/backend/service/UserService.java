@@ -1,10 +1,10 @@
 package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
-import com.projeto.aplicado.backend.constants.Roles;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
 import com.projeto.aplicado.backend.dto.user.UserResponseDTO;
 import com.projeto.aplicado.backend.model.User;
+import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,11 +22,12 @@ public class UserService {
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
+        user.setAddress(dto.getAddress());
+        user.setPhone(dto.getPhone());
+        user.setRole(Role.USER);
         user.setCpf(dto.getCpf());
-        user.setCity(dto.getCity());
         user.setGender(dto.getGender());
         user.setBloodType(dto.getBloodType());
-        user.setRole(Roles.USER);
 
         user = userRepository.save(user);
         return toResponseDTO(user);
@@ -49,8 +50,10 @@ public class UserService {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
+        dto.setAddress(user.getAddress());
+        dto.setPhone(user.getPhone());
+        dto.setRole(user.getRole());
         dto.setCpf(user.getCpf());
-        dto.setCity(user.getCity());
         dto.setGender(user.getGender());
         dto.setBloodType(user.getBloodType());
         return dto;

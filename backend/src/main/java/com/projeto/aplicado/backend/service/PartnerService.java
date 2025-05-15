@@ -1,10 +1,10 @@
 package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
-import com.projeto.aplicado.backend.constants.Roles;
 import com.projeto.aplicado.backend.dto.partner.PartnerRequestDTO;
 import com.projeto.aplicado.backend.dto.partner.PartnerResponseDTO;
 import com.projeto.aplicado.backend.model.Partner;
+import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.PartnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,9 +22,11 @@ public class PartnerService {
         partner.setName(dto.getName());
         partner.setEmail(dto.getEmail());
         partner.setPassword(dto.getPassword());
+        partner.setAddress(dto.getAddress());
+        partner.setPhone(dto.getPhone());
+        partner.setRole(Role.PARTNER);
         partner.setCnpj(dto.getCnpj());
-        partner.setCompanyName(dto.getCompanyName());
-        partner.setRole(Roles.PARTNER);
+        partner.setOffers(dto.getOffers());
 
         partner = partnerRepository.save(partner);
         return toResponseDTO(partner);
@@ -47,8 +49,11 @@ public class PartnerService {
         dto.setId(partner.getId());
         dto.setName(partner.getName());
         dto.setEmail(partner.getEmail());
+        dto.setAddress(partner.getAddress());
+        dto.setPhone(partner.getPhone());
+        dto.setRole(partner.getRole());
         dto.setCnpj(partner.getCnpj());
-        dto.setCompanyName(partner.getCompanyName());
+        dto.setOffers(partner.getOffers());
         return dto;
     }
 }

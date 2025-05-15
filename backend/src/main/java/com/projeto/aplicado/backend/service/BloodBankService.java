@@ -1,10 +1,10 @@
 package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
-import com.projeto.aplicado.backend.constants.Roles;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
 import com.projeto.aplicado.backend.model.BloodBank;
+import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,10 +22,11 @@ public class BloodBankService {
         bloodBank.setName(dto.getName());
         bloodBank.setEmail(dto.getEmail());
         bloodBank.setPassword(dto.getPassword());
-        bloodBank.setRegistryNumber(dto.getRegistryNumber());
-        bloodBank.setRegion(dto.getRegion());
-        bloodBank.setRole(Roles.BLOOD_BANK);
-
+        bloodBank.setAddress(dto.getAddress());
+        bloodBank.setPhone(dto.getPhone());
+        bloodBank.setRole(Role.BLOODBANK);
+        bloodBank.setCnpj(dto.getCnpj());
+        bloodBank.setCampaigns(dto.getCampaigns());
         bloodBank = bloodBankRepository.save(bloodBank);
         return toResponseDTO(bloodBank);
     }
@@ -47,8 +48,11 @@ public class BloodBankService {
         dto.setId(bloodBank.getId());
         dto.setName(bloodBank.getName());
         dto.setEmail(bloodBank.getEmail());
-        dto.setRegion(bloodBank.getRegion());
-        dto.setRegistryNumber(bloodBank.getRegistryNumber());
+        dto.setAddress(bloodBank.getAddress());
+        dto.setPhone(bloodBank.getPhone());
+        dto.setRole(bloodBank.getRole());
+        dto.setCnpj(bloodBank.getCnpj());
+        dto.setCampaigns(bloodBank.getCampaigns());
         return dto;
     }
 }

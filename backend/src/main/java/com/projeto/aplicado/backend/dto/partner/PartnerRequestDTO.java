@@ -1,12 +1,18 @@
 package com.projeto.aplicado.backend.dto.partner;
 
+import com.projeto.aplicado.backend.model.vo.Address;
+import com.projeto.aplicado.backend.model.vo.Offer;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class PartnerRequestDTO {
     private String name;
     private String email;
     private String password;
+    private Address address;
+    private String phone;
     private String cnpj;
-    private String companyName;
+    private List<Offer> offers;
 }

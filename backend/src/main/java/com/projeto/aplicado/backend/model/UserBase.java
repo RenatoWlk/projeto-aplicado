@@ -1,5 +1,7 @@
 package com.projeto.aplicado.backend.model;
 
+import com.projeto.aplicado.backend.model.enums.Role;
+import com.projeto.aplicado.backend.model.vo.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +19,7 @@ public abstract class UserBase {
     private String name;
     private String email;
     private String password;
-    private String role; // "USER", "PARTNER" and "BLOODBANK"
+    private Address address;
+    private String phone;
+    private Role role; // "USER", "PARTNER" and "BLOODBANK"
 }

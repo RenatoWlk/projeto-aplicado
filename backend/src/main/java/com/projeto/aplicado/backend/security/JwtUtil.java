@@ -1,6 +1,5 @@
 package com.projeto.aplicado.backend.security;
 
-import com.projeto.aplicado.backend.constants.Roles;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,11 +11,10 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(String userId, String role) {
+    public String generateToken(String userId) {
         long EXPIRATION_TIME = 86400000; // 1 day
         return Jwts.builder()
                 .setSubject(userId)
-                .claim(Roles.ROLE, role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, secret)
@@ -25,10 +23,6 @@ public class JwtUtil {
 
     public String extractUserId(String token) {
         return getClaims(token).getSubject();
-    }
-
-    public String extractRole(String token) {
-        return getClaims(token).get(Roles.ROLE, String.class);
     }
 
     public boolean validateToken(String token) {

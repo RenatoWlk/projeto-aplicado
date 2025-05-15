@@ -25,7 +25,7 @@ public class AuthService {
             throw new RuntimeException(Messages.INVALID_CREDENTIALS);
         }
 
-        String token = jwtUtil.generateToken(user.getId(), user.getRole());
+        String token = jwtUtil.generateToken(user.getId());
         return new AuthResponse(token);
     }
 }
