@@ -1,1 +1,185 @@
-<p>questionnaire works!</p>
+<div class="container">
+  <h1>Questionário de Elegibilidade para Doação de Sangue</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Você tem entre 16 e 69 anos?
+      <select formControlName="idade">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Já doou sangue antes dos 60 anos?
+      <select formControlName="doacaoAntesDos60">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Você pesa mais de 50kg?
+      <select formControlName="peso">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Está se sentindo bem e saudável hoje?
+      <select formControlName="saudavel">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Está grávida?
+      <select formControlName="gravida">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Está amamentando?
+      <select formControlName="amamentando">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Teve parto nos últimos 12 meses?
+      <select formControlName="partoRecente">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Está com febre, gripe ou sintomas infecciosos?
+      <select formControlName="sintomas">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Teve hepatite, doença de chagas, câncer ou doenças graves?
+      <select formControlName="doencas">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Está tomando medicamentos?
+      <select formControlName="medicamentos">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Fez cirurgia, endoscopia ou piercing recentemente?
+      <select formControlName="procedimentos">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Usa drogas ilícitas injetáveis?
+      <select formControlName="drogas">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Teve múltiplos parceiros sexuais nos últimos 12 meses?
+      <select formControlName="parceiros">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Fez tatuagem nos últimos 12 meses?
+      <select formControlName="tatuagem">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      (Homem) Doou sangue há menos de 2 meses?
+      <select formControlName="homemUltimaDoacao">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      (Mulher) Doou sangue há menos de 3 meses?
+      <select formControlName="mulherUltimaDoacao">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Tomou vacina contra COVID-19 nos últimos 7 dias?
+      <select formControlName="vacinaCovid">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Tomou vacina da febre amarela nos últimos 30 dias?
+      <select formControlName="vacinaFebre">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <label>
+      Viajou para área com risco de malária nos últimos 12 meses?
+      <select formControlName="viagemRisco">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </label>
+
+    <button type="submit">Verificar Elegibilidade</button>
+  </form>
+
+  <div class="resultado" *ngIf="resultado">
+    <p>{{ resultado }}</p>
+    <ul *ngIf="perguntasInvalidas.length > 0">
+      <li *ngFor="let pergunta of perguntasInvalidas">{{ pergunta }}</li>
+    </ul>
+  </div>
+</div>

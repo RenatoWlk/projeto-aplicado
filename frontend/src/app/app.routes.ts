@@ -49,7 +49,7 @@ export const routes: Routes = [
   },
 
   // Fallback for unknown routes
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({

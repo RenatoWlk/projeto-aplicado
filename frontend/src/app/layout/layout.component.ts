@@ -5,11 +5,12 @@ import { ContentComponent } from './content/content.component';
 import { AsideComponent } from './aside/aside.component';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-layout',
-  imports: [HeaderComponent, FooterComponent, ContentComponent, AsideComponent, MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule, MatIconModule],
+  imports: [HeaderComponent, FooterComponent, ContentComponent, AsideComponent, MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule, MatIconModule, RouterModule ],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss',]
 })
