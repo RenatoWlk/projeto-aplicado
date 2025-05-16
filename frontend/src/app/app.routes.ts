@@ -9,8 +9,8 @@ export const routes: Routes = [
   // Public routes
   {
     path: 'login',
-    loadComponent: () => import('../app/pages/login/login.component')
-      .then(m => m.LoginComponent)
+    loadComponent: () => import('../app/pages/questionnaire/questionnaire.component')
+      .then(m => m.QuestionnaireComponent)
   },
 
   // Main app routes under the main layout (requires authentication)

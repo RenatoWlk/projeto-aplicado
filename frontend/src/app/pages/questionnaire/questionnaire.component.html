@@ -12,6 +12,15 @@
     </label>
 
     <label>
+      Qual seu sexo?
+      <select formControlName="sexo">
+        <option value="">Selecione</option>
+        <option value="masculino">Masculino</option>
+        <option value="feminino">Feminino</option>
+      </select>
+    </label>    
+    
+    <label>
       Já doou sangue antes dos 60 anos?
       <select formControlName="doacaoAntesDos60">
         <option value="">Selecione</option>
@@ -38,7 +47,7 @@
       </select>
     </label>
 
-    <label>
+    <label *ngIf="form.get('sexo')?.value === 'feminino'">
       Está grávida?
       <select formControlName="gravida">
         <option value="">Selecione</option>
@@ -47,7 +56,7 @@
       </select>
     </label>
 
-    <label>
+    <label *ngIf="form.get('sexo')?.value === 'feminino'">
       Está amamentando?
       <select formControlName="amamentando">
         <option value="">Selecione</option>
@@ -56,7 +65,7 @@
       </select>
     </label>
 
-    <label>
+    <label *ngIf="form.get('sexo')?.value === 'feminino'">
       Teve parto nos últimos 12 meses?
       <select formControlName="partoRecente">
         <option value="">Selecione</option>
@@ -128,7 +137,7 @@
       </select>
     </label>
 
-    <label>
+    <label *ngIf="form.get('sexo')?.value === 'masculino'">
       (Homem) Doou sangue há menos de 2 meses?
       <select formControlName="homemUltimaDoacao">
         <option value="">Selecione</option>
@@ -137,7 +146,7 @@
       </select>
     </label>
 
-    <label>
+    <label *ngIf="form.get('sexo')?.value === 'feminino'">
       (Mulher) Doou sangue há menos de 3 meses?
       <select formControlName="mulherUltimaDoacao">
         <option value="">Selecione</option>
