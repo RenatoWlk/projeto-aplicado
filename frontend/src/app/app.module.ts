@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+<<<<<<< HEAD
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { LayoutComponent } from './layout/layout.component';
@@ -25,3 +26,4 @@ import { FormsModule } from '@angular/forms';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
