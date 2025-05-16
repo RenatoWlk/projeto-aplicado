@@ -4,6 +4,8 @@ import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 // importa o main layout aqui
 import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from '../app/core/services/auth/auth.guard';
+import { LoginComponent } from '../app/pages/login/login.component';
+
 
 export const routes: Routes = [
   // Public routes

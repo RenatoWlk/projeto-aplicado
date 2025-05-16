@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './pages/login/login.component';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     LayoutComponent,
     HeaderComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
