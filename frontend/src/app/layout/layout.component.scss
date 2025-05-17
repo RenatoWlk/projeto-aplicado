@@ -10,13 +10,6 @@ app-root {
     box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;   // Permite scroll vertical
-    overflow-y: auto;
-}
-
 .app-container {
     height: 100vh;
     display: flex;

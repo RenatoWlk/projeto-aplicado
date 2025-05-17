@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { ContentComponent } from './content/content.component';
 import { AsideComponent } from './aside/aside.component';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,20 +9,17 @@ import { RouterModule } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-layout',
-  imports: [HeaderComponent, FooterComponent, ContentComponent, AsideComponent, MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule, MatIconModule, RouterModule ],
+  imports: [HeaderComponent, FooterComponent, AsideComponent, MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule, MatIconModule, RouterModule],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss',]
 })
 export class LayoutComponent {
-
-  constructor() {
-    console.log("Layout component carregado.")
-  }
-  
   isSidenavOpen = false;
+  
+  constructor() {
+  }
 
   toggleSidenav() {
     this.isSidenavOpen = !this.isSidenavOpen;
   }
-
 }

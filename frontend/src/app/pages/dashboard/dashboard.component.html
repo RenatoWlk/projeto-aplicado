@@ -1,1 +1,34 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+
+  <section class="dashboard-section dashboard-section-posts">
+    <h2 class="section-title">{{ postsSectionTitle }}</h2>
+    <div class="posts">
+      <article class="post" *ngFor="let post of posts">
+        <header class="post-header">
+          <h3 class="post-title">{{ post.title }}</h3>
+          <time class="post-start-date" [attr.datetime]="post.startDate">{{ post.startDate | date:'dd/MM/yyyy' }}</time>
+          <time class="post-end-date" [attr.datetime]="post.endDate">{{ post.endDate | date:'dd/MM/yyyy' }}</time>
+        </header>
+        <p class="post-body">{{ post.body }}</p>
+        <footer class="post-footer">
+          <p class="post-location">{{ post.location }}</p>
+          <a class="post-phone" [href]="'tel:' + post.phone">{{ post.phone }}</a>
+        </footer>
+      </article>
+    </div>
+  </section>
+
+  <section class="dashboard-section dashboard-section-offers">
+    <h2 class="section-title">{{ offersSectionTitle }}</h2>
+    <div class="offers">
+      <div class="offer" *ngFor="let offer of offers">
+        <h3 class="offer-title">{{ offer.title }}</h3>
+        <p class="offer-desc">{{ offer.description }}</p>
+        <p class="offer-discount">{{ offer.discount }}% de desconto</p>
+        <time class="offer-valid-until">{{ offer.date | date:'dd/MM/yyyy' }}</time>
+      </div>
+    </div>
+  </section>
+
+</div>
+

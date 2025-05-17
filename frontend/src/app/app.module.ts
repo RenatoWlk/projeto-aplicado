@@ -10,11 +10,6 @@ import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LayoutComponent,
-    HeaderComponent,
-  ],
   imports: [
     BrowserModule,
     CommonModule,
@@ -22,6 +17,5 @@ import { FormsModule } from '@angular/forms';
     MatIconModule,
     MatSidenavModule
   ],
-  bootstrap: [AppComponent]
 })
 export class AppModule { }
