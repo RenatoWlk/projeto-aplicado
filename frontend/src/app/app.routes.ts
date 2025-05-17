@@ -2,21 +2,21 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 
 // importa o main layout aqui
-// import { MainLayoutComponent } from '../app/layouts/main-layout/main-layout.component';
+import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from '../app/core/services/auth/auth.guard';
 
 export const routes: Routes = [
   // Public routes
   {
     path: 'login',
-    loadComponent: () => import('../app/pages/login/login.component')
-      .then(m => m.LoginComponent)
+    loadComponent: () => import('../app/pages/questionnaire/questionnaire.component')
+      .then(m => m.QuestionnaireComponent)
   },
 
   // Main app routes under the main layout (requires authentication)
   {
     path: '',
-    component: MainLayoutComponent,
+    component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -49,7 +49,7 @@ export const routes: Routes = [
   },
 
   // Fallback for unknown routes
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({

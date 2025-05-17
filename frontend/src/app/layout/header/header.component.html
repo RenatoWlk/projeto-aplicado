@@ -1,0 +1,20 @@
+<div class="header">
+    <div class="right">
+      @if(isSidenavOpen) {
+        <button class="arrow-btn" (click)="onMenuClick()">
+          <mat-icon fontIcon="arrow">arrow_back</mat-icon>
+        </button>
+      } @else {
+        <button class="menu-btn" (click)="onMenuClick()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <p>Quatro vidas</p>
+    </div>
+    <div class="left"> 
+    <button class="settings-btn">
+      <mat-icon>settings</mat-icon>
+    </button>
+    </div>
+</div>
+
