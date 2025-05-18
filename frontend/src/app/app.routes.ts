@@ -9,17 +9,16 @@ export const routes: Routes = [
   // Public routes
   {
     path: 'login',
-    loadComponent: () => import('../app/pages/questionnaire/questionnaire.component')
-      .then(m => m.QuestionnaireComponent)
+    loadComponent: () => import('./pages/login/login.component')
+      .then(m => m.LoginComponent)
   },
 
   // Main app routes under the main layout (requires authentication)
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
         loadComponent: () => import('../app/pages/dashboard/dashboard.component')
