@@ -1,29 +1,47 @@
 <div class="container">
   <h1>Minha Conta</h1>
 
-  <div class="account-header">
-    <div class="profile-photo-wrapper">
-    <img [src]="user?.photoUrl || 'assets/profile.png'" alt="Foto de Perfil" class="profile-photo" />
-    <label class="profile-photo-edit-btn">
-      <input type="file" (change)="onPhotoSelected($event)" accept="image/*" hidden>
-      <span class="material-icons">photo_camera</span>
-    </label>
+  <ng-container *ngIf="!editProfileMode && !changePasswordMode && !showAchievements">
+    <div class="account-header">
+      <div class="profile-photo-wrapper">
+        <img [src]="user?.photoUrl || 'assets/profile2.png'" alt="Foto de Perfil" class="profile-photo" />
+        <input #fileInput type="file" (change)="onPhotoSelected($event)" accept="image/*" hidden>
+        <button type="button" class="profile-photo-edit-btn" (click)="fileInput.click()">
+          Trocar Foto
+        </button>
+      </div>
+      <div class="account-info">
+        <p><strong>Nome:</strong> {{ user?.name }}</p>
+        <p><strong>Email:</strong> {{ user?.email }}</p>
+        <p><strong>Tipo Sanguíneo:</strong> {{ user?.bloodType }}</p>
+        <button type="button" (click)="onEditProfile()" [disabled]="changePasswordMode">Editar Perfil</button>
+        <button type="button" (click)="onChangePassword()" [disabled]="editProfileMode">Alterar Senha</button>
+        <button type="button" (click)="showAchievements = true" [disabled]="editProfileMode || changePasswordMode">
+          Ver Conquistas
+        </button>
+      </div>
     </div>
-    <div class="account-info">
-      <p><strong>Nome:</strong> {{ user?.name }}</p>
-      <p><strong>Email:</strong> {{ user?.email }}</p>
-      <p><strong>Tipo Sanguíneo:</strong> {{ user?.bloodType }}</p>
-      <!-- outros dados -->
-      <button type="button" (click)="onEditProfile()"
-      [disabled]="changePasswordMode">Editar Perfil</button>
-      <button type="button" (click)="onChangePassword()" 
-      [disabled]="editProfileMode">Alterar Senha</button>
+
+    <hr />
+
+    <div class="account-details">
+      <p><strong>Última doação:</strong> {{ user?.lastDonation | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Próxima doação possível:</strong> {{ user?.nextEligibleDonation | date:'dd/MM/yyyy' }}</p>
     </div>
-  </div>
 
-  <hr />
+    <div class="last-questionnaire" *ngIf="lastQuestionnaire">
+      <h2>Último Questionário de Doação</h2>
+      <p><strong>Data:</strong> {{ lastQuestionnaire.date | date:'dd/MM/yyyy' }}</p>
+      <ul>
+        <li *ngFor="let item of lastQuestionnaire.answers">
+          <strong>{{ item?.question }}</strong> <br>
+          Resposta: {{ item?.answer }}
+        </li>
+      </ul>
+    </div>
+  </ng-container>
 
-  <form *ngIf="editProfileMode && editUser">
+  <form *ngIf="editProfileMode && !changePasswordMode && editUser">
     <label>
       Nome:
       <input type="text" [(ngModel)]="editUser.name" name="name" />
@@ -32,14 +50,13 @@
       Email:
       <input type="email" [(ngModel)]="editUser.email" name="email" />
     </label>
-    <!-- outros campos editáveis -->
     <label>
       <button type="button" (click)="saveProfile()">Salvar</button>
       <button type="button" (click)="cancelEdit()">Cancelar</button>
     </label>
   </form>
 
-  <form *ngIf="changePasswordMode">
+  <form *ngIf="changePasswordMode && !editProfileMode">
     <label>
       Nova senha:
       <input type="password" [(ngModel)]="newPassword" name="password" />
@@ -50,24 +67,8 @@
     </label>
   </form>
 
-  <div class="account-details">
-    <p><strong>Última doação:</strong> {{ user?.lastDonation | date:'dd/MM/yyyy' }}</p>
-    <p><strong>Próxima doação possível:</strong> {{ user?.nextEligibleDonation | date:'dd/MM/yyyy' }}</p>
-  </div>
-
-  <div class="last-questionnaire" *ngIf="lastQuestionnaire">
-    <h2>Último Questionário de Doação</h2>
-    <p><strong>Data:</strong> {{ lastQuestionnaire.date | date:'dd/MM/yyyy' }}</p>
-    <ul>
-      <li *ngFor="let item of lastQuestionnaire.answers">
-        <strong>{{ item?.question }}</strong> <br>
-        Resposta: {{ item?.answer }}
-      </li>
-    </ul>
-  </div>
-
-  <div class="achievements-section" *ngIf="user?.achievements?.length">
-    <h2>Conquistas</h2>
+  <div *ngIf="showAchievements" class="achievements-page">
+    <h2>Minhas Conquistas</h2>
     <div class="badges-list">
       <div class="badge" *ngFor="let badge of user?.achievements">
         <img [src]="badge.iconUrl" [alt]="badge.title" />
@@ -75,14 +76,6 @@
         <span class="badge-desc">{{ badge.description }}</span>
       </div>
     </div>
+    <button type="button" (click)="showAchievements = false">Voltar</button>
   </div>
-
-  <ng-template #viewProfile>
-    <div class="account-info">
-      <p><strong>Nome:</strong> {{ user?.name }}</p>
-      <p><strong>Email:</strong> {{ user?.email }}</p>
-      <button type="button" (click)="onEditProfile()" 
-      [disabled]="changePasswordMode">Editar Perfil</button>
-    </div>
-  </ng-template>
 </div>

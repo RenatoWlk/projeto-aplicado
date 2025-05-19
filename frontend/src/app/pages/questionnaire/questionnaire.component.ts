@@ -9,7 +9,7 @@ import { QuestionnaireService } from '../services/questionnaire.service';
   templateUrl: './questionnaire.component.html',
   styleUrls: ['./questionnaire.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule], // 👈 adicionar aqui
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class QuestionnaireComponent {
   form: FormGroup;

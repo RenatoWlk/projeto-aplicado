@@ -97,7 +97,7 @@ select.erro {
   border-bottom: 1px dotted #c62828;
   cursor: help;
   position: relative;
-  white-space: nowrap; // impede quebra de linha na palavra
+  white-space: nowrap; 
 
   &::after {
     content: attr(data-tooltip);

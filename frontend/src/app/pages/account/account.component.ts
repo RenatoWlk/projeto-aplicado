@@ -16,30 +16,37 @@ export class AccountComponent implements OnInit{
   changePasswordMode = false;
   newPassword = '';
   lastQuestionnaire?: Questionnaire;
+  showAchievements = false;
   
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-  const userId = '1'; // Troque pelo id real do usuário logado
-  this.accountService.getUser(userId).subscribe(user => {
-    user.photoUrl = 'C:/Users/Pedro/Downloads/profile.png'; // coloque o caminho de uma imagem real para testar
-    // Exemplo de conquistas para teste
-    user.achievements = [
+  // Simulação de usuário (mock)
+  this.user = {
+    id: '1',
+    name: 'Pedro Silva',
+    email: 'pedro@email.com',
+    bloodType: 'O+',
+    lastDonation: new Date(2024, 10, 15).toISOString(),
+    nextEligibleDonation: new Date(2025, 1, 15).toISOString(),
+    photoUrl: 'assets/profile2.png',
+    achievements: [
       {
         title: 'Primeira Doação',
         description: 'Parabéns pela sua primeira doação!',
-        iconUrl: 'assets/badges/first-donation.png'
-      },
-      {
-        title: 'Doador Frequente',
-        description: '5 doações realizadas!',
-        iconUrl: 'assets/badges/frequent-donor.png'
+        iconUrl: 'assets/achievements.png'
       }
-    ];
-    this.user = user;
-    this.editUser = { ...user };
-  });
-  this.accountService.getLastQuestionnaire(userId).subscribe(q => this.lastQuestionnaire = q);
+    ]
+  };
+  this.editUser = { ...this.user };
+
+  this.lastQuestionnaire = {
+    date: new Date(2024, 10, 15).toISOString(),
+    answers: [
+      { question: 'Você está bem de saúde?', answer: 'Sim' },
+      { question: 'Dormiu bem na última noite?', answer: 'Sim' }
+    ]
+  };
   }
 
   onEditProfile() {
@@ -77,19 +84,15 @@ export class AccountComponent implements OnInit{
     this.newPassword = '';
   }
 
-  onPhotoSelected(event: any) {
+  onPhotoSelected(event: any): void {
     const file = event.target.files[0];
-    if (file && this.user) {
-      // Mostra a imagem imediatamente
-      this.user.photoUrl = URL.createObjectURL(file);
-
-      // Faz o upload normalmente
-      this.accountService.uploadPhoto(this.user.id, file).subscribe(user => {
-        // Atualiza a URL da foto após o upload, se o backend retornar uma nova
-        this.user = user;
-        console.log(this.user.photoUrl); // Veja se aparece uma URL tipo blob:http://...
-
-      });
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        console.log('Imagem carregada:', reader.result);
+        this.user = { ...(this.user as User), photoUrl: reader.result as string }; 
+      };
+      reader.readAsDataURL(file);
     }
   }
 }

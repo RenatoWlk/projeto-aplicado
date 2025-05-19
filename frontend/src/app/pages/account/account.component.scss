@@ -38,25 +38,18 @@
       }
 
       .profile-photo-edit-btn {
-        position: absolute;
-        bottom: 5%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(183, 28, 28, 0.85);
+        margin-top: 0.7rem;
+        margin-right: 0.7rem;
+        padding: 0.45rem 1.3rem;
+        background: #b71c1c;
         color: #fff;
-        border-radius: 50%;
-        padding: 0.4rem;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
         cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid #fff;
         transition: background 0.2s;
-        font-size: 1.3rem;
-
         &:hover {
           background: #a31515;
-        }
 
         input {
           display: none;
@@ -67,6 +60,7 @@
         }
       }
     }
+}
 
     .account-info {
       flex: 1;
@@ -159,7 +153,9 @@
 
   form {
     display: flex;
-    flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: center; 
+  margin: 0 auto;
     gap: 1.3rem;
     margin-bottom: 1.7rem;
     background: #f6f6f6;
@@ -256,6 +252,74 @@
     .account-details,
     .last-questionnaire {
       padding: 1rem 0.7rem;
+    }
+  }
+}
+
+.achievements-page {
+  background: #eee;
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 12px rgba(183,28,28,0.07);
+  margin-bottom: 2rem;
+  text-align: center;
+
+  h2 {
+    color: #b71c1c;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .badges-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .badge {
+    background: #fff3e0;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 1px 4px rgba(183,28,28,0.05);
+    min-width: 120px;
+    max-width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 54px;
+      height: 54px;
+      margin-bottom: 0.5rem;
+    }
+    .badge-title {
+      font-weight: 700;
+      color: #b71c1c;
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+    .badge-desc {
+      font-size: 0.95rem;
+      color: #6d4c41;
+      text-align: center;
+    }
+  }
+
+  button {
+    margin-top: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    background: #b71c1c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover {
+      background: #a31515;
     }
   }
 }
