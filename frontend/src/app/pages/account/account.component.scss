@@ -153,9 +153,9 @@
 
   form {
     display: flex;
-  flex-wrap: wrap;
-  justify-content: center; 
-  margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center; 
+    margin: 0 auto;
     gap: 1.3rem;
     margin-bottom: 1.7rem;
     background: #f6f6f6;
@@ -172,7 +172,7 @@
       color: #333;
       margin-bottom: 0.5rem;
 
-      input {
+      input:not([type="checkbox"]) {
         margin-top: 0.3rem;
         padding: 0.5rem 0.7rem;
         border: 1px solid #ccc;
@@ -181,10 +181,22 @@
         background: #fff;
         transition: border 0.2s;
         &:focus {
-          border: 1.5px solid #b71c1c;
-          outline: none;
+            border: 1.5px solid #b71c1c;
+            outline: none;
+            }
         }
-      }
+      input[type="checkbox"] {
+        display: inline-block;
+        flex-wrap: wrap;
+        width: 20px;
+        height: 20px;
+        accent-color: #b71c1c; // cor do checkbox moderno
+        margin-top: 0.5rem;
+        margin-left: 0.2rem;
+        padding: 0; // Remove padding extra
+        border-radius: 4px;
+        cursor: pointer;
+        }
     }
 
     button {
@@ -318,6 +330,99 @@
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
+    &:hover {
+      background: #a31515;
+    }
+  }
+}
+
+.campaigns-section {
+  background: #f8f8f8;
+  border-radius: 8px;
+  padding: 1.5rem 1.3rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 6px rgba(183,28,28,0.06);
+
+  h2 {
+    color: #b71c1c;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.1rem;
+    text-align: left;
+  }
+  
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.2rem;
+
+    li {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      margin-bottom: 0.9rem;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      font-size: 1.05rem;
+
+      .campaign-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .campaign-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      strong {
+        color: #b71c1c;
+        font-weight: 700;
+        margin-right: 0.5rem;
+      }
+
+      span {
+        font-size: 0.98rem;
+        margin-left: 0.5rem;
+      }
+
+      button {
+        margin-left: auto;
+        margin-right: 0.5rem;
+        padding: 0.35rem 1.1rem;
+        background: #b71c1c;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-size: 0.97rem;
+
+        &:hover {
+          background: #a31515;
+        }
+      }
+    }
+  }
+
+  > button {
+    padding: 0.5rem 1.4rem;
+    background: #b71c1c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 1rem;
+    margin-top: 0.7rem;
+
     &:hover {
       background: #a31515;
     }

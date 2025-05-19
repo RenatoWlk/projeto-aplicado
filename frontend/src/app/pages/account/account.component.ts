@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AccountService, User, Questionnaire } from '../account/account.service';
+import { AccountService, User, BloodBankUser, Questionnaire } from '../account/account.service';
 
 @Component({
   selector: 'app-account',
@@ -10,32 +10,59 @@ import { AccountService, User, Questionnaire } from '../account/account.service'
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit{
-  user?: User;
-  editUser?: User;
+  user?: User | BloodBankUser;
+  editUser?: User | BloodBankUser;
   editProfileMode = false;
   changePasswordMode = false;
   newPassword = '';
   lastQuestionnaire?: Questionnaire;
   showAchievements = false;
+  addCampaignMode = false;
+  editCampaignMode = false;
+  campaignForm: any = {
+    id: '',
+    title: '',
+    description: '',
+    active: true
+  };
+  editingCampaignIndex: number | null = null;
   
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-  // Simulação de usuário (mock)
-  this.user = {
-    id: '1',
-    name: 'Pedro Silva',
-    email: 'pedro@email.com',
-    bloodType: 'O+',
-    lastDonation: new Date(2024, 10, 15).toISOString(),
-    nextEligibleDonation: new Date(2025, 1, 15).toISOString(),
+  // Exemplo para banco de sangue
+   this.user = {
+  //   id: '1',
+  //   name: 'Pedro Silva',
+  //   email: 'pedro@email.com',
+  //   bloodType: 'O+',
+  //   photoUrl: 'assets/profile2.png',
+  //   lastDonation: '2024-05-01',
+  //   nextEligibleDonation: '2024-08-01',
+  //   achievements: [
+  //     {
+  //       title: 'Primeira Doação',
+  //       description: 'Parabéns pela sua primeira doação!',
+  //       iconUrl: 'assets/badges/first-donation.png'
+  //     }
+  //   ],
+  //   role: 'USER'
+  // };
+  // this.editUser = { ...this.user };
+    id: '2',
+    name: 'Banco de Sangue Vida',
+    email: 'contato@bancovida.com',
+    bloodType: '',
+    lastDonation: '',
+    nextEligibleDonation: '',
     photoUrl: 'assets/profile2.png',
-    achievements: [
-      {
-        title: 'Primeira Doação',
-        description: 'Parabéns pela sua primeira doação!',
-        iconUrl: 'assets/achievements.png'
-      }
+    role: 'BLOODBANK',
+    address: 'Rua Central, 123',
+    phone: '(11) 99999-9999',
+    cnpj: '12.345.678/0001-99',
+    campaigns: [
+      { id: '1', title: 'Doe Sangue, Salve Vidas', description: 'Campanha de inverno', active: true },
+      { id: '2', title: 'Natal Solidário', description: 'Doe antes do Natal!', active: false }
     ]
   };
   this.editUser = { ...this.user };
@@ -94,5 +121,50 @@ export class AccountComponent implements OnInit{
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  addCampaign() {
+    this.campaignForm = { id: '', title: '', description: '', active: true };
+    this.addCampaignMode = true;
+    this.editCampaignMode = false;
+    this.editingCampaignIndex = null;
+  }
+
+  editCampaign(campaign: any, index: number) {
+    this.campaignForm = { ...campaign };
+    this.editCampaignMode = true;
+    this.addCampaignMode = false;
+    this.editingCampaignIndex = index;
+  }
+
+  saveCampaign() {
+    if (!this.user || this.user.role !== 'BLOODBANK') return;
+    const bloodBank = this.user as BloodBankUser;
+    if (this.addCampaignMode) {
+      this.campaignForm.id = Date.now().toString();
+      bloodBank.campaigns = [...(bloodBank.campaigns || []), { ...this.campaignForm }];
+    } else if (this.editCampaignMode && this.editingCampaignIndex !== null) {
+      bloodBank.campaigns[this.editingCampaignIndex] = { ...this.campaignForm };
+    }
+    this.cancelCampaignForm();
+  }
+
+  cancelCampaignForm() {
+    this.addCampaignMode = false;
+    this.editCampaignMode = false;
+    this.campaignForm = { id: '', title: '', description: '', active: true };
+    this.editingCampaignIndex = null;
+  }
+
+  removeCampaign(campaign: any) {
+    if (!this.user || this.user.role !== 'BLOODBANK') return;
+    const bloodBank = this.user as BloodBankUser;
+    if (confirm('Remover esta campanha?')) {
+      bloodBank.campaigns = bloodBank.campaigns.filter((c: any) => c.id !== campaign.id);
+    }
+  }
+
+  get bloodBankUser(): BloodBankUser | undefined {
+    return this.user?.role === 'BLOODBANK' ? this.user as BloodBankUser : undefined;
   }
 }

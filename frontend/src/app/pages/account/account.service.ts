@@ -11,6 +11,22 @@ export interface User {
   lastDonation: string;
   nextEligibleDonation: string;
   achievements?: Achievement[];
+    role?: string;
+}
+
+export interface Campaign {
+  id: string;
+  title: string;
+  description: string;
+  active: boolean;
+}
+
+export interface BloodBankUser extends User {
+  role: 'BLOODBANK';
+  address: string;
+  phone: string;
+  cnpj: string;
+  campaigns: Campaign[];
 }
 
 export interface Achievement {
