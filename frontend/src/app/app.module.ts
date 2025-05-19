@@ -6,8 +6,11 @@ import { HeaderComponent } from './layout/header/header.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './pages/login/login.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { AppRoutingModule } from './app.routes';
+import { RegisterComponent } from './pages/register/register.component';
 
 
 @NgModule({
@@ -15,14 +18,18 @@ import { LoginComponent } from './pages/login/login.component';
     AppComponent,
     LayoutComponent,
     HeaderComponent,
-    LoginComponent
+    LoginComponent,
+    ForgotPasswordComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     CommonModule,
     FormsModule,
     MatIconModule,
-    MatSidenavModule
+    MatSidenavModule,
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   bootstrap: [AppComponent]
 })

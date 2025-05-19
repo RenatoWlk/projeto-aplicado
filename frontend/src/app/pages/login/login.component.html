@@ -1,24 +1,27 @@
 <div class="login-container">
-  <form class="login-box">
-    <h2>Bem-vindo</h2>
+  <form class="login-box" [formGroup]="loginForm">
+    <h2>
+      <img src="assets/icon-name.png" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
+      Bem-vindo
+    </h2>
 
     <div class="input-group">
-      <label for="login">Login (email ou usuário)</label>
-      <input type="text" id="login" [formGroup]="login" required />
+      <label for="login">Login (email)</label>
+      <input type="text" id="login" formControlName="login" required />
     </div>
 
     <div class="input-group">
       <label for="password">Senha</label>
-      <input type="password" id="password" [formGroup]="password" required />
+      <input type="password" id="password" formControlName="password" required />
     </div>
 
     <div class="actions">
       <button type="submit">Entrar</button>
-      <a href="#" class="forgot">Esqueci minha senha</a>
+      <a routerLink="/esqueci-senha" class="forgot">Esqueci minha senha</a>
     </div>
 
     <div class="divider"></div>
 
-    <button type="button" class="register">Criar Conta</button>
+  <button type="button" class="register" routerLink="/registrar">Criar Conta</button>
   </form>
 </div>
