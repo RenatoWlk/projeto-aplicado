@@ -1,1 +1,8 @@
-<p>calendar works!</p>
+<div class="calendar-wrapper">
+    <mat-card class="calendar">
+    <mat-calendar [headerComponent]="customHeader" [(selected)]="selected"></mat-calendar>
+    </mat-card>
+    <div class="date-wrapper">
+        <p class="selected-date">Data selecionada: {{ selected | date: 'fullDate' }}</p>
+    </div>
+</div>

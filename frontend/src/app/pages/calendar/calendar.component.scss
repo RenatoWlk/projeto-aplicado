@@ -1,0 +1,51 @@
+.calendar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 160px;
+}
+
+.calendar {
+    font-family: 'Poppins', sans-serif;
+    width: 600px;
+    padding: 60px;
+}
+
+.mat-calendar {
+    font-family: 'Poppins', sans-serif;
+    width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mat-calendar-table-header {
+    background-color: #54B9CC;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.mat-calendar-body-label {
+    font-family: 'Poppins', sans-serif;
+}
+
+.mat-mdc-card {
+    justify-content: space-evenly;
+}
+
+.mat-calendar-body-today {
+    border: none !important;
+    background-color: none !important;
+}
+
+.selected-date {
+    font-family: 'Poppins', sans-serif;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-left: 4px solid #c62828;
+    background-color: #ffecec;
+    border-radius: 0.5rem;
+}
+
+.mat-calendar-body-selected {
+    border-color: #c62828 !important;
+    background-color: #ffecec !important;
+}
