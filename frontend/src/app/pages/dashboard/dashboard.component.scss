@@ -10,6 +10,8 @@
 }
 
 .dashboard-section {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   flex: 1;
   margin: 20px;
   padding: 20px;
@@ -23,6 +25,12 @@
   overflow-y: auto;
 }
 
+.phone {
+  width: fit-content;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 /**
  * POSTS SECTION
  */
@@ -31,9 +39,10 @@
 }
 
 .post {
+  background-color: #ffffff;
   margin: 10px;
   padding: 10px;
-  border: 1px solid #dadada;
+  border: 2px solid #dadada;
   border-radius: 8px;
 }
 
@@ -68,12 +77,6 @@
   gap: 0.3rem;
 }
 
-.post-phone {
-  width: fit-content;
-  text-decoration: none;
-  font-weight: bold;
-}
-
 .post-phone:hover {
   text-decoration: underline;
 }
@@ -86,9 +89,10 @@
 }
 
 .offer {
+  background-color: #ffffff;
   margin: 10px;
   padding: 10px;
-  border: 1px solid #dadada;
+  border: 2px solid #dadada;
   border-radius: 8px;
 }
 
@@ -127,4 +131,32 @@
  */
 .dashboard-section-nearby-bloodbanks {
   min-width: 50%;
+}
+
+.nearby-bloodbank {
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #dadada;
+  border-radius: 8px;
+}
+
+/**
+ * STATS SECTION
+ */
+.dashboard-section-stats {
+  min-width: 33%;
+}
+
+.stat {
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #dadada;
+  border-radius: 8px;
+}
+
+.stat h4 {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

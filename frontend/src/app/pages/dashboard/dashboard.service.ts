@@ -38,6 +38,7 @@ export interface Bloodbank {
 export class DashboardService {
     private offersUrl = '/api/dashboard/offers';
     private campaignsUrl = '/api/dashboard/campaigns';
+    private nearbyBloodbanksUrl = '/api/dashboard/nearbyBloodbanks';
 
     constructor(private http: HttpClient) {}
 
@@ -47,5 +48,9 @@ export class DashboardService {
 
     getCampaigns(): Observable<Campaign[]> {
         return this.http.get<Campaign[]>(this.campaignsUrl);
+    }
+
+    getNearbyBloodbanks(): Observable<Bloodbank[]> {
+        return this.http.get<Bloodbank[]>(this.nearbyBloodbanksUrl);
     }
 }

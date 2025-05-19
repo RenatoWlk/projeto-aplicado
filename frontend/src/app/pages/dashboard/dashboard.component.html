@@ -16,7 +16,7 @@
           <p class="post-body">{{ post.body }}</p>
           <footer class="post-footer">
             <p>{{ post.location.street }} - {{ post.location.city }}-{{ post.location.state }} - {{ post.location.zip }}</p>
-            <a class="post-phone" [href]="'tel:' + post.phone">{{ post.phone }}</a>
+            <a class="phone" [href]="'tel:' + post.phone">{{ post.phone }}</a>
           </footer>
         </article>
       </div>
@@ -43,18 +43,32 @@
 
   <div class="dashboard-sections">
     <!-- NEARBY BLOODBANKS -->
-    <section class="dashboard-section dashboard-section-bloodbanks">
+    <section class="dashboard-section dashboard-section-nearby-bloodbanks">
       <h2 class="section-title">Bancos de sangue próximos à você</h2>
       <div class="nearby-bloodbanks section-content">
         <div class="nearby-bloodbank" *ngFor="let bloodbank of nearbyBloodbanks">
           <header class="nearby-bloodbank-header">
             <h3 class="nearby-bloodbank-name">{{ bloodbank.name }}</h3>
-            <p>{{ bloodbank.location.street }} - {{ bloodbank.location.city }}-{{ bloodbank.location.state }} - {{ bloodbank.location.zip }}</p>
+            <p>{{ bloodbank.address.street }} - {{ bloodbank.address.city }}-{{ bloodbank.address.state }} - {{ bloodbank.address.zip }}</p>
           </header>
           <footer class="nearby-bloodbank-footer">
-            <p class="nearby-bloodbank-phone">{{ bloodbank.phone }}</p>
-            <a [href]="bloodbank.website" target="_blank">Visite o site</a>
+            <a class="phone" [href]="'tel:' + bloodbank.phone">{{ bloodbank.phone }}</a>
           </footer>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="dashboard-section dashboard-section-stats">
+      <h2 class="section-title">Estatísticas de doação</h2>
+      <div class="stats section-content">
+        <div class="stat">
+          <h4>Nível de doador: Prata</h4><hr>
+          <h4>Vezes doadas: 5</h4><hr>
+          <h4>Tempo até próxima doação: 2 meses</h4><hr>
+          <h4>Vidas potencialmente salvas: 20</h4><hr>
+          <h4>Tipo sanguíneo: A+</h4><hr>
+          <h4>Última doação: 12/03/2025</h4>
         </div>
       </div>
     </section>
