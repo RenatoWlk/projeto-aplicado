@@ -1,0 +1,21 @@
+.custom-header {
+    display: flex;
+    align-items: center;
+    padding: 0.5em;
+    background-color: #54B9CC;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.custom-header-label {
+    flex: 1;
+    height: 1em;
+    text-align: center;
+    color: white;
+}
+
+.header-button {
+    background-color: #54B9CC;
+    border: none;
+    color:white;
+    cursor: pointer;
+}

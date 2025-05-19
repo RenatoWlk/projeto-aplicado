@@ -12,6 +12,18 @@
     li {
         text-align: left;
 
+        a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        mat-icon {
+            font-size: 24px;
+        }
+
     }
 }
 
