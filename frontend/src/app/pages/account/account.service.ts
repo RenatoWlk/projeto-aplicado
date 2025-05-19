@@ -11,7 +11,11 @@ export interface User {
   lastDonation: string;
   nextEligibleDonation: string;
   achievements?: Achievement[];
-    role?: string;
+  role?: string;
+  address?: string;
+  phone?: string;
+  cpf?: string;
+  gender?: string;
 }
 
 export interface Campaign {

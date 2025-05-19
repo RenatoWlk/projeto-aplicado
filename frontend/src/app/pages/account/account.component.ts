@@ -17,6 +17,7 @@ export class AccountComponent implements OnInit{
   newPassword = '';
   lastQuestionnaire?: Questionnaire;
   showAchievements = false;
+  showQuestionnaires = false;
   addCampaignMode = false;
   editCampaignMode = false;
   campaignForm: any = {
@@ -31,7 +32,7 @@ export class AccountComponent implements OnInit{
 
   ngOnInit() {
   // Exemplo para banco de sangue
-   this.user = {
+    this.user = {
   //   id: '1',
   //   name: 'Pedro Silva',
   //   email: 'pedro@email.com',
@@ -43,10 +44,14 @@ export class AccountComponent implements OnInit{
   //     {
   //       title: 'Primeira Doação',
   //       description: 'Parabéns pela sua primeira doação!',
-  //       iconUrl: 'assets/badges/first-donation.png'
+  //       iconUrl: 'assets/achievements.png'
   //     }
   //   ],
-  //   role: 'USER'
+  //   role: 'USER',
+  //   address: 'Rua das Flores, 123',
+  //   phone: '(11) 91234-5678',
+  //   cpf: '123.456.789-00',
+  //   gender: 'Masculino'
   // };
   // this.editUser = { ...this.user };
     id: '2',
@@ -82,12 +87,10 @@ export class AccountComponent implements OnInit{
   }
 
   saveProfile() {
-    if (!this.editUser) return;
-    this.accountService.updateProfile(this.editUser.id, this.editUser).subscribe(user => {
-      this.user = user;
-      this.editProfileMode = false;
-    });
-  }
+  if (!this.editUser) return;
+  this.user = { ...this.editUser };
+  this.editProfileMode = false;
+}
 
   cancelEdit() {
     this.editProfileMode = false;
