@@ -10,6 +10,7 @@ export interface Address {
 }
 
 export interface Offer {
+    partnerName: string;
     title: string;
     description: string;
     validUntil: Date;
@@ -25,12 +26,18 @@ export interface Campaign {
     phone: string;
 }
 
+export interface Bloodbank {
+    name: string;
+    address: Address;
+    phone: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class DashboardService {
-    private offersUrl = '/api/offers';
-    private campaignsUrl = '/api/campaigns';
+    private offersUrl = '/api/dashboard/offers';
+    private campaignsUrl = '/api/dashboard/campaigns';
 
     constructor(private http: HttpClient) {}
 

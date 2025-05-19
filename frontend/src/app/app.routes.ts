@@ -19,6 +19,7 @@ export const routes: Routes = [
     component: LayoutComponent,
     //canActivate: [AuthGuard],
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
         loadComponent: () => import('../app/pages/dashboard/dashboard.component')
