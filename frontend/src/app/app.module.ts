@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -12,7 +11,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     MatIconModule,
-    MatSidenavModule
+    MatSidenavModule,
+    ReactiveFormsModule
   ],
 })
 export class AppModule { }
