@@ -36,7 +36,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "node_modules/leaflet/dist/leaflet.css"
             ],

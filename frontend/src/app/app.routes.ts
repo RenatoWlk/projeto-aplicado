@@ -2,35 +2,27 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from '../app/core/services/auth/auth.guard';
-import { LoginComponent } from '../app/pages/login/login.component';
-import { ForgotPasswordComponent } from '../app/pages/forgot-password/forgot-password.component';
-
-
 
 export const routes: Routes = [
-  // Public login route
+  /** 
+   * Public login routes
+   */
   {
     path: 'login',
     loadComponent: () => import('./pages/login/login.component')
       .then(m => m.LoginComponent)
   },
   {
-  path: 'esqueci-senha',
-  loadComponent: () =>
-    import('../app/pages/forgot-password/forgot-password.component')
+    path: 'forgotPassword',
+    loadComponent: () => import('./pages/forgot-password/forgot-password.component')
       .then(m => m.ForgotPasswordComponent)
   },
   {
-  path: 'registrar',
-  loadComponent: () => import('../app/pages/register/register.component')
-    .then(m => m.RegisterComponent)
+    path: 'register',
+    loadComponent: () => import('./pages/register/register.component')
+      .then(m => m.RegisterComponent)
   },
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },
-
+  
   // Public dashboard route
   {
     path: 'dashboard',
@@ -77,7 +69,7 @@ export const routes: Routes = [
     ]
   },
 
-  // Fallback
+  // Fallback for unknown routes
   { path: '**', redirectTo: 'login' }
 ];
 
