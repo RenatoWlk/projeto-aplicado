@@ -1,1 +1,269 @@
-<p>questionnaire works!</p>
+<div class="container">
+  <h1>Questionário de Elegibilidade para Doação de Sangue</h1>
+
+  <form *ngIf="!sucessoPreenchimento" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Você tem entre 16 e 69 anos?
+      <select formControlName="idade"
+        [ngClass]="{'erro': form.get('idade')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('idade')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Qual seu sexo?
+      <select formControlName="sexo"
+        [ngClass]="{'erro': form.get('sexo')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="masculino">Masculino</option>
+        <option value="feminino">Feminino</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('sexo')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>    
+    
+    <label>
+      Já doou sangue antes dos 60 anos?
+      <select formControlName="doacaoAntesDos60"
+        [ngClass]="{'erro': form.get('doacaoAntesDos60')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('doacaoAntesDos60')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Você pesa mais de 50kg?
+      <select formControlName="peso"
+        [ngClass]="{'erro': form.get('peso')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('peso')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Está se sentindo bem e saudável hoje?
+      <select formControlName="saudavel"
+        [ngClass]="{'erro': form.get('saudavel')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('saudavel')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label *ngIf="form.get('sexo')?.value === 'feminino'">
+      Está grávida?
+      <select formControlName="gravida"
+        [ngClass]="{'erro': form.get('gravida')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('gravida')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label *ngIf="form.get('sexo')?.value === 'feminino'">
+      Teve parto nos últimos 12 meses?
+      <select formControlName="partoRecente"
+        [ngClass]="{'erro': form.get('partoRecente')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('partoRecente')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Está com febre, gripe ou sintomas infecciosos?
+      <select formControlName="sintomas"
+        [ngClass]="{'erro': form.get('sintomas')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('sintomas')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Teve hepatite, doença de chagas, câncer ou doenças graves?
+      <select formControlName="doencas"
+        [ngClass]="{'erro': form.get('doencas')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('doencas')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      <span class="tooltip-container">
+        Está tomando <span class="tooltip" data-tooltip="Exemplo: antibióticos, anticoagulantes, insulina, corticoides, etc.">medicamentos</span>?
+      </span>
+      <select formControlName="medicamentos"
+        [ngClass]="{'erro': form.get('medicamentos')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('medicamentos')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      <span class="tooltip-container">
+      Você realizou algum <span class="tooltip" data-tooltip="Exemplo: cirurgias, endoscopia, piercing, transfusão, etc.">procedimento</span> recentemente?
+      </span>
+      <select formControlName="procedimentos"
+        [ngClass]="{'erro': form.get('procedimentos')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('procedimentos')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Usa drogas ilícitas injetáveis?
+      <select formControlName="drogas"
+        [ngClass]="{'erro': form.get('drogas')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('drogas')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Teve múltiplos parceiros sexuais nos últimos 12 meses?
+      <select formControlName="parceiros"
+        [ngClass]="{'erro': form.get('parceiros')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('parceiros')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Fez tatuagem nos últimos 12 meses?
+      <select formControlName="tatuagem"
+        [ngClass]="{'erro': form.get('tatuagem')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('tatuagem')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label *ngIf="form.get('sexo')?.value === 'masculino'">
+      Doou sangue há menos de 2 meses?
+      <select formControlName="homemUltimaDoacao"
+        [ngClass]="{'erro': form.get('homemUltimaDoacao')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('homemUltimaDoacao')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label *ngIf="form.get('sexo')?.value === 'feminino'">
+      Doou sangue há menos de 3 meses?
+      <select formControlName="mulherUltimaDoacao"
+        [ngClass]="{'erro': form.get('mulherUltimaDoacao')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('mulherUltimaDoacao')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Tomou vacina contra COVID-19 nos últimos 7 dias?
+      <select formControlName="vacinaCovid"
+        [ngClass]="{'erro': form.get('vacinaCovid')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('vacinaCovid')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Tomou vacina da febre amarela nos últimos 30 dias?
+      <select formControlName="vacinaFebre"
+        [ngClass]="{'erro': form.get('vacinaFebre')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('vacinaFebre')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <label>
+      Viajou para área com risco de malária nos últimos 12 meses?
+      <select formControlName="viagemRisco"
+        [ngClass]="{'erro': form.get('viagemRisco')?.invalid && submitted}">
+        <option value="" disabled selected hidden>Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <span class="mensagem-erro" *ngIf="form.get('viagemRisco')?.invalid && submitted">
+        Por favor, responda esta pergunta.
+      </span>
+    </label>
+
+    <button type="submit">Verificar Elegibilidade</button>
+  </form>
+
+  <div *ngIf="sucessoPreenchimento" class="alerta-sucesso">
+    <p>Formulário preenchido com sucesso!</p>
+    <div class="resultado" *ngIf="resultado">
+      <p>{{ resultado }}</p>
+      <ul *ngIf="perguntasInvalidas.length > 0">
+        <li *ngFor="let pergunta of perguntasInvalidas">{{ perguntasLabels[pergunta] || pergunta }}</li>
+      </ul>
+    </div>
+    <button (click)="responderNovamente()" class="btn-refazer">Responder novamente</button>
+  </div>
+</div>

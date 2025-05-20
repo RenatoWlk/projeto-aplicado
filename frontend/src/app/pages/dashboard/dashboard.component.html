@@ -1,1 +1,77 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <div class="dashboard-sections">
+
+    <!-- BLOODBANKS CAMPAIGNS -->
+    <section class="dashboard-section dashboard-section-posts">
+      <h2 class="section-title">{{ postsSectionTitle }}</h2>
+      <div class="posts section-content">
+        <article class="post" *ngFor="let post of posts">
+          <header class="post-header">
+            <h3 class="post-title">{{ post.title }}</h3>
+            <div class="post-dates">
+              <time class="post-start-date" [attr.datetime]="post.startDate">{{ post.startDate | date:'dd/MM/yyyy' }}</time> até
+              <time class="post-end-date" [attr.datetime]="post.endDate">{{ post.endDate | date:'dd/MM/yyyy' }}</time>
+            </div>
+          </header>
+          <p class="post-body">{{ post.body }}</p>
+          <footer class="post-footer">
+            <p>{{ post.location.street }} - {{ post.location.city }}-{{ post.location.state }} - {{ post.location.zip }}</p>
+            <a class="phone" [href]="'tel:' + post.phone">{{ post.phone }}</a>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <!-- PARTNERS OFFERS -->
+    <section class="dashboard-section dashboard-section-offers">
+      <h2 class="section-title">{{ offersSectionTitle }}</h2>
+      <div class="offers section-content">
+        <div class="offer" *ngFor="let offer of offers">
+          <header class="offer-header">
+            <h3><a class="offer-partner-name">{{ offer.partnerName }}</a></h3>
+            <h3 class="offer-title">: {{ offer.title }}</h3>
+          </header>
+          <p class="offer-desc">{{ offer.description }}</p>
+          <footer class="offer-footer">
+            <p class="offer-discount">{{ offer.discountPercentage }}% de desconto</p>
+            <time class="offer-valid-until">Válido até: {{ offer.validUntil | date:'dd/MM/yyyy' }}</time>
+          </footer>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="dashboard-sections">
+    <!-- NEARBY BLOODBANKS -->
+    <section class="dashboard-section dashboard-section-nearby-bloodbanks">
+      <h2 class="section-title">Bancos de sangue próximos à você</h2>
+      <div class="nearby-bloodbanks section-content">
+        <div class="nearby-bloodbank" *ngFor="let bloodbank of nearbyBloodbanks">
+          <header class="nearby-bloodbank-header">
+            <h3 class="nearby-bloodbank-name">{{ bloodbank.name }}</h3>
+            <p>{{ bloodbank.address.street }} - {{ bloodbank.address.city }}-{{ bloodbank.address.state }} - {{ bloodbank.address.zip }}</p>
+          </header>
+          <footer class="nearby-bloodbank-footer">
+            <a class="phone" [href]="'tel:' + bloodbank.phone">{{ bloodbank.phone }}</a>
+          </footer>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="dashboard-section dashboard-section-stats">
+      <h2 class="section-title">Estatísticas de doação</h2>
+      <div class="stats section-content">
+        <div class="stat">
+          <h4>Nível de doador: Prata</h4><hr>
+          <h4>Vezes doadas: 5</h4><hr>
+          <h4>Tempo até próxima doação: 2 meses</h4><hr>
+          <h4>Vidas potencialmente salvas: 20</h4><hr>
+          <h4>Tipo sanguíneo: A+</h4><hr>
+          <h4>Última doação: 12/03/2025</h4>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+

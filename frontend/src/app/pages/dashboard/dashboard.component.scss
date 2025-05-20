@@ -1,0 +1,162 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-sections {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.dashboard-section {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  flex: 1;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #dadada;
+  border-radius: 8px;
+}
+
+.section-content {
+  min-height: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.phone {
+  width: fit-content;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/**
+ * POSTS SECTION
+ */
+.dashboard-section-posts {
+  min-width: 50%;
+}
+
+.post {
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #dadada;
+  border-radius: 8px;
+}
+
+.post-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
+.post-title {
+  font-size: 1.3rem;
+}
+
+.post-dates {
+  padding-left: 2%;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.post-body {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.post-footer {
+  font-size: 0.9rem;
+  color: #555;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.post-phone:hover {
+  text-decoration: underline;
+}
+
+/**
+ * OFFERS SECTION
+ */
+.dashboard-section-offers {
+  min-width: 33%;
+}
+
+.offer {
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #dadada;
+  border-radius: 8px;
+}
+
+.offer-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
+.offer-header h3 {
+  margin: 0;
+}
+
+.offer-title {
+  margin: 0;
+}
+
+.offer-body {
+  margin: 10px 0;
+}
+
+.offer-discount {
+  font-weight: bold;
+  color: #d9534f;
+  margin-bottom: 4px;
+}
+
+.offer-valid-until {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/**
+ * NEARBY BLOODBANKS SECTION
+ */
+.dashboard-section-nearby-bloodbanks {
+  min-width: 50%;
+}
+
+.nearby-bloodbank {
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #dadada;
+  border-radius: 8px;
+}
+
+/**
+ * STATS SECTION
+ */
+.dashboard-section-stats {
+  min-width: 33%;
+}
+
+.stat {
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #dadada;
+  border-radius: 8px;
+}
+
+.stat h4 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

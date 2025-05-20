@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
-
-// importa o main layout aqui
 import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from '../app/core/services/auth/auth.guard';
 import { LoginComponent } from '../app/pages/login/login.component';
@@ -10,10 +8,10 @@ import { ForgotPasswordComponent } from '../app/pages/forgot-password/forgot-pas
 
 
 export const routes: Routes = [
-  // Public routes
+  // Public login route
   {
     path: 'login',
-    loadComponent: () => import('../app/pages/login/login.component')
+    loadComponent: () => import('./pages/login/login.component')
       .then(m => m.LoginComponent)
   },
   {
@@ -33,18 +31,29 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
 
-  // Main app routes under the main layout (requires authentication)
+  // Public dashboard route
+  {
+    path: 'dashboard',
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('../app/pages/dashboard/dashboard.component')
+          .then(m => m.DashboardComponent)
+      }
+    ]   
+  },
+
+  // Always redirect to dashboard if no path is provided
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
+  // Protected routes under Layout
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [AuthGuard],
+    // Comment out the AuthGuard to test the routes
+    //canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      {
-        path: 'dashboard',
-        loadComponent: () => import('../app/pages/dashboard/dashboard.component')
-          .then(m => m.DashboardComponent)
-      },
       {
         path: 'account',
         loadComponent: () => import('../app/pages/account/account.component')
@@ -68,8 +77,8 @@ export const routes: Routes = [
     ]
   },
 
-  // Fallback for unknown routes
-  { path: '**', redirectTo: '' }
+  // Fallback
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({

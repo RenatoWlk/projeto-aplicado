@@ -2,11 +2,15 @@
   display: flex;
   justify-content: space-between;
   align-items: anchor-center;
-  padding: 10px;
-  background: #54B9CC;  
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  background: #3bacff;  
   color: white;
   width: 100%;
   position: relative;
+  border-bottom: 2px solid #3b90ff;
 
   .mat-icon {
     display: contents;
@@ -42,7 +46,6 @@
       color: white;
       cursor: pointer;
       font-size: 12px;
-
     }
 
   }

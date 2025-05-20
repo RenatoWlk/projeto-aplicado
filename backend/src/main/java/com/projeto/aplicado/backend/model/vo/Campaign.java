@@ -8,8 +8,8 @@ import java.time.LocalDate;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Campaign {
-    private String name;
-    private String description;
+    private String title;
+    private String body;
     private LocalDate startDate;
     private LocalDate endDate;
     private Address location;
