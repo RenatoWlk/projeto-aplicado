@@ -58,17 +58,28 @@
       </div>
     </section>
 
-    <!-- STATS -->
+    <!-- STATS AND ACHIEVEMENTS -->
     <section class="dashboard-section dashboard-section-stats">
       <h2 class="section-title">Estatísticas de doação</h2>
       <div class="stats section-content">
-        <div class="stat">
-          <h4>Nível de doador: Prata</h4><hr>
-          <h4>Vezes doadas: 5</h4><hr>
-          <h4>Tempo até próxima doação: 2 meses</h4><hr>
-          <h4>Vidas potencialmente salvas: 20</h4><hr>
-          <h4>Tipo sanguíneo: A+</h4><hr>
-          <h4>Última doação: 12/03/2025</h4>
+        <p class="times-donated">Quantidade de doações: {{ userStats.timesDonated }}</p>
+        <p class="potential-lives-saved">Potenciais vidas salvas: {{ userStats.potentialLivesSaved }}</p>
+        <p class="blood-type">Tipo sanguíneo: {{ userStats.bloodType }}</p>
+        <p class="time-until-next-donation">Tempo até próxima doação: {{ userStats.timeUntilNextDonation }}</p>
+        <p class="last-donation-date">Última doação: {{ userStats.lastDonationDate | date:'dd/MM/yyyy' }}</p>
+        <div class="achievements">
+          <h3 class="achievements-title">Conquistas</h3>
+          <ul class="achievements-list">
+            <li *ngFor="let achievement of userStats.achievements" class="achievement">
+              <div class="achievement-header">
+                <img [src]="achievement.imageUrl" alt="icon" class="achievement-icon"> - 
+                <span class="achievement-title">{{ achievement.title }}</span> - 
+                <span class="achievement-rarity">{{ achievement.rarity }}</span>
+              </div>
+              <span class="achievement-points">+{{ achievement.points }} pontos</span>
+            </li>
+          </ul>
+          <p class="total-points">Total de pontos: {{ userStats.totalPoints }}</p>
         </div>
       </div>
     </section>

@@ -36,7 +36,9 @@ export interface BloodBankUser extends User {
 export interface Achievement {
   title: string;
   description: string;
-  iconUrl: string;
+  points: number;
+  rarity: string;
+  imageUrl: string;
 }
 
 export interface Questionnaire {

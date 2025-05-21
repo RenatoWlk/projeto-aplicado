@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { TokenService } from '../token/token.service';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthRequest {
   email: string;
@@ -43,5 +44,13 @@ export class AuthService {
   /** Returns true if authenticated */
   isAuthenticated(): boolean {
     return this.tokenService.isLogged();
+  }
+
+  /** Returns the current user ID from the token */
+  getCurrentUserId(): string {
+    const token = this.tokenService.getToken();
+    if (!token) return '';
+    const decoded: any = jwtDecode(token);
+    return decoded.sub || decoded.id || '';
   }
 }
