@@ -65,12 +65,17 @@ export const routes: Routes = [
         path: 'questionnaire',
         loadComponent: () => import('../app/pages/questionnaire/questionnaire.component')
           .then(m => m.QuestionnaireComponent)
+      },
+      {
+        path: 'segredinho',
+        loadComponent: () => import('../app/pages/scrt/scrt.component')
+          .then(m => m.ScrtComponent)
       }
     ]
   },
 
   // Fallback for unknown routes
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'dashboard' }
 ];
 
 @NgModule({

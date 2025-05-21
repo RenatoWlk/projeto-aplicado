@@ -28,6 +28,11 @@ public class UserService {
         user.setCpf(dto.getCpf());
         user.setGender(dto.getGender());
         user.setBloodType(dto.getBloodType());
+        user.setTimesDonated(0);
+        user.setTimeUntilNextDonation(dto.getTimeUntilNextDonation());
+        user.setLastDonationDate(dto.getLastDonationDate());
+        user.setAchievements(null);
+        user.setTotalPoints(0);
 
         user = userRepository.save(user);
         return toResponseDTO(user);
@@ -56,6 +61,11 @@ public class UserService {
         dto.setCpf(user.getCpf());
         dto.setGender(user.getGender());
         dto.setBloodType(user.getBloodType());
+        dto.setTimesDonated(user.getTimesDonated());
+        dto.setTimeUntilNextDonation(user.getTimeUntilNextDonation());
+        dto.setLastDonationDate(user.getLastDonationDate());
+        dto.setAchievements(user.getAchievements());
+        dto.setTotalPoints(user.getTotalPoints());
         return dto;
     }
 }
