@@ -69,20 +69,25 @@
         <p class="last-donation-date">Última doação: {{ userStats.lastDonationDate | date:'dd/MM/yyyy' }}</p>
         <div class="achievements">
           <h3 class="achievements-title">Conquistas</h3>
-          <ul class="achievements-list">
-            <li *ngFor="let achievement of userStats.achievements" class="achievement">
-              <div class="achievement-header">
-                <img [src]="achievement.imageUrl" alt="icon" class="achievement-icon"> - 
-                <span class="achievement-title">{{ achievement.title }}</span> - 
-                <span class="achievement-rarity">{{ achievement.rarity }}</span>
+          <div class="achievements-grid">
+            <div
+              *ngFor="let achievement of userStats.achievements"
+              class="achievement-square-card tooltip-container"
+              [ngClass]="achievement.rarity.toLowerCase()"
+            >
+              <img [src]="achievement.imageUrl" alt="icon" class="achievement-icon-large" />
+              <div class="achievement-info">
+                <span class="achievement-title">{{ achievement.title }}</span>
+                <span class="achievement-points">+{{ achievement.points }} pts</span>
               </div>
-              <span class="achievement-points">+{{ achievement.points }} pontos</span>
-            </li>
-          </ul>
+              <div class="tooltip">{{ achievement.description }}</div>
+            </div>
+          </div>
           <p class="total-points">Total de pontos: {{ userStats.totalPoints }}</p>
-        </div>
-      </div>
+        </div>               
+      </div>        
     </section>
+
   </div>
 </div>
 

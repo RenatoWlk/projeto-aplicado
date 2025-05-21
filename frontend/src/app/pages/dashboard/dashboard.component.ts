@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DashboardConstants } from './constants/dashboard.constants';
 import { UserStats, Bloodbank, Campaign, DashboardService, Offer, BloodType } from './dashboard.service';
 import { AuthService } from '../../core/services/auth/auth.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule],
+  imports: [CommonModule, MatTooltipModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

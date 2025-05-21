@@ -160,3 +160,116 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+/**
+ * ACHIEVEMENTS
+ */
+ .achievements-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.achievement-square-card {
+  width: 90px;
+  height: 80px;
+  border-radius: 16px;
+  background-color: #ccc;
+  color: white;
+  text-align: center;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.achievement-square-card:hover {
+  transform: scale(1.05);
+}
+
+.achievement-icon-large {
+  width: 48px;
+  height: 48px;
+}
+
+.achievement-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.achievement-title {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.achievement-points {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #f1f1f1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Poppins', sans-serif;
+  white-space: normal;
+  width: max-content;
+  max-width: 180px;
+  text-align: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tooltip-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%; /* bottom of tooltip */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Raridade: cores personalizadas */
+.comum {
+  background-color: #b0bec5;
+}
+
+.raro {
+  background-color: #64b5f6;
+}
+
+.épico {
+  background-color: #ba68c8;
+}
+
+.lendário {
+  background-color: #ffb300;
+}
