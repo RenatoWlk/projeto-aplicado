@@ -1,20 +1,19 @@
 <div class="header">
     <div class="right">
-      @if(isSidenavOpen) {
-        <button class="arrow-btn" (click)="onMenuClick()">
-          <mat-icon fontIcon="arrow">arrow_back</mat-icon>
-        </button>
-      } @else {
-        <button class="menu-btn" (click)="onMenuClick()">
-          <mat-icon>menu</mat-icon>
-        </button>
-      }
-      <img src="assets/logo.png" alt="Logo" class="logo" style="margin-left: 30px; width: 152px; height: 69px;">
+      <button class="logo-btn" [routerLink]="'/segredinho'">
+        <img src="assets/logo.png" alt="Logo" class="logo" style="margin-left: 30px; width: 152px; height: 69px;">
+      </button>
     </div>
     <div class="left"> 
-    <button class="settings-btn">
-      <mat-icon>settings</mat-icon>
-    </button>
+      <button class="account-btn" (click)="toggleMenu()">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <div class="dropdown-menu" *ngIf="isMenuOpen">
+        <ul>
+          <li><a [routerLink]="'/login'">Login</a></li>
+          <li><a [routerLink]="'/register'">Criar conta</a></li>
+        </ul>
+      </div>
     </div>
 </div>
 

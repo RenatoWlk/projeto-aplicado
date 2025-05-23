@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AsideComponent } from './aside.component';
+import { SubheaderComponent } from './subheader.component';
 
-describe('AsideComponent', () => {
-  let component: AsideComponent;
-  let fixture: ComponentFixture<AsideComponent>;
+describe('SubheaderComponent', () => {
+  let component: SubheaderComponent;
+  let fixture: ComponentFixture<SubheaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AsideComponent]
+      imports: [SubheaderComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AsideComponent);
+    fixture = TestBed.createComponent(SubheaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
