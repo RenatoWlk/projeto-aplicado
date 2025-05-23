@@ -1,0 +1,26 @@
+.subheader {
+    height: 40px;
+    background-color: #7bc2f5;
+}
+
+.links {
+    display: flex;
+    padding-top: 10px;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    list-style: none;
+    justify-content: center;
+    gap:50px;
+
+    li {
+        text-align: center;
+        
+
+        a {
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+        }
+    }
+}
+

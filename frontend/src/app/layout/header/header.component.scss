@@ -1,70 +1,86 @@
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: anchor-center;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  align-items: center;
+  padding: 4px 10px;
   background: #3bacff;  
   color: white;
   width: 100%;
   position: relative;
-  border-bottom: 2px solid #3b90ff;
+
+  .logo-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  }
 
   .mat-icon {
     display: contents;
-    font-size: 30px;
+    font-size: 40px;
   }
 
   .right {
-    padding-left: 10px;
+    padding-left: 20px;
     display: flex;
     flex-direction: row;
     width: 100%;
-
-    p {
-      padding-left: 6px;
-      margin: 0;
-      font-size: 36px;
-      font-family: 'Poppins', sans-serif;
-      font-weight: bold;
-    }
-
-    .menu-btn {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 12px;
-
-    }
-
-    .arrow-btn {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
   }
 
   .left {
-    padding-right: 30px;    
-    .settings-btn {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 12px;
-      margin-left: auto;
-
-    }
+    padding-right: 100px;   
 
   }
+}
 
-  .mat-icon.mat-ligature-font[fontIcon]::before {
-    content: none;
-  }
+.account-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 70px;
+  background-color: white;
+  color: #333;
+  font-weight: 500;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 10px 0;
+  min-width: 120px;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-menu ul li {
+  padding: 8px 16px;
+}
+
+.dropdown-menu ul li:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-menu ul li a {
+  color: #333;
+  text-decoration: none;
+  display: block;
 }
