@@ -1,34 +1,21 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-}
-
-.dashboard-sections {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  gap: 2rem;
+  padding: 2rem;
 }
 
 .dashboard-section {
   background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  flex: 1;
-  margin: 20px;
-  padding: 20px;
-  border: 1px solid #dadada;
+  padding: 1.5rem;
   border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.section-content {
-  min-height: 400px;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.phone {
-  width: fit-content;
-  text-decoration: none;
-  font-weight: bold;
+.section-title {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #232a31;
 }
 
 /**
@@ -36,14 +23,6 @@
  */
 .dashboard-section-posts {
   min-width: 50%;
-}
-
-.post {
-  background-color: #ffffff;
-  margin: 10px;
-  padding: 10px;
-  border: 2px solid #dadada;
-  border-radius: 8px;
 }
 
 .post-header {
@@ -88,14 +67,6 @@
   min-width: 33%;
 }
 
-.offer {
-  background-color: #ffffff;
-  margin: 10px;
-  padding: 10px;
-  border: 2px solid #dadada;
-  border-radius: 8px;
-}
-
 .offer-header {
   display: flex;
   flex-direction: row;
@@ -118,7 +89,6 @@
 .offer-discount {
   font-weight: bold;
   color: #d9534f;
-  margin-bottom: 4px;
 }
 
 .offer-valid-until {
@@ -133,18 +103,11 @@
   min-width: 50%;
 }
 
-.nearby-bloodbank {
-  background-color: #ffffff;
-  margin: 10px;
-  padding: 10px;
-  border: 2px solid #dadada;
-  border-radius: 8px;
-}
 
 /**
  * STATS SECTION
  */
-.dashboard-section-stats {
+ .dashboard-section-stats {
   min-width: 33%;
 }
 
@@ -161,10 +124,55 @@
   margin-bottom: 10px;
 }
 
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  flex: 1 1 160px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.stat-icon {
+  font-size: 28px;
+  color: #e53935;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
 /**
  * ACHIEVEMENTS
  */
- .achievements-grid {
+.dashboard-section-achievements {
+  min-width: 50%;
+  max-height: 20%;
+}
+
+.achievements-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -172,8 +180,8 @@
 }
 
 .achievement-square-card {
-  width: 90px;
-  height: 80px;
+  width: 120px;
+  height: 90px;
   border-radius: 16px;
   background-color: #ccc;
   color: white;
@@ -192,9 +200,9 @@
   transform: scale(1.05);
 }
 
-.achievement-icon-large {
-  width: 48px;
-  height: 48px;
+.achievement-icon {
+  font-size: 32px;
+  color: #ffffff;
 }
 
 .achievement-info {
@@ -215,46 +223,53 @@
   margin-top: 2px;
 }
 
+.dashboard-section-achievements {
+  position: relative;
+}
+
 .tooltip-container {
   position: relative;
+  display: inline-block;
+  cursor: pointer;
 }
 
 .tooltip {
   position: absolute;
-  bottom: 110%;
+  bottom: 100%; /* posiciona acima do card */
   left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #f1f1f1;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-family: 'Poppins', sans-serif;
-  white-space: normal;
-  width: max-content;
-  max-width: 180px;
-  text-align: center;
+  transform: translateX(-50%) translateY(-8px);
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 10;
+  width: max-content;
+  max-width: 200px;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  line-height: 1.2;
   pointer-events: none;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  z-index: 9999 !important;
 }
 
-.tooltip-container:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-
-.tooltip::after {
-  content: '';
+.tooltip::before {
+  content: "";
   position: absolute;
-  top: 100%; /* bottom of tooltip */
+  top: 100%; /* aponta para baixo, saindo da base do tooltip */
   left: 50%;
   transform: translateX(-50%);
   border-width: 6px;
   border-style: solid;
-  border-color: #333 transparent transparent transparent;
+  border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
+}
+
+.tooltip-container:hover .tooltip,
+.tooltip-container:focus-within .tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Raridade: cores personalizadas */
@@ -272,4 +287,19 @@
 
 .lendário {
   background-color: #ffb300;
+}
+
+/* Overflow in all wrappers in achievements section */
+.dashboard-section-achievements,
+.dashboard-section-achievements .section-content,
+.dashboard-section-achievements .achievements,
+.dashboard-section-achievements .achievements-grid {
+  overflow: visible !important;
+}
+
+.dashboard-section-posts .section-content,
+.dashboard-section-offers .section-content,
+.dashboard-section-nearby-bloodbanks .section-content,
+.dashboard-section-stats .section-content {
+  overflow-y: auto;
 }
