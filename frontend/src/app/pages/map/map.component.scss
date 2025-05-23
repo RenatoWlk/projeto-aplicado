@@ -1,4 +1,12 @@
+.map-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
 #map {
-  height: 100vh;
-  width: 100%;
+  width: 500px;
+  height: 300px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
