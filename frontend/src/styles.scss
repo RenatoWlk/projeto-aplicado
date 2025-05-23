@@ -15,6 +15,33 @@ h1, h2, h3, h4, h5, h6 {
   color: #232a31;
 }
 
+.app-card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.app-card-icon {
+  font-size: 32px;
+  color: #e53935;
+  margin-bottom: 8px;
+  margin-left: 4px;
+}
+
+.app-card-title {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #232a31;
+}
+
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
