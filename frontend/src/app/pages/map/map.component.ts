@@ -11,54 +11,57 @@ const redIcon = new L.Icon({
 });
 
 @Component({
-selector: 'app-map',
-templateUrl: './map.component.html',
-styleUrls: ['./map.component.scss']
+  selector: 'app-map',
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements AfterViewInit {
 
-private map!: L.Map;
+  private map!: L.Map;
+  private API_URL = 'http://localhost:8080/api/bloodbanks';  // Ajuste para o seu backend
 
-ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.initMap();
   }
 
   private initMap(): void {
-    // Criar o mapa já com as opções que bloqueiam o zoom out e limitam o zoom in
     this.map = L.map('map', {
       center: [-22.838659, -47.0498384],
       zoom: 13,
-      minZoom: 13,       // bloqueia zoom out
-      maxZoom: 18,       // máximo zoom in
-      zoomControl: false // esconde os controles padrão do Leaflet
+      minZoom: 13,
+      maxZoom: 18,
+      zoomControl: false
     });
 
-    // Adicionar camada de tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
 
-    // Adiciona os marcadores com ícone vermelho
-    L.marker([-22.838659, -47.0498384], { icon: redIcon }).addTo(this.map)
-      .bindPopup('Casa do Renato');
+    this.loadBloodBanksMarkers();
 
-    L.marker([-22.82377468659109, -47.06238270403627], { icon: redIcon }).addTo(this.map)
-      .bindPopup('Hemocentro Unicamp');
-
-    L.marker([-22.90956414345422, -47.07029810970188], { icon: redIcon }).addTo(this.map)
-      .bindPopup('Hemocentro Mario Gatti');
-
-    L.marker([-22.89376799958717, -47.05641652694881], { icon: redIcon }).addTo(this.map)
-      .bindPopup('Centro de Hematologia e Hemoterapia Campinas');
-
-    L.marker([-22.89564858936956, -47.06825670047348], { icon: redIcon }).addTo(this.map)
-      .bindPopup('CHCM Centro de Hemoterapia Celular em Medicina');
-
-    // Para evitar zoom out via scroll do mouse, força o zoom mínimo
     this.map.on('zoomend', () => {
       if (this.map.getZoom() < 13) {
         this.map.setZoom(13);
       }
     });
+  }
+
+  private async loadBloodBanksMarkers() {
+    try {
+      const response = await fetch(this.API_URL);
+      const bloodBanks = await response.json();
+
+      bloodBanks.forEach((bank: any) => {
+        const lat = bank.address?.latitude;
+        const lng = bank.address?.longitude;
+
+        if (lat && lng) {
+          L.marker([lat, lng], { icon: redIcon }).addTo(this.map)
+            .bindPopup(`<b>${bank.name}</b><br/>${bank.address.street}, ${bank.address.city}`);
+        }
+      });
+    } catch (error) {
+      console.error('Erro ao carregar hemocentros:', error);
+    }
   }
 }
