@@ -1,7 +1,8 @@
 .header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: self-end;
   padding: 4px 10px;
   background: #3bacff;  
   color: white;
@@ -25,15 +26,11 @@
   }
 
   .right {
-    padding-left: 20px;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
+    padding-left: 5rem;
   }
 
   .left {
-    padding-right: 100px;   
-
+    padding-right: 8rem;
   }
 }
 
@@ -43,8 +40,8 @@
   color: white;
   cursor: pointer;
   font-size: 32px;
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   display: flex;
   align-items: center;
   justify-content: center;

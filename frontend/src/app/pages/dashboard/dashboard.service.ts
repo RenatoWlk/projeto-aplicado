@@ -41,7 +41,7 @@ export interface Campaign {
 export interface UserStats {
     timesDonated: number;
     potentialLivesSaved: number;
-    timeUntilNextDonation: number;
+    timeUntilNextDonation: string;
     lastDonationDate: Date;
     achievements: Achievement[];
     totalPoints: number;
