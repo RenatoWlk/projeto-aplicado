@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Achievement } from '../account/account.service';
+import { DashboardConstants } from './constants/dashboard.constants';
 
 export enum BloodType {
     A_POSITIVE = 'A+',
@@ -58,22 +59,18 @@ export interface Bloodbank {
     providedIn: 'root'
 })
 export class DashboardService {
-    private offersUrl = '/api/dashboard/offers';
-    private campaignsUrl = '/api/dashboard/campaigns';
-    private nearbyBloodbanksUrl = '/api/dashboard/nearbyBloodbanks';
-
     constructor(private http: HttpClient) {}
 
     getOffers(): Observable<Offer[]> {
-        return this.http.get<Offer[]>(this.offersUrl);
+        return this.http.get<Offer[]>(DashboardConstants.GET_OFFERS_ENDPOINT);
     }
 
     getCampaigns(): Observable<Campaign[]> {
-        return this.http.get<Campaign[]>(this.campaignsUrl);
+        return this.http.get<Campaign[]>(DashboardConstants.GET_CAMPAIGNS_ENDPOINT);
     }
 
     getNearbyBloodbanks(): Observable<Bloodbank[]> {
-        return this.http.get<Bloodbank[]>(this.nearbyBloodbanksUrl);
+        return this.http.get<Bloodbank[]>(DashboardConstants.GET_NEARBY_BLOODBANKS_ENDPOINT);
     }
 
     getUserStats(userId: string): Observable<UserStats> {

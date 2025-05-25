@@ -16,6 +16,11 @@ public class OfferService {
         this.partnerRepository = partnerRepository;
     }
 
+    /**
+     * Fetches all offers from all partners.
+     * 
+     * @return a list of OfferDTO objects containing offer details.
+     */
     public List<OfferDTO> getAllOffers() {
         return partnerRepository.findAll().stream()
                 .flatMap(p -> p.getOffers().stream())

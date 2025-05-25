@@ -15,6 +15,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #232a31;
 }
 
+/* ------------------------ APP CARD ------------------------ */
 .app-card {
   background-color: #ffffff;
   padding: 1.5rem;
@@ -42,6 +43,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #232a31;
 }
 
+/* -------------------- CARD GRID (inside app-card) -------------------- */
 .cards-grid-large {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
@@ -70,6 +72,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
 }
 
+/* --------------------- CARD (inside card-grid) --------------------- */
 .card {
   background-color: #f9f9f9;
   border-radius: 12px;
@@ -113,6 +116,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
 }
 
+/* --------------------- PHONE LINK --------------------- */
 .phone-link {
   text-decoration: none;
   font-weight: 500;
@@ -121,4 +125,21 @@ h1, h2, h3, h4, h5, h6 {
 
 .phone-link:hover {
   text-decoration: underline;
+}
+
+/* --------------------- LOGIN BUTTON --------------------- */
+.login-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: #ff4f42;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.login-btn:hover {
+  background-color: #e53935;
 }

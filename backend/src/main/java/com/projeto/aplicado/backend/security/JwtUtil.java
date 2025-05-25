@@ -11,6 +11,12 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
+    /**
+     * Generate a JWT token for the given user ID.
+     * 
+     * @param userId the user ID to include in the token
+     * @return the generated JWT token
+     */
     public String generateToken(String userId) {
         long EXPIRATION_TIME = 86400000; // 1 day
         return Jwts.builder()
@@ -21,10 +27,22 @@ public class JwtUtil {
                 .compact();
     }
 
+    /**
+     * Extract the user ID from the given JWT token.
+     * 
+     * @param token the JWT token to extract the user ID from
+     * @return the extracted user ID
+     */
     public String extractUserId(String token) {
         return getClaims(token).getSubject();
     }
 
+    /**
+     * Validate the given JWT token.
+     * 
+     * @param token the JWT token to validate
+     * @return true if the token is valid, false otherwise
+     */
     public boolean validateToken(String token) {
         try {
             getClaims(token);
@@ -34,6 +52,12 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * Extract the expiration date from the given JWT token.
+     * 
+     * @param token the JWT token to extract the expiration date from
+     * @return the extracted expiration date
+     */
     private Claims getClaims(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }

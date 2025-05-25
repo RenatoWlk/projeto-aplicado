@@ -1,4 +1,4 @@
-package com.projeto.aplicado.backend.model.vo;
+package com.projeto.aplicado.backend.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package com.projeto.aplicado.backend.model;
+package com.projeto.aplicado.backend.model.users;
 
+import com.projeto.aplicado.backend.model.achievement.UnlockedAchievement;
 import com.projeto.aplicado.backend.model.enums.BloodType;
-import com.projeto.aplicado.backend.model.vo.Achievement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +22,6 @@ public class User extends UserBase {
     private int timesDonated;
     private Duration timeUntilNextDonation;
     private LocalDate lastDonationDate;
-    private List<Achievement> achievements;
+    private List<UnlockedAchievement> unlockedAchievements; // IDs and unlocked date of achievements
     private int totalPoints;
 }

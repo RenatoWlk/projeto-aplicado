@@ -1,6 +1,6 @@
-package com.projeto.aplicado.backend.model;
+package com.projeto.aplicado.backend.model.users;
 
-import com.projeto.aplicado.backend.model.vo.Campaign;
+import com.projeto.aplicado.backend.model.Campaign;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

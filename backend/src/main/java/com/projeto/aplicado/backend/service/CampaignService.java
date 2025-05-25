@@ -16,6 +16,11 @@ public class CampaignService {
         this.bloodBankRepository = bloodBankRepository;
     }
 
+    /**
+     * Fetches all campaigns from the database and converts them to DTOs.
+     * 
+     * @return a list of CampaignDTO objects representing all campaigns.
+     */
     public List<CampaignDTO> getAllCampaigns() {
         return bloodBankRepository.findAll().stream()
                 .flatMap(b -> b.getCampaigns().stream())

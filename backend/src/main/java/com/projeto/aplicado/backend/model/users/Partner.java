@@ -1,6 +1,6 @@
-package com.projeto.aplicado.backend.model;
+package com.projeto.aplicado.backend.model.users;
 
-import com.projeto.aplicado.backend.model.vo.Offer;
+import com.projeto.aplicado.backend.model.Offer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,7 +1,7 @@
 package com.projeto.aplicado.backend.dto.partner;
 
-import com.projeto.aplicado.backend.model.vo.Address;
-import com.projeto.aplicado.backend.model.vo.Offer;
+import com.projeto.aplicado.backend.model.Address;
+import com.projeto.aplicado.backend.model.Offer;
 import lombok.Data;
 
 import java.util.List;

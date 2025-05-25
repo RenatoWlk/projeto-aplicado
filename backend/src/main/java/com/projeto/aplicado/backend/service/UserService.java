@@ -1,9 +1,10 @@
 package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
+import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
 import com.projeto.aplicado.backend.dto.user.UserResponseDTO;
-import com.projeto.aplicado.backend.model.User;
+import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final AchievementService achievementService;
 
+    /**
+     * Creates a new user in the system.
+     * 
+     * @param dto the user request DTO containing user details
+     * @return the created user response DTO
+     */
     public UserResponseDTO create(UserRequestDTO dto) {
         User user = new User();
         user.setName(dto.getName());
@@ -31,22 +39,45 @@ public class UserService {
         user.setTimesDonated(0);
         user.setTimeUntilNextDonation(dto.getTimeUntilNextDonation());
         user.setLastDonationDate(dto.getLastDonationDate());
-        user.setAchievements(null);
+        user.setUnlockedAchievements(List.of());
         user.setTotalPoints(0);
 
         user = userRepository.save(user);
         return toResponseDTO(user);
     }
 
+    /**
+     * Finds all users in the system.
+     * 
+     * @return a list of user response DTOs
+     */
     public List<UserResponseDTO> findAll() {
         return userRepository.findAll().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Finds a user by ID.
+     * 
+     * @param id the ID of the user to find
+     * @return the user response DTO
+     */
     public UserResponseDTO findById(String id) {
         return userRepository.findById(id)
                 .map(this::toResponseDTO)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+    }
+
+    /**
+     * Finds user statistics by ID.
+     * 
+     * @param id the ID of the user to find statistics for
+     * @return the user statistics DTO
+     */
+    public UserStatsDTO findStatsById(String id) {
+        return userRepository.findById(id)
+                .map(this::toStatsDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
 
@@ -61,11 +92,17 @@ public class UserService {
         dto.setCpf(user.getCpf());
         dto.setGender(user.getGender());
         dto.setBloodType(user.getBloodType());
+        return dto;
+    }
+
+    private UserStatsDTO toStatsDTO(User user) {
+        UserStatsDTO dto = new UserStatsDTO();
         dto.setTimesDonated(user.getTimesDonated());
         dto.setTimeUntilNextDonation(user.getTimeUntilNextDonation());
         dto.setLastDonationDate(user.getLastDonationDate());
-        dto.setAchievements(user.getAchievements());
+        dto.setAchievements(achievementService.getAchievementsFromUser(user));
         dto.setTotalPoints(user.getTotalPoints());
+        dto.setBloodType(user.getBloodType());
         return dto;
     }
 }

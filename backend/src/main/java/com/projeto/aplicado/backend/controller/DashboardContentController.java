@@ -25,11 +25,21 @@ public class DashboardContentController {
         this.campaignService = campaignService;
     }
 
+    /**
+     * Gets all offers for the dashboard.
+     *
+     * @return a list of offers
+     */
     @GetMapping("/offers")
     public ResponseEntity<List<OfferDTO>> getAllOffers() {
         return ResponseEntity.ok(offerService.getAllOffers());
     }
 
+    /**
+     * Gets all campaigns for the dashboard.
+     *
+     * @return a list of campaigns
+     */
     @GetMapping("/campaigns")
     public ResponseEntity<List<CampaignDTO>> getAllCampaigns() {
         return ResponseEntity.ok(campaignService.getAllCampaigns());

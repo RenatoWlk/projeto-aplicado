@@ -1,7 +1,7 @@
 package com.projeto.aplicado.backend.dto.bloodbank;
 
-import com.projeto.aplicado.backend.model.vo.Address;
-import com.projeto.aplicado.backend.model.vo.Campaign;
+import com.projeto.aplicado.backend.model.Address;
+import com.projeto.aplicado.backend.model.Campaign;
 import lombok.Data;
 
 import java.util.List;

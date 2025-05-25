@@ -5,15 +5,7 @@
   padding: 2rem;
 }
 
-/**
- * POSTS SECTION
- */
-
-
-/**
- * OFFERS SECTION
- */
-
+/* ------------------------ OFFERS ------------------------ */
 .offer-discount {
   font-weight: bold;
   color: #d9534f;
@@ -24,9 +16,7 @@
   color: #555;
 }
 
-/**
- * STATS SECTION
- */
+/* ------------------------ STATS ------------------------ */
 .stat {
   background-color: #ffffff;
   margin: 10px;
@@ -80,9 +70,7 @@
   color: #333;
 }
 
-/**
- * ACHIEVEMENTS
- */
+/* ------------------------ ACHIEVEMENTS ------------------------ */
 .achievements-grid {
   display: flex;
   flex-wrap: wrap;
@@ -138,6 +126,7 @@
   position: relative;
 }
 
+/* ---------------- ACHIEVEMENTS TOOLTIP (description) ---------------- */
 .tooltip-container {
   position: relative;
   display: inline-block;
@@ -183,13 +172,6 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* Rarities */
-.comum { background-color: #b0bec5; }
-.raro { background-color: #64b5f6; }
-.épico { background-color: #ba68c8; }
-.lendário { background-color: #ffb300; }
-
-/* Overflow in all wrappers in achievements section */
 .dashboard-section-achievements,
 .dashboard-section-achievements .section-content,
 .dashboard-section-achievements .achievements,
@@ -203,3 +185,10 @@
 .dashboard-section-stats .section-content {
   overflow-y: auto;
 }
+
+/* ------------------------ RARITIES ------------------------ */
+.comum { background-color: #9fbac7; }
+.raro { background-color: #64b5f6; }
+.épico { background-color: #ba68c8; }
+.lendário { background: linear-gradient(to right, #FFD200, #F7971E); }
+.mítico { background: linear-gradient(to right, #004e92, #000428); }

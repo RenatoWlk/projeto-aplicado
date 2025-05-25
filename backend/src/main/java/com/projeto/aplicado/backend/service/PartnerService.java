@@ -3,7 +3,7 @@ package com.projeto.aplicado.backend.service;
 import com.projeto.aplicado.backend.constants.Messages;
 import com.projeto.aplicado.backend.dto.partner.PartnerRequestDTO;
 import com.projeto.aplicado.backend.dto.partner.PartnerResponseDTO;
-import com.projeto.aplicado.backend.model.Partner;
+import com.projeto.aplicado.backend.model.users.Partner;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.PartnerRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,12 @@ import java.util.stream.Collectors;
 public class PartnerService {
     private final PartnerRepository partnerRepository;
 
+    /**
+     * Creates a new partner.
+     * 
+     * @param dto the partner request DTO containing the partner's details
+     * @return the created partner response DTO
+     */
     public PartnerResponseDTO create(PartnerRequestDTO dto) {
         Partner partner = new Partner();
         partner.setName(dto.getName());
@@ -32,12 +38,23 @@ public class PartnerService {
         return toResponseDTO(partner);
     }
 
+    /**
+     * Finds all partners.
+     * 
+     * @return a list of partner response DTOs
+     */
     public List<PartnerResponseDTO> findAll() {
         return partnerRepository.findAll().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Finds a partner by ID.
+     * 
+     * @param id the ID of the partner to find
+     * @return the partner response DTO
+     */
     public PartnerResponseDTO findById(String id) {
         return partnerRepository.findById(id)
                 .map(this::toResponseDTO)

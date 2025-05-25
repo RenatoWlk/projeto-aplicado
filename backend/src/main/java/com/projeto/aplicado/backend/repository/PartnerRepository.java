@@ -1,6 +1,6 @@
 package com.projeto.aplicado.backend.repository;
 
-import com.projeto.aplicado.backend.model.Partner;
+import com.projeto.aplicado.backend.model.users.Partner;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

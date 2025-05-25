@@ -1,6 +1,8 @@
 <div class="dashboard-container">
 
-  <!-- SEÇÃO DE CAMPANHAS -->
+  <!-- ================= -->
+  <!-- CAMPAIGNS SECTION -->
+  <!-- ================= -->
   <section class="app-card card-overflow">
     <div class="app-card-header">
       <i class="fas fa-book-medical app-card-icon"></i>
@@ -25,7 +27,9 @@
     </div>
   </section>
 
-  <!-- SEÇÃO DE OFERTAS -->
+  <!-- ============== -->
+  <!-- OFFERS SECTION -->
+  <!-- ============== -->
   <section class="app-card">
     <div class="app-card-header">
       <i class="fas fa-tags app-card-icon"></i>
@@ -47,13 +51,15 @@
     </div>
   </section>
 
-  <!-- SEÇÃO DE BANCOS DE SANGUE PRÓXIMOS -->
+  <!-- ========================= -->
+  <!-- NEARBY BLOODBANKS SECTION -->
+  <!-- ========================= -->
   <section class="app-card">
     <div class="app-card-header">
       <i class="fas fa-location-dot app-card-icon"></i>
-      <h2 class="app-card-title">Bancos de sangue próximos à você</h2>
+      <h2 class="app-card-title">{{ nearbyBloodbanksSectionTitle }}</h2>
     </div>
-    <div class="cards-grid-medium cards-grid-overflow">
+    <div *ngIf="isLoggedIn else loginPrompt" class="cards-grid-medium cards-grid-overflow">
       <article class="card" *ngFor="let bloodbank of nearbyBloodbanks">
         <header class="card-header">
           <h3 class="card-title">{{ bloodbank.name }}</h3>
@@ -66,13 +72,15 @@
     </div>
   </section>
 
-  <!-- SEÇÃO DE ESTATÍSTICAS -->
+  <!-- ================== -->
+  <!-- STATISTICS SECTION -->
+  <!-- ================== -->
   <section class="app-card">
     <div class="app-card-header">
       <i class="fas fa-chart-simple app-card-icon"></i>
-      <h2 class="app-card-title">Estatísticas de doação</h2>
+      <h2 class="app-card-title">{{ statsSectionTitle }}</h2>
     </div>
-    <div class="cards-grid-small">
+    <div *ngIf="isLoggedIn else loginPrompt" class="cards-grid-small">
       <div class="stat-card" *ngFor="let stat of [
         { icon: 'fa-hand-holding-heart', label: 'Doações', value: userStats.timesDonated },
         { icon: 'fa-heartbeat', label: 'Vidas salvas', value: userStats.potentialLivesSaved },
@@ -93,13 +101,15 @@
     </div>
   </section>
 
-  <!-- SEÇÃO DE CONQUISTAS -->
+  <!-- ==================== -->
+  <!-- ACHIEVEMENTS SECTION -->
+  <!-- ==================== -->
   <section class="app-card">
     <div class="app-card-header">
       <i class="fas fa-trophy app-card-icon"></i>
-      <h2 class="app-card-title">Conquistas</h2>
+      <h2 class="app-card-title">{{ achievementsSectionTitle }}</h2>
     </div>
-    <div class="achievements-grid">
+    <div *ngIf="isLoggedIn else loginPrompt" class="achievements-grid">
       <div
         *ngFor="let achievement of userStats.achievements"
         class="achievement-square-card tooltip-container"
@@ -114,5 +124,15 @@
       </div>
     </div>
   </section>
+
+  <!-- ======================= -->
+  <!-- LOGIN REQUIRED TEMPLATE -->
+  <!-- ======================= -->
+  <ng-template #loginPrompt>
+    <div class="card">
+      <p class="card-title">{{ loginRequiredMessage }}</p>
+      <button routerLink="/login" class="login-btn">Fazer Login</button>
+    </div>
+  </ng-template>
 
 </div>

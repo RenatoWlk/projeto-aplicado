@@ -1,7 +1,7 @@
-package com.projeto.aplicado.backend.model;
+package com.projeto.aplicado.backend.model.users;
 
+import com.projeto.aplicado.backend.model.Address;
 import com.projeto.aplicado.backend.model.enums.Role;
-import com.projeto.aplicado.backend.model.vo.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

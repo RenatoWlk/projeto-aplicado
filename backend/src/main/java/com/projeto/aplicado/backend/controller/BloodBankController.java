@@ -15,16 +15,33 @@ import java.util.List;
 public class BloodBankController {
     private final BloodBankService bloodBankService;
 
+    /**
+     * Creates a new blood bank.
+     * 
+     * @param dto the blood bank request DTO
+     * @return the created blood bank response DTO
+     */
     @PostMapping
     public ResponseEntity<BloodBankResponseDTO> create(@RequestBody BloodBankRequestDTO dto) {
         return ResponseEntity.ok(bloodBankService.create(dto));
     }
 
+    /**
+     * Gets all blood banks.
+     * 
+     * @return a list of blood bank response DTOs
+     */
     @GetMapping
     public ResponseEntity<List<BloodBankResponseDTO>> getAll() {
         return ResponseEntity.ok(bloodBankService.findAll());
     }
 
+    /**
+     * Get an existing blood bank.
+     * 
+     * @param id the ID of the blood bank to get
+     * @return the blood bank response DTO
+     */
     @GetMapping("/{id}")
     public ResponseEntity<BloodBankResponseDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(bloodBankService.findById(id));
