@@ -133,29 +133,35 @@
 
   <ng-container *ngIf="user?.role === 'BLOODBANK'">
     <ng-container *ngIf="bloodBankUser as bb">
-      <!-- Visualização dos dados -->
       <div *ngIf="!editProfileMode">
-        <div class="account-header">
-          <div class="profile-photo-wrapper">
-            <img [src]="bb.photoUrl || 'assets/bloodbank.png'" alt="Foto do Banco" class="profile-photo" />
-            <input #fileInput type="file" (change)="onPhotoSelected($event)" accept="image/*" hidden>
-            <button type="button" class="profile-photo-edit-btn" (click)="fileInput.click()">
-              Trocar Foto
-            </button>
+        <div class="app-card">
+          <div class="app-card-header">
+            <i class="fa-solid fa-hospital app-card-icon"></i>
+            <h2 class="app-card-title">Perfil do Banco de Sangue</h2>
           </div>
-          <div class="account-info">
-            <p><strong>Nome:</strong> {{ bb.name }}</p>
-            <p><strong>Email:</strong> {{ bb.email }}</p>
-            <p><strong>Endereço:</strong> {{ bb.address }}</p>
-            <p><strong>Telefone:</strong> {{ bb.phone }}</p>
-            <p><strong>CNPJ:</strong> {{ bb.cnpj }}</p>
-            <button type="button" (click)="onEditProfile()">Editar Perfil</button>
+          <div class="account-header">
+            <div class="profile-photo-wrapper">
+              <img [src]="bb.photoUrl || 'assets/bloodbank.png'" alt="Foto do Banco" class="profile-photo" />
+              <input #fileInput type="file" (change)="onPhotoSelected($event)" accept="image/*" hidden>
+              <button type="button" class="profile-photo-edit-btn" (click)="fileInput.click()">
+                Trocar Foto
+              </button>
+            </div>
+            <div class="account-info">
+              <p><strong>Nome:</strong> {{ bb.name }}</p>
+              <p><strong>Email:</strong> {{ bb.email }}</p>
+              <p><strong>Endereço:</strong> {{ bb.address }}</p>
+              <p><strong>Telefone:</strong> {{ bb.phone }}</p>
+              <p><strong>CNPJ:</strong> {{ bb.cnpj }}</p>
+              <button type="button" (click)="onEditProfile()">Editar Perfil</button>
+            </div>
           </div>
         </div>
-        <hr />
-        <div class="campaigns-section">
-          <h2>Campanhas de Doação</h2>
-
+        <div class="app-card">
+          <div class="app-card-header">
+            <i class="fa-solid fa-hand-holding-medical app-card-icon"></i>
+            <h2 class="app-card-title">Campanhas de Doação</h2>
+          </div>
           <!-- Formulário de adicionar/editar campanha -->
           <form *ngIf="addCampaignMode || editCampaignMode" (ngSubmit)="saveCampaign()" style="margin-bottom: 1.5rem;">
             <label>
@@ -175,7 +181,6 @@
               <button type="button" (click)="cancelCampaignForm()">Cancelar</button>
             </label>
           </form>
-
           <ul>
             <li *ngFor="let campaign of bb.campaigns; let i = index">
               <div class="campaign-info">
