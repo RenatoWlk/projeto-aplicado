@@ -15,12 +15,16 @@ public class JwtUtil {
      * Generate a JWT token for the given user ID.
      * 
      * @param userId the user ID to include in the token
+     * @param userName the user name to include in the token
+     * @param email the user email to include in the token
      * @return the generated JWT token
      */
-    public String generateToken(String userId) {
+    public String generateToken(String userId, String userName, String email) {
         long EXPIRATION_TIME = 86400000; // 1 day
         return Jwts.builder()
                 .setSubject(userId)
+                .setSubject(userName)
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, secret)

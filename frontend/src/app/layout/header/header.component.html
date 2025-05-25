@@ -4,16 +4,35 @@
         <img src="assets/logo.png" alt="Logo" class="logo" style="width: 152px; height: 69px;">
       </button>
     </div>
-    <div class="left"> 
-      <button class="account-btn" (click)="toggleMenu()">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-      <div class="dropdown-menu" *ngIf="isMenuOpen">
-        <ul>
-          <li><a [routerLink]="'/login'">Login</a></li>
-          <li><a [routerLink]="'/register'">Criar conta</a></li>
-        </ul>
+    <div class="left">
+      <div *ngIf="isLoggedIn">
+        <button class="header-btn" (click)="toggleMenu()">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <div class="dropdown-menu" *ngIf="isMenuOpen">
+          <ul>
+            <li><a [routerLink]="'/login'">Login</a></li>
+            <li><a [routerLink]="'/register'">Criar conta</a></li>
+          </ul>
+        </div>
+      </div>
+      <div *ngIf="!isLoggedIn">
+        <div class="logged-in-container">
+          <button class="header-btn">
+            <mat-icon>notifications</mat-icon>
+          </button>
+          <button class="header-btn" (click)="toggleMenu()">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <div class="dropdown-menu" *ngIf="isMenuOpen">
+            <ul>
+              <p class="menu-name">{{ userName }}</p>
+              <p class="menu-email">{{ userEmail }}</p>
+              <li><a [routerLink]="'/account'">Conta</a></li>
+              <li><a [routerLink]="'/logout'">Sair</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 </div>
-

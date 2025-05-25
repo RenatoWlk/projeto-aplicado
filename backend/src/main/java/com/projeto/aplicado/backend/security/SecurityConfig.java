@@ -19,14 +19,13 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     /**
-     * Configures the security filter chain for the application.
-     * 
-     * This method sets up the security filter chain with the following configurations:
-     * - Disables CSRF protection.
-     * - Sets the session management policy to stateless.
-     * - Configures authorization rules for HTTP requests:
-     *  - Allows all requests to the "/api/auth/**" endpoint without authentication.
-     * - Requires authentication for all other requests.
+     * Configures the security filter chain for the application.<br><br>
+     * This method sets up the security filter chain with the following configurations:<br>
+     * - Disables CSRF protection.<br>
+     * - Sets the session management policy to stateless.<br>
+     * - Configures authorization rules for HTTP requests:<br>
+     * - Allows all requests to the "/api/auth/**" endpoint without authentication.<br>
+     * - Requires authentication for all other requests.<br>
      * - Adds the JWT authentication filter before the UsernamePasswordAuthenticationFilter.
      * 
      * @param http the HttpSecurity object to configure
@@ -47,8 +46,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Creates a PasswordEncoder bean using BCryptPasswordEncoder.
-     * 
+     * Creates a PasswordEncoder bean using BCryptPasswordEncoder.<br><br>
      * This method provides a PasswordEncoder bean that uses the BCrypt hashing algorithm
      * to encode passwords. It is used for securely hashing and verifying passwords.
      * 
@@ -60,9 +58,8 @@ public class SecurityConfig {
     }
 
     /**
-     * Creates an AuthenticationManager bean.
-     * 
-     * This method provides an AuthenticationManager bean that is used for authenticating users.
+     * Creates an AuthenticationManager bean.<br><br>
+     * This method provides an AuthenticationManager bean that is used for authenticating users.<br>
      * It retrieves the AuthenticationManager from the provided AuthenticationConfiguration.
      * 
      * @return an AuthenticationManager instance

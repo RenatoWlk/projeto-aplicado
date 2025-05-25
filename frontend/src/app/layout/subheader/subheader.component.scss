@@ -6,6 +6,8 @@
 .links {
     display: flex;
     padding-top: 10px;
+    padding-left: 1rem;
+    padding-right: 1rem;
     margin: 0;
     font-family: 'Poppins', sans-serif;
     list-style: none;
@@ -15,12 +17,29 @@
     li {
         text-align: center;
         
-
         a {
-            font-weight: 500;
+            font-weight: 600;
+            font-size: large;
             color: white;
             text-decoration: none;
+            margin-left: 0.5rem;
         }
     }
 }
 
+.subheader-link {
+    color: white;
+}
+
+.subheader-link:hover {
+    color: rgb(255, 239, 239);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    transform: translateY(-3px);
+}
+
+.subheader-icon {
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}

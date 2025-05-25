@@ -22,7 +22,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private tokenService: TokenService
-  ) { }
+  ) {}
 
   /**
    * Send credentials to the backend and, on success,
@@ -52,5 +52,21 @@ export class AuthService {
     if (!token) return '';
     const decoded: any = jwtDecode(token);
     return decoded.sub || decoded.id || '';
+  }
+
+  /** Returns the current user's name from the token */
+  getCurrentUserName(): string {
+    const token = this.tokenService.getToken();
+    if (!token) return '';
+    const decoded: any = jwtDecode(token);
+    return decoded.name || decoded.userName || '';
+  }
+
+  /** Returns the current user email from the token */
+  getCurrentUserEmail(): string {
+    const token = this.tokenService.getToken();
+    if (!token) return '';
+    const decoded: any = jwtDecode(token);
+    return decoded.email || decoded.userEmail || '';
   }
 }

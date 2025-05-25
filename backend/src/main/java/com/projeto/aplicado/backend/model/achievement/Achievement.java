@@ -14,7 +14,17 @@ public class Achievement {
     private String title;
     private String description;
     private int points;
+
+    /** "Comum", "Raro", "Épico", "Lendário" or "Mítico" */
     private String rarity;
+
+    /**
+     * Icon name. <br>
+     * Better examples: "fa-star", "fa-heart", "fa-hand-holding-heart", "fa-award", "fa-trophy". <br>
+     * See more at: <a href="https://fontawesome.com/search?o=r&s=solid&ip=classic">FontAwesome</a>
+     */
     private String imageUrl;
-    private AchievementCondition condition; // Type and Value (e.g., "times_donated" and 10)
+
+    /** Type and Value (e.g., "times_donated" and 10) */
+    private AchievementCondition condition;
 }

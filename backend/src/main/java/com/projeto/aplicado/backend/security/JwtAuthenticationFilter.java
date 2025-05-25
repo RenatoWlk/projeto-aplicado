@@ -19,9 +19,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     /**
-     * This method is called for every request to check if the JWT token is present and valid.
-     * 
-     * If the token is valid, it sets the authentication in the security context.
+     * This method is called for every request to check if the JWT token is present and valid.<br>
+     * If the token is valid, it sets the authentication in the security context.<br>
      * If the token is not valid or not present, it continues the filter chain without setting authentication.
      * 
      * @param request the HTTP request

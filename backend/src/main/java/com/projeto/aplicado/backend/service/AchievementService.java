@@ -55,9 +55,12 @@ public class AchievementService {
      */
     private boolean matchesCondition(User user, Achievement achievement) {
         switch (achievement.getCondition().getType()) {
-            case "donation_count":
+            case "times_donated":
                 return user.getTimesDonated() >= Integer.parseInt(achievement.getCondition().getValue());
-            // Other cases like "consecutive_donations", "first_time", etc.
+            case "used_questionnaire":
+                //return user.getLastQuestionnaire() == achievement.getCondition().getValue();
+            case "scheduled_a_donation":
+                //return true;
             default:
                 return false;
         }

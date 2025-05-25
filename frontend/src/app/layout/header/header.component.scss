@@ -17,7 +17,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
   }
 
   .mat-icon {
@@ -34,18 +33,25 @@
   }
 }
 
-.account-btn {
+.header-btn {
   background: none;
   border: none;
   color: white;
-  cursor: pointer;
   font-size: 32px;
   width: 54px;
-  height: 54px;
+  height: 54px; 
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  margin-left: 0.5rem;
+}
+
+.header-btn:hover {
+  color: rgb(255, 239, 239);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  transform: translateY(-2px);
 }
 
 .dropdown-menu {
@@ -80,4 +86,31 @@
   color: #333;
   text-decoration: none;
   display: block;
+}
+
+.logged-in-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.menu-name {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 3px;
+  margin-bottom: 2px;
+  font-size: 16px;
+  font-weight: 700;
+  font-weight: 500;
+  color: #333;
+}
+
+.menu-email {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 3px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-style: italic;
+  color: #666;
 }

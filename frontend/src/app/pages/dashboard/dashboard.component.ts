@@ -14,12 +14,12 @@ import { RouterModule } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   // Constants
-  postsSectionTitle = DashboardConstants.POSTS_SECTION_TITLE;
-  offersSectionTitle = DashboardConstants.OFFERS_SECTION_TITLE;
-  nearbyBloodbanksSectionTitle = DashboardConstants.NEARBY_BLOODBANKS_SECTION_TITLE;
-  statsSectionTitle = DashboardConstants.STATS_SECTION_TITLE;
-  achievementsSectionTitle = DashboardConstants.ACHIEVEMENTS_SECTION_TITLE;
-  loginRequiredMessage = DashboardConstants.LOGIN_REQUIRED_MESSAGE;
+  postsSectionTitle: string = DashboardConstants.POSTS_SECTION_TITLE;
+  offersSectionTitle: string = DashboardConstants.OFFERS_SECTION_TITLE;
+  nearbyBloodbanksSectionTitle: string = DashboardConstants.NEARBY_BLOODBANKS_SECTION_TITLE;
+  statsSectionTitle: string = DashboardConstants.STATS_SECTION_TITLE;
+  achievementsSectionTitle: string = DashboardConstants.ACHIEVEMENTS_SECTION_TITLE;
+  loginRequiredMessage: string = DashboardConstants.LOGIN_REQUIRED_MESSAGE;
 
   isLoggedIn: boolean = false;
 
