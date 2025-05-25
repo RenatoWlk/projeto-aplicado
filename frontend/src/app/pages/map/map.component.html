@@ -1,19 +1,22 @@
-<div id="map" style="height: 100vh;"></div>
+<div class="map-container">
+  <div class="saved-locations">
+    <h3><i class="fa fa-map-marker-alt"></i> Locais Salvos</h3>
+    <ul>
+      <li *ngFor="let loc of locations" (click)="selectLocation(loc)" [class.selected]="selectedLocation === loc">
+        {{ loc.name }}
+      </li>
+    </ul>
+    <div *ngIf="selectedLocation" class="location-details">
+      <h4>{{ selectedLocation.name }}</h4>
+      <p><strong>Endereço:</strong> {{ selectedLocation.address }}</p>
+      <p><strong>Telefone:</strong> {{ selectedLocation.phone }}</p>
+    </div>
+  </div>
 
-<div class="sidebar">
-  <h2>Locais Salvos</h2>
-  <ul>
-    <li 
-      *ngFor="let location of locations" 
-      (click)="selectLocation(location)"
-      [class.active]="selectedLocation?.name === location.name">
-      {{ location.name }}
-    </li>
-  </ul>
-
-  <div *ngIf="selectedLocation" class="details">
-    <h3>{{ selectedLocation.name }}</h3>
-    <p><strong>Endereço:</strong> {{ selectedLocation.address }}</p>
-    <p><strong>Telefone:</strong> {{ selectedLocation.phone }}</p>
+  <div class="map-section">
+    <h2 class="map-title">
+      <i class="fa fa-map"></i> Mapa de Hemocentros
+    </h2>
+    <div id="map"></div>
   </div>
 </div>
