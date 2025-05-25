@@ -1,31 +1,37 @@
-<div class="register-container">
-  <form class="register-box" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <h2>
-      Criar Conta
-    </h2>
-
-    <div class="input-group">
-      <label for="name">Nome</label>
-      <input type="text" id="name" formControlName="name" required />
+<div class="stepper app-card">
+  <mat-horizontal-stepper linear>
+    <div class="step card">
+      <mat-step>
+        <form>
+          <ng-template matStepLabel>Tipo de usuário</ng-template>
+          <mat-radio-group>
+            <mat-radio-button value="donator">Doador</mat-radio-button>
+            <mat-radio-button value="bloodbank">Banco de Sangue</mat-radio-button>
+            <mat-radio-button value="partner">Parceiro</mat-radio-button>
+          </mat-radio-group>
+          <div class="actions">
+            <button mat-button matStepperNext>Próximo</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="credentialsGroup">
+        <form [formGroup]="credentialsGroup">
+          <ng-template matStepLabel>Dados de cadastro</ng-template>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" required/>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Senha</mat-label>
+            <input matInput formControlName="password" type="password" required/>
+          </mat-form-field>
+          <div class="actions">
+            <button mat-button matStepperPrevious>Voltar</button>
+            <button mat-button matStepperNext [disabled]="!credentialsGroup.valid">Próximo</button>
+          </div>
+        </form>
+      </mat-step>
     </div>
 
-    <div class="input-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" formControlName="email" required />
-    </div>
-
-    <div class="input-group">
-      <label for="password">Senha</label>
-      <input type="password" id="password" formControlName="password" required />
-    </div>
-
-    <div class="actions">
-      <button type="submit">Registrar</button>
-    </div>
-
-    <div class="divider"></div>
-
-    <a routerLink="/login" class="forgot">Já tem conta? Faça login</a>
-    
-  </form>
+  </mat-horizontal-stepper>
 </div>

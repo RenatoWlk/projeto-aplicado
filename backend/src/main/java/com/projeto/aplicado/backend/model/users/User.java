@@ -16,8 +16,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data @NoArgsConstructor @AllArgsConstructor
 public class User extends UserBase {
+    private String name;
+    private String email;
     private String cpf;
     private String gender;
+    private String password;
     private BloodType bloodType;
     private int timesDonated;
     private Duration timeUntilNextDonation;
