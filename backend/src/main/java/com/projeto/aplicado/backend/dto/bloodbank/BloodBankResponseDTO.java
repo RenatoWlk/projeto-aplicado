@@ -5,6 +5,7 @@ import com.projeto.aplicado.backend.model.Address;
 import com.projeto.aplicado.backend.model.Campaign;
 import lombok.Data;
 
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -17,4 +18,8 @@ public class BloodBankResponseDTO {
     private Role role;
     private String cnpj;
     private List<Campaign> campaigns;
+
+    public List<Campaign> getCampaigns() {
+        return campaigns == null ? Collections.emptyList() : campaigns;
+    }
 }

@@ -32,15 +32,19 @@ export class DashboardComponent implements OnInit {
   constructor(private dashboardService: DashboardService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadDashboardData();
     this.isLoggedIn = this.authService.isAuthenticated();
-    console.log(this.isLoggedIn);
+
+    if (this.isLoggedIn) {
+      this.loadAllDashboardData();
+    } else {
+      this.loadDashboardDataForUnloggedUsers();
+    }
   }
 
   /**
-   * Loads all required dashboard data.
+   * Loads all required dashboard data for logged users.
    */
-  private loadDashboardData(): void {
+  private loadAllDashboardData(): void {
     this.getPosts();
     this.getOffers();
     this.getNearbyBloodbanks();
@@ -48,6 +52,14 @@ export class DashboardComponent implements OnInit {
     this.sortAchievementsByRarity(this.userStats.achievements);
     this.userStats.potentialLivesSaved = this.calculatePotentialLivesSaved(this.userStats.timesDonated);
     this.userStats.timeUntilNextDonation = this.getReadableTimeUntilNextDonation(this.userStats.timeUntilNextDonation);
+  }
+
+  /**
+   * Loads the dashboard data for unlogged users.
+   */
+  private loadDashboardDataForUnloggedUsers(): void {
+    this.getPosts();
+    this.getOffers();
   }
 
   /**

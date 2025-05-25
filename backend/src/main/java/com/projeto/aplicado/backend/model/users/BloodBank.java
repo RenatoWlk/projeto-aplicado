@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @TypeAlias("BloodBank")
@@ -13,5 +14,5 @@ import java.util.List;
 @Data @NoArgsConstructor
 public class BloodBank extends UserBase {
     private String cnpj;
-    private List<Campaign> campaigns;
+    private List<Campaign> campaigns = new ArrayList<>();
 }

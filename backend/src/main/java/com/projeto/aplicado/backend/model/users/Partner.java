@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @TypeAlias("Partner")
@@ -14,5 +15,5 @@ import java.util.List;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Partner extends UserBase {
     private String cnpj;
-    private List<Offer> offers;
+    private List<Offer> offers = new ArrayList<>();
 }
