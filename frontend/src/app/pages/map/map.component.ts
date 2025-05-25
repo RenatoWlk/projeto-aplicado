@@ -1,24 +1,54 @@
 import { Component, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';  // ➝ Importa CommonModule
 import * as L from 'leaflet';
 
-const redIcon = new L.Icon({
+const blueIcon = new L.Icon({
   iconUrl: 'assets/marker-icon-2x.png',
   shadowUrl: 'assets/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+  shadowSize: [41, 41],
 });
 
 @Component({
   selector: 'app-map',
+  standalone: true,   // ➝ Se você estiver usando standalone (provável)
+  imports: [CommonModule], // ➝ Adiciona aqui
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit {
-
   private map!: L.Map;
-  private API_URL = 'http://localhost:8080/api/bloodbanks';  // Ajuste para o seu backend
+
+  locations = [
+    {
+      name: 'Hemocentro Unicamp',
+      coords: [-22.82377468659109, -47.06238270403627],
+      address: 'Rua Tessália Vieira de Camargo, 126 - Cidade Universitária, Campinas - SP',
+      phone: '(19) 3521-8700',
+    },
+    {
+      name: 'Hemocentro Mario Gatti',
+      coords: [-22.90956414345422, -47.07029810970188],
+      address: 'Av. Pref. Faria Lima, 600 - Parque Itália, Campinas - SP',
+      phone: '(19) 3772-5915',
+    },
+    {
+      name: 'Centro de Hematologia e Hemoterapia Campinas',
+      coords: [-22.89376799958717, -47.05641652694881],
+      address: 'R. Luzitana, 1824 - Centro, Campinas - SP',
+      phone: '(19) 3251-9811',
+    },
+    {
+      name: 'CHCM Centro de Hemoterapia Celular em Medicina',
+      coords: [-22.89564858936956, -47.06825670047348],
+      address: 'Av. Andrade Neves, 1231 - Centro, Campinas - SP',
+      phone: '(19) 3231-1234',
+    },
+  ];
+
+  selectedLocation: any = null;
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -28,40 +58,26 @@ export class MapComponent implements AfterViewInit {
     this.map = L.map('map', {
       center: [-22.838659, -47.0498384],
       zoom: 13,
-      minZoom: 13,
+      minZoom: 10,
       maxZoom: 18,
-      zoomControl: false
+      zoomControl: true,
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+      attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
-    this.loadBloodBanksMarkers();
+    this.locations.forEach((loc) => {
+      const marker = L.marker(loc.coords as L.LatLngExpression, { icon: blueIcon })
+        .addTo(this.map)
+        .on('click', () => this.selectLocation(loc));
 
-    this.map.on('zoomend', () => {
-      if (this.map.getZoom() < 13) {
-        this.map.setZoom(13);
-      }
+      marker.bindPopup(loc.name);
     });
   }
 
-  private async loadBloodBanksMarkers() {
-    try {
-      const response = await fetch(this.API_URL);
-      const bloodBanks = await response.json();
-
-      bloodBanks.forEach((bank: any) => {
-        const lat = bank.address?.latitude;
-        const lng = bank.address?.longitude;
-
-        if (lat && lng) {
-          L.marker([lat, lng], { icon: redIcon }).addTo(this.map)
-            .bindPopup(`<b>${bank.name}</b><br/>${bank.address.street}, ${bank.address.city}`);
-        }
-      });
-    } catch (error) {
-      console.error('Erro ao carregar hemocentros:', error);
-    }
+  selectLocation(location: any) {
+    this.selectedLocation = location;
+    this.map.setView(location.coords as L.LatLngExpression, 15);
   }
 }

@@ -1,3 +1,19 @@
-<div class="container">
-  <div id="map" class="map-container"></div>
+<div id="map" style="height: 100vh;"></div>
+
+<div class="sidebar">
+  <h2>Locais Salvos</h2>
+  <ul>
+    <li 
+      *ngFor="let location of locations" 
+      (click)="selectLocation(location)"
+      [class.active]="selectedLocation?.name === location.name">
+      {{ location.name }}
+    </li>
+  </ul>
+
+  <div *ngIf="selectedLocation" class="details">
+    <h3>{{ selectedLocation.name }}</h3>
+    <p><strong>Endereço:</strong> {{ selectedLocation.address }}</p>
+    <p><strong>Telefone:</strong> {{ selectedLocation.phone }}</p>
+  </div>
 </div>
