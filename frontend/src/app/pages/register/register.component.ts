@@ -43,6 +43,15 @@ export class RegisterComponent {
         gender: ['', Validators.required],
         bloodtype: ['', Validators.required],
       }),
+      bloodbankInfo: this.fb.group({ 
+        instituitionName: ['', Validators.required],
+        cnpj: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required],
+        street: ['', Validators.required],
+        neighborhood: ['', Validators.required],
+        zipcode: ['', Validators.required],
+      })
     });
   }
 
@@ -54,6 +63,10 @@ export class RegisterComponent {
     return this.userForm.get('personalInfo') as FormGroup;
   }
 
+  get bloodbankInfoGroup() {
+    return this.userForm.get('bloodbankInfo') as FormGroup;
+  }
+  
   submit() {
     console.log('Formulário enviado:', this.userForm.value);
   }
