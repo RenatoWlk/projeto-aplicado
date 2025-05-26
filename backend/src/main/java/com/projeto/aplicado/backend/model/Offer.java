@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Offer {
     private String title;
-    private String description;
+    private String body;
     private LocalDate validUntil;
     private BigDecimal discountPercentage;
 }

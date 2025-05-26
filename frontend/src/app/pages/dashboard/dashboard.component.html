@@ -20,7 +20,7 @@
         </header>
         <p class="card-body">{{ post.body }}</p>
         <footer class="card-footer">
-          <p class="address">{{ post.location.street }} - {{ post.location.city }}-{{ post.location.state }} - {{ post.location.zip }}</p>
+          <p class="address">{{ post.location.street }} - {{ post.location.city }}-{{ post.location.state }} - {{ post.location.zipCode }}</p>
           <a class="phone-link" [href]="'tel:' + post.phone">{{ post.phone }}</a>
         </footer>
       </article>
@@ -42,7 +42,7 @@
             <span class="offer-partner-name">{{ offer.partnerName }}</span>: {{ offer.title }}
           </h3>
         </header>
-        <p class="card-body">{{ offer.description }}</p>
+        <p class="card-body">{{ offer.body }}</p>
         <footer class="card-footer">
           <p class="offer-discount">{{ offer.discountPercentage }}% de desconto</p>
           <time class="offer-valid-until">Válido até: {{ offer.validUntil | date: 'dd/MM/yyyy' }}</time>
@@ -63,7 +63,7 @@
       <article class="card" *ngFor="let bloodbank of nearbyBloodbanks">
         <header class="card-header">
           <h3 class="card-title">{{ bloodbank.name }}</h3>
-          <p class="address">{{ bloodbank.address.street }} - {{ bloodbank.address.city }}-{{ bloodbank.address.state }} - {{ bloodbank.address.zip }}</p>
+          <p class="address">{{ bloodbank.address.street }} - {{ bloodbank.address.city }}-{{ bloodbank.address.state }} - {{ bloodbank.address.zipCode }}</p>
         </header>
         <footer class="card-footer">
           <a class="phone-link" [href]="'tel:' + bloodbank.phone">{{ bloodbank.phone }}</a>
