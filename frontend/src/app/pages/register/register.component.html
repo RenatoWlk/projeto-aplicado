@@ -1,7 +1,7 @@
 <div class="stepper app-card">
   <mat-horizontal-stepper [linear]=false>
     <!-- Etapa 1: Escolher usuário -->
-    <mat-step class="card">
+    <mat-step>
       <form [formGroup]="userForm">
         <ng-template matStepLabel>Tipo de usuário</ng-template>
         <div class="custom-radio-group">
@@ -9,15 +9,18 @@
             class="radio-option"
             [class.selected]="selectedOption === 'donator'"
             (click)="selectedOption = 'donator'"
+            data-tooltip="Quero doar sangue!"
           >
             <i class="fa-solid fa-users app-card-icon"></i>
             <span>Doador</span>
+            
           </button>
 
           <button mat-button matStepperNext
             class="radio-option"
             [class.selected]="selectedOption === 'bloodbank'"
             (click)="selectedOption = 'bloodbank'"
+            data-tooltip="Quero promover campanhas de doação de sangue!"
           >
             <i class="fa-solid fa-hospital app-card-icon"></i>
             <span>Banco de Sangue</span>
@@ -27,6 +30,7 @@
             class="radio-option"
             [class.selected]="selectedOption === 'partner'"
             (click)="selectedOption = 'partner'"
+            data-tooltip="Quero incentivar a doação de sangue!"
           >
             <i class="fa-solid fa-handshake-angle app-card-icon"></i>
             <span>Parceiro</span>
