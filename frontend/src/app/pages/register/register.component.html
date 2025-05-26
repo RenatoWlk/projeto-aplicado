@@ -109,8 +109,8 @@
 
     <!-- Etapa 3: Dados pessoais: bloodbank -->
 
-    <mat-step *ngIf="selectedOption === 'bloodbank'"[stepControl]="bloodbankInfoGroup">
-      <form [formGroup]="personalInfoGroup">
+    <mat-step *ngIf="selectedOption === 'bloodbank'"[stepControl]="bloodbankInfoFormGroup">
+      <form [formGroup]="bloodbankInfoFormGroup">
         <ng-template matStepLabel>Dados Pessoais</ng-template>
 
         <mat-form-field appearance="fill">
@@ -121,7 +121,58 @@
         <mat-form-field appearance="fill">
           <mat-label>CNPJ</mat-label>
           <input matInput formControlName="cnpj" required />
-          <mat-error *ngIf="personalInfoGroup.get('cnpj')?.hasError('pattern')">
+          <mat-error *ngIf="bloodbankInfoFormGroup.get('cnpj')?.hasError('pattern')">
+            CNPJ deve conter 11 dígitos
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Cidade</mat-label>
+          <input matInput formControlName="city" required/>
+        </mat-form-field>    
+
+        <mat-form-field appearance="fill">
+          <mat-label>Estado</mat-label>
+          <input matInput formControlName="state" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Rua</mat-label>
+          <input matInput formControlName="street" required/>
+        </mat-form-field>
+        
+        <mat-form-field appearance="fill">
+          <mat-label>Bairro</mat-label>
+          <input matInput formControlName="neighborhood" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CEP</mat-label>
+          <input matInput formControlName="zipcode" required/>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-button matStepperNext>Próximo</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Etapa 3: Dados pessoais: partner -->
+
+    <mat-step *ngIf="selectedOption === 'partner'"[stepControl]="partnerInfoFormGroup">
+      <form [formGroup]="partnerInfoFormGroup">
+        <ng-template matStepLabel>Dados Pessoais</ng-template>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Nome do Parcerio</mat-label>
+          <input matInput formControlName="partnerName" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CNPJ</mat-label>
+          <input matInput formControlName="cnpj" required />
+          <mat-error *ngIf="partnerInfoFormGroup.get('cnpj')?.hasError('pattern')">
             CNPJ deve conter 11 dígitos
           </mat-error>
         </mat-form-field>
@@ -162,9 +213,9 @@
     <!-- Etapa 4: Bem-vindo -->
     <mat-step>
       <ng-template matStepLabel>Concluído</ng-template>
-      <h2>Bem-vindo, {{ personalInfoGroup.get('name')?.value }}!</h2>
+      <h2>Bem-vindo,!</h2>
       <p>Seu cadastro foi realizado com sucesso.</p>
-      <button mat-button (click)="submit()">Acessar o site</button>
+      <button mat-button routerLink="/dashboard" (click)="submit()">Acessar o site</button>
     </mat-step>
 
   </mat-horizontal-stepper>

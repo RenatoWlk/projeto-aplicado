@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatIconModule } from '@angular/material/icon';
-import { BloodType } from '../dashboard/dashboard.service';
+import { RouterModule } from '@angular/router';
 
 
 @Component({
@@ -17,7 +17,7 @@ import { BloodType } from '../dashboard/dashboard.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule, MatStepperModule, MatRadioModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,
-    MatIconModule
+    MatIconModule, RouterModule,
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -44,14 +44,23 @@ export class RegisterComponent {
         bloodtype: ['', Validators.required],
       }),
       bloodbankInfo: this.fb.group({ 
-        instituitionName: ['', Validators.required],
+        instituitonName: ['', Validators.required],
         cnpj: ['', Validators.required],
         city: ['', Validators.required],
         state: ['', Validators.required],
         street: ['', Validators.required],
         neighborhood: ['', Validators.required],
         zipcode: ['', Validators.required],
-      })
+      }),
+      partnerInfo: this.fb.group({ 
+        partnerName: ['', Validators.required],
+        cnpj: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required],
+        street: ['', Validators.required],
+        neighborhood: ['', Validators.required],
+        zipcode: ['', Validators.required],
+      }),
     });
   }
 
@@ -63,8 +72,12 @@ export class RegisterComponent {
     return this.userForm.get('personalInfo') as FormGroup;
   }
 
-  get bloodbankInfoGroup() {
+  get bloodbankInfoFormGroup() {
     return this.userForm.get('bloodbankInfo') as FormGroup;
+  }
+  
+  get partnerInfoFormGroup() {
+    return this.userForm.get('partnerInfo') as FormGroup;
   }
   
   submit() {
