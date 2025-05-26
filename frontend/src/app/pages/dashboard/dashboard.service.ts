@@ -19,13 +19,13 @@ export interface Address {
     street: string;
     city: string;
     state: string;
-    zip: string;
+    zipCode: string;
 }
 
 export interface Offer {
     partnerName: string;
     title: string;
-    description: string;
+    body: string;
     validUntil: Date;
     discountPercentage: number;
 }

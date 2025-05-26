@@ -43,3 +43,9 @@
     font-size: 24px;
     cursor: pointer;
 }
+
+.subheader-link.active {
+  .subheader-icon {
+    color: #d9534f;
+  }
+}
