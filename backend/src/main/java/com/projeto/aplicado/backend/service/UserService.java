@@ -8,9 +8,13 @@ import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import com.projeto.aplicado.backend.service.EmailService;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final AchievementService achievementService;
+    private final EmailService emailService;
+
 
     /**
      * Creates a new user in the system.
@@ -105,4 +111,16 @@ public class UserService {
         dto.setBloodType(user.getBloodType());
         return dto;
     }
+
+    public void sendPasswordRecoveryEmail(String email) {
+    Optional<User> userOpt = userRepository.findByEmail(email);
+    if (userOpt.isPresent()) {
+        User user = userOpt.get();
+        String message = "Olá " + user.getName() + ",\n\n" +
+                         "Seu login é: " + user.getEmail() + "\n\n" +
+                         "Sua senha é: " + user.getPassword() + "\n\n";
+
+        emailService.sendEmail(user.getEmail(), "Recuperação de Dados de Acesso", message);
+    }
+}
 }
