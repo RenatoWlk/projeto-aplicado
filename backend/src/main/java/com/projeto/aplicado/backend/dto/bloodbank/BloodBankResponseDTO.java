@@ -15,6 +15,8 @@ public class BloodBankResponseDTO {
     private String email;
     private Address address;
     private String phone;
+    private Double latitude;
+    private Double longitude;
     private Role role;
     private String cnpj;
     private List<Campaign> campaigns;

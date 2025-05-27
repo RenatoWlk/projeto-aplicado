@@ -38,7 +38,6 @@ export class QuestionnaireComponent {
   sucessoPreenchimento = false;
 
   constructor(private fb: FormBuilder) {
-    console.log("questionnaire component carregado.")
     this.form = this.fb.group({
       sexo: ['', Validators.required],
       idade: ['', Validators.required],

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreloaderComponent } from './preloader.component';
+import { UserAccountComponent } from './user-account.component';
 
-describe('PreloaderComponent', () => {
-  let component: PreloaderComponent;
-  let fixture: ComponentFixture<PreloaderComponent>;
+describe('UserAccountComponent', () => {
+  let component: UserAccountComponent;
+  let fixture: ComponentFixture<UserAccountComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PreloaderComponent]
+      imports: [UserAccountComponent]
     })
     .compileComponents();
-    
-    fixture = TestBed.createComponent(PreloaderComponent);
+
+    fixture = TestBed.createComponent(UserAccountComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

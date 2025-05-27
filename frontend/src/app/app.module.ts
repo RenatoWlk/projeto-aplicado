@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -27,6 +28,8 @@ import { MatNativeDateModule } from '@angular/material/core'
     MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
 })
-export class AppModule { }
+export class AppModule {}

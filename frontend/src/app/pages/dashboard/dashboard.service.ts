@@ -3,17 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Achievement } from '../account/account.service';
 import { DashboardConstants } from './constants/dashboard.constants';
-
-export enum BloodType {
-    A_POSITIVE = 'A+',
-    A_NEGATIVE = 'A-',
-    B_POSITIVE = 'B+',
-    B_NEGATIVE = 'B-',
-    AB_POSITIVE = 'AB+',
-    AB_NEGATIVE = 'AB-',
-    O_POSITIVE = 'O+',
-    O_NEGATIVE = 'O-'
-}
+import { BloodType } from '../../shared/app.enums';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 export interface Address {
     street: string;
@@ -59,7 +50,7 @@ export interface Bloodbank {
     providedIn: 'root'
 })
 export class DashboardService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     getOffers(): Observable<Offer[]> {
         return this.http.get<Offer[]>(DashboardConstants.GET_OFFERS_ENDPOINT);
@@ -75,5 +66,15 @@ export class DashboardService {
 
     getUserStats(userId: string): Observable<UserStats> {
         return this.http.get<UserStats>(`/api/users/${userId}/stats`);
+    }
+
+    createCampaign(campaign: Campaign): Observable<Campaign> {
+        const data = {campaign, bloodbankEmail: this.auth.getCurrentUserEmail()};
+        return this.http.post<Campaign>(DashboardConstants.CREATE_CAMPAIGN_ENDPOINT, data);
+    }
+
+    createOffer(offer: Offer): Observable<Offer> {
+        const data = {offer, partnerEmail: this.auth.getCurrentUserEmail()};
+        return this.http.post<Offer>(DashboardConstants.CREATE_OFFER_ENDPOINT, data);
     }
 }

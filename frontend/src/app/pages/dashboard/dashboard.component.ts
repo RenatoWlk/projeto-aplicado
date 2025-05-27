@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardConstants } from './constants/dashboard.constants';
-import { UserStats, Bloodbank, Campaign, DashboardService, Offer, BloodType } from './dashboard.service';
+import { UserStats, Bloodbank, Campaign, DashboardService, Offer } from './dashboard.service';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { RouterModule } from '@angular/router';
+import { UserRole } from '../../shared/app.enums';
+import { ModalComponent } from '../../shared/modal/modal.component';
+import { FormCreateItemComponent } from '../../shared/form-create-item/form-create-item.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -21,13 +24,18 @@ export class DashboardComponent implements OnInit {
   achievementsSectionTitle: string = DashboardConstants.ACHIEVEMENTS_SECTION_TITLE;
   loginRequiredMessage: string = DashboardConstants.LOGIN_REQUIRED_MESSAGE;
 
+  // User data
+  roles = UserRole;
   isLoggedIn: boolean = false;
-
-  // Data
+  userRole: UserRole | null = null;
+  
+  // Dashboard data
   posts: Campaign[] = [];
   offers: Offer[] = [];
   nearbyBloodbanks: Bloodbank[] = [];
   userStats: UserStats = {} as any;
+  isCampaignModalOpen: boolean = false;
+  isOfferModalOpen: boolean = false;
 
   constructor(private dashboardService: DashboardService, private authService: AuthService) {}
 
@@ -36,6 +44,7 @@ export class DashboardComponent implements OnInit {
 
     if (this.isLoggedIn) {
       this.loadAllDashboardData();
+      this.userRole = this.authService.getCurrentUserRole();
     } else {
       this.loadDashboardDataForUnloggedUsers();
     }
@@ -64,7 +73,6 @@ export class DashboardComponent implements OnInit {
    */
   private getPosts(): void {
     this.dashboardService.getCampaigns().subscribe((posts: Campaign[]) => {
-      console.log(posts);
       this.posts = posts;
     });
   }
@@ -74,7 +82,6 @@ export class DashboardComponent implements OnInit {
    */
   private getOffers(): void {
     this.dashboardService.getOffers().subscribe((offers: Offer[]) => {
-      console.log(offers);
       this.offers = offers;
     });
   }
@@ -147,5 +154,21 @@ export class DashboardComponent implements OnInit {
     };
 
     return achievements.sort((a, b) => order[a.rarity.toLowerCase()] - order[b.rarity.toLowerCase()]);
+  }
+
+  createNewCampaign(data: any): void {
+    this.isCampaignModalOpen = false;
+
+    this.dashboardService.createCampaign(data).subscribe(() => {
+      this.getPosts();
+    });
+  }
+
+  createNewOffer(data: any): void {
+    this.isOfferModalOpen = false;
+
+    this.dashboardService.createOffer(data).subscribe(() => {
+      this.getOffers();
+    });
   }
 }

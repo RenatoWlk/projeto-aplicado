@@ -1,0 +1,359 @@
+.account-header {
+  display: flex;
+  align-items: center;
+  gap: 10%;
+  margin-bottom: 2rem;
+
+  .profile-photo-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-left: 8%;
+    margin-bottom: 4%;
+
+    .profile-photo {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #b71c1c;
+      background: #f5f5f5;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.09);
+      display: block;
+    }
+
+    .profile-photo-edit-btn {
+      margin-top: 0.7rem;
+      margin-right: 0.7rem;
+      padding: 0.45rem 1.3rem;
+      background: #b71c1c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #a31515;
+      }
+    }
+
+    input {
+      display: none;
+    }
+
+    .material-icons {
+      font-size: 1.5rem;
+    }
+  }
+
+  .account-info {
+    flex: 1;
+
+    p {
+      margin: 0.4rem 0;
+      color: #333;
+      font-weight: 500;
+      font-size: 1.08rem;
+    }
+
+    button {
+      margin-top: 0.7rem;
+      margin-right: 0.7rem;
+      padding: 0.45rem 1.3rem;
+      background: #b71c1c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #a31515;
+      }
+    }
+  }
+
+  .profile-photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 1rem;
+
+    .profile-photo-edit {
+      color: #b71c1c;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 0.6rem;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #a31515;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto 1.7rem;
+  gap: 1.3rem;
+  background: #f6f6f6;
+  border-radius: 7px;
+  padding: 1.1rem 1.3rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.025);
+
+  label {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 210px;
+    min-width: 170px;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+
+    input:not([type="checkbox"]) {
+      margin-top: 0.3rem;
+      padding: 0.5rem 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      background: #fff;
+      transition: border 0.2s;
+
+      &:focus {
+        border: 1.5px solid #b71c1c;
+        outline: none;
+      }
+    }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #b71c1c;
+      margin-top: 0.5rem;
+      margin-left: 0.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+
+  button {
+    padding: 0.5rem 1.5rem;
+    background: #b71c1c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 1.2rem;
+    margin-right: 0.7rem;
+
+    &:hover {
+      background: #a31515;
+    }
+  }
+}
+
+ng-template,
+.account-info {
+  margin-bottom: 1.2rem;
+
+  p {
+    margin: 0.3rem 0;
+    color: #333;
+    font-weight: 500;
+    font-size: 1.05rem;
+  }
+
+  button {
+    margin-top: 0.7rem;
+    padding: 0.4rem 1.2rem;
+    background: #b71c1c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #a31515;
+    }
+  }
+}
+
+.app-card {
+  background: #f8f8f8;
+  border-radius: 8px;
+  padding: 1.5rem 1.3rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 6px rgba(183, 28, 28, 0.06);
+
+  .app-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.1rem;
+
+    .app-card-icon {
+      color: #b71c1c;
+      font-size: 1.5rem;
+    }
+
+    .app-card-title {
+      color: #b71c1c;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.2rem;
+
+    li {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      margin-bottom: 0.9rem;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      font-size: 1.05rem;
+
+      .campaign-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .campaign-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      strong {
+        color: #b71c1c;
+        font-weight: 700;
+        margin-right: 0.5rem;
+      }
+
+      span {
+        font-size: 0.98rem;
+        margin-left: 0.5rem;
+      }
+
+      button {
+        margin-left: auto;
+        margin-right: 0.5rem;
+        padding: 0.35rem 1.1rem;
+        background: #b71c1c;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-size: 0.97rem;
+
+        &:hover {
+          background: #a31515;
+        }
+      }
+    }
+  }
+
+  > button {
+    padding: 0.5rem 1.4rem;
+    background: #b71c1c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 1rem;
+    margin-top: 0.7rem;
+
+    &:hover {
+      background: #a31515;
+    }
+  }
+}
+.achievements-page {
+  background: #eee;
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 12px rgba(183,28,28,0.07);
+  margin-bottom: 2rem;
+  text-align: center;
+
+  h2 {
+    color: #b71c1c;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .badges-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .badge {
+    background: #fff3e0;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 1px 4px rgba(183,28,28,0.05);
+    min-width: 120px;
+    max-width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 54px;
+      height: 54px;
+      margin-bottom: 0.5rem;
+    }
+    .badge-title {
+      font-weight: 700;
+      color: #b71c1c;
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+    .badge-desc {
+      font-size: 0.95rem;
+      color: #6d4c41;
+      text-align: center;
+    }
+  }
+
+  button {
+    margin-top: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    background: #b71c1c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover {
+      background: #a31515;
+    }
+  }
+}

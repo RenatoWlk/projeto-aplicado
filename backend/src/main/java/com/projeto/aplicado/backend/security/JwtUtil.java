@@ -1,5 +1,6 @@
 package com.projeto.aplicado.backend.security;
 
+import com.projeto.aplicado.backend.model.enums.Role;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,12 +20,13 @@ public class JwtUtil {
      * @param email the user email to include in the token
      * @return the generated JWT token
      */
-    public String generateToken(String userId, String userName, String email) {
+    public String generateToken(String userId, String userName, String email, Role role) {
         long EXPIRATION_TIME = 86400000; // 1 day
         return Jwts.builder()
                 .setSubject(userId)
                 .setSubject(userName)
                 .setSubject(email)
+                .setSubject(String.valueOf(role))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, secret)

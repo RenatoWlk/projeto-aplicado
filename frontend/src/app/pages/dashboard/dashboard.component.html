@@ -7,6 +7,12 @@
     <div class="app-card-header">
       <i class="fas fa-book-medical app-card-icon"></i>
       <h2 class="app-card-title">{{ postsSectionTitle }}</h2>
+      <div *ngIf="userRole === roles.Bloodbank" class="create-post-container">
+        <button class="app-button create-post-button" (click)="isCampaignModalOpen = true">
+          <i class="fas fa-plus create-post-icon"></i>
+          Criar nova publicação
+        </button>
+      </div>
     </div>
     <div class="cards-grid-large cards-grid-overflow">
       <article class="card" *ngFor="let post of posts">
@@ -34,6 +40,12 @@
     <div class="app-card-header">
       <i class="fas fa-tags app-card-icon"></i>
       <h2 class="app-card-title">{{ offersSectionTitle }}</h2>
+      <div *ngIf="userRole === roles.Partner" class="create-post-container">
+        <button class="app-button create-post-button" (click)="isOfferModalOpen = true">
+          <i class="fas fa-plus create-post-icon"></i>
+          Criar nova oferta
+        </button>
+      </div>
     </div>
     <div class="cards-grid-medium cards-grid-overflow">
       <article class="card" *ngFor="let offer of offers">
@@ -59,17 +71,22 @@
       <i class="fas fa-location-dot app-card-icon"></i>
       <h2 class="app-card-title">{{ nearbyBloodbanksSectionTitle }}</h2>
     </div>
-    <div *ngIf="isLoggedIn else loginPrompt" class="cards-grid-medium cards-grid-overflow">
-      <article class="card" *ngFor="let bloodbank of nearbyBloodbanks">
-        <header class="card-header">
-          <h3 class="card-title">{{ bloodbank.name }}</h3>
-          <p class="address">{{ bloodbank.address.street }} - {{ bloodbank.address.city }}-{{ bloodbank.address.state }} - {{ bloodbank.address.zipCode }}</p>
-        </header>
-        <footer class="card-footer">
-          <a class="phone-link" [href]="'tel:' + bloodbank.phone">{{ bloodbank.phone }}</a>
-        </footer>
-      </article>
-    </div>
+    <!-- VISIBLE ONLY TO LOGGED-IN USERS WITH ROLE 'USER' -->
+    <ng-container *ngIf="isLoggedIn; else loginPrompt">
+      <ng-container *ngIf="userRole === roles.User; else restrictedRolePrompt">
+        <div class="cards-grid-medium cards-grid-overflow">
+          <article class="card" *ngFor="let bloodbank of nearbyBloodbanks">
+            <header class="card-header">
+              <h3 class="card-title">{{ bloodbank.name }}</h3>
+              <p class="address">{{ bloodbank.address.street }} - {{ bloodbank.address.city }}-{{ bloodbank.address.state }} - {{ bloodbank.address.zipCode }}</p>
+            </header>
+            <footer class="card-footer">
+              <a class="phone-link" [href]="'tel:' + bloodbank.phone">{{ bloodbank.phone }}</a>
+            </footer>
+          </article>
+        </div>
+      </ng-container>
+    </ng-container>
   </section>
 
   <!-- ================== -->
@@ -80,25 +97,30 @@
       <i class="fas fa-chart-simple app-card-icon"></i>
       <h2 class="app-card-title">{{ statsSectionTitle }}</h2>
     </div>
-    <div *ngIf="isLoggedIn else loginPrompt" class="cards-grid-small">
-      <div class="stat-card" *ngFor="let stat of [
-        { icon: 'fa-hand-holding-heart', label: 'Doações', value: userStats.timesDonated },
-        { icon: 'fa-heartbeat', label: 'Vidas salvas', value: userStats.potentialLivesSaved },
-        { icon: 'fa-tint', label: 'Tipo sanguíneo', value: userStats.bloodType },
-        { icon: 'fa-clock', label: 'Próxima doação', value: userStats.timeUntilNextDonation },
-        { icon: 'fa-calendar-check', label: 'Última doação', value: (userStats.lastDonationDate | date: 'dd/MM/yyyy') },
-        { icon: 'custom', label: 'Total de pontos', value: userStats.totalPoints }
-      ]">
-        <ng-container *ngIf="stat.icon !== 'custom'; else customIcon">
-          <i class="fas {{ stat.icon }} stat-icon"></i>
-        </ng-container>
-        <ng-template #customIcon>
-          <img src="assets/icon.png" style="height: 29px; width: 31px;">
-        </ng-template>
-        <p class="stat-label">{{ stat.label }}</p>
-        <p class="stat-value">{{ stat.value }}</p>
-      </div>
-    </div>
+    <!-- VISIBLE ONLY TO LOGGED-IN USERS WITH ROLE 'USER' -->
+    <ng-container *ngIf="isLoggedIn; else loginPrompt">
+      <ng-container *ngIf="userRole === roles.User; else restrictedRolePrompt">
+        <div class="cards-grid-small">
+          <div class="stat-card" *ngFor="let stat of [
+            { icon: 'fa-hand-holding-heart', label: 'Doações', value: userStats.timesDonated },
+            { icon: 'fa-heartbeat', label: 'Vidas salvas', value: userStats.potentialLivesSaved },
+            { icon: 'fa-tint', label: 'Tipo sanguíneo', value: userStats.bloodType },
+            { icon: 'fa-clock', label: 'Próxima doação', value: userStats.timeUntilNextDonation },
+            { icon: 'fa-calendar-check', label: 'Última doação', value: (userStats.lastDonationDate | date: 'dd/MM/yyyy') },
+            { icon: 'custom', label: 'Total de pontos', value: userStats.totalPoints }
+          ]">
+            <ng-container *ngIf="stat.icon !== 'custom'; else customIcon">
+              <i class="fas {{ stat.icon }} stat-icon"></i>
+            </ng-container>
+            <ng-template #customIcon>
+              <img src="assets/icon.png" style="height: 29px; width: 31px;">
+            </ng-template>
+            <p class="stat-label">{{ stat.label }}</p>
+            <p class="stat-value">{{ stat.value }}</p>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
   </section>
 
   <!-- ==================== -->
@@ -109,20 +131,25 @@
       <i class="fas fa-trophy app-card-icon"></i>
       <h2 class="app-card-title">{{ achievementsSectionTitle }}</h2>
     </div>
-    <div *ngIf="isLoggedIn else loginPrompt" class="achievements-grid">
-      <div
-        *ngFor="let achievement of userStats.achievements"
-        class="achievement-square-card tooltip-container"
-        [ngClass]="achievement.rarity.toLowerCase()"
-      >
-        <i class="fas achievement-icon" [ngClass]="achievement.imageUrl"></i>
-        <div class="achievement-info">
-          <span class="achievement-title">{{ achievement.title }}</span>
-          <span class="achievement-points">+{{ achievement.points }} pts</span>
+    <!-- VISIBLE ONLY TO LOGGED-IN USERS WITH ROLE 'USER' -->
+    <ng-container *ngIf="isLoggedIn; else loginPrompt">
+      <ng-container *ngIf="userRole === roles.User; else restrictedRolePrompt">
+        <div class="achievements-grid">
+          <div
+            *ngFor="let achievement of userStats.achievements"
+            class="achievement-square-card tooltip-container"
+            [ngClass]="achievement.rarity.toLowerCase()"
+          >
+            <i class="fas achievement-icon" [ngClass]="achievement.imageUrl"></i>
+            <div class="achievement-info">
+              <span class="achievement-title">{{ achievement.title }}</span>
+              <span class="achievement-points">+{{ achievement.points }} pts</span>
+            </div>
+            <div class="tooltip">{{ achievement.description }}</div>
+          </div>
         </div>
-        <div class="tooltip">{{ achievement.description }}</div>
-      </div>
-    </div>
+      </ng-container>
+    </ng-container>
   </section>
 
   <!-- ======================= -->
@@ -131,8 +158,47 @@
   <ng-template #loginPrompt>
     <div class="card">
       <p class="card-title">{{ loginRequiredMessage }}</p>
-      <button routerLink="/login" class="login-btn">Fazer Login</button>
+      <button routerLink="/login" class="app-button">Fazer Login</button>
     </div>
   </ng-template>
+
+  <!-- ======================== -->
+  <!-- RESTRICTED ROLE TEMPLATE -->
+  <!-- ======================== -->
+  <ng-template #restrictedRolePrompt>
+    <div class="card">
+      <p class="card-title">
+        Esta seção é exclusiva para doadores. Sua função atual não permite visualizar essas informações.
+      </p>
+    </div>
+  </ng-template>
+
+  <!-- ========================= -->
+  <!-- CREATE NEW CAMPAIGN MODAL -->
+  <!-- ========================= -->
+  <app-modal
+    [title]="'Criar nova publicação'"
+    [visible]="isCampaignModalOpen"
+    (close)="isCampaignModalOpen = false"
+  >
+    <app-form-create-item
+      [type]="'post'"
+      (submitForm)="createNewCampaign($event)">
+    </app-form-create-item>
+  </app-modal>
+
+  <!-- ====================== -->
+  <!-- CREATE NEW OFFER MODAL -->
+  <!-- ====================== -->
+  <app-modal
+    [title]="'Criar nova oferta'"
+    [visible]="isOfferModalOpen"
+    (close)="isOfferModalOpen = false"
+  >
+    <app-form-create-item
+      [type]="'offer'"
+      (submitForm)="createNewOffer($event)">
+    </app-form-create-item>
+  </app-modal>
 
 </div>
