@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -57,6 +58,13 @@ public class UserController {
     @GetMapping("/{id}/stats")
     public ResponseEntity<UserStatsDTO> getStatsById(@PathVariable String id) {
         return ResponseEntity.ok(userService.findStatsById(id));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        userService.sendPasswordRecoveryEmail(email);
+        return ResponseEntity.ok().build();
     }
 }
 
