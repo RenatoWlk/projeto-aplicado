@@ -17,7 +17,7 @@ public class BloodBankController {
 
     /**
      * Creates a new blood bank.
-     * 
+     *
      * @param dto the blood bank request DTO
      * @return the created blood bank response DTO
      */
@@ -28,7 +28,7 @@ public class BloodBankController {
 
     /**
      * Gets all blood banks.
-     * 
+     *
      * @return a list of blood bank response DTOs
      */
     @GetMapping
@@ -37,13 +37,24 @@ public class BloodBankController {
     }
 
     /**
-     * Get an existing blood bank.
-     * 
-     * @param id the ID of the blood bank to get
+     * Get an existing blood bank by ID.
+     *
+     * @param id the ID of the blood bank to retrieve
      * @return the blood bank response DTO
      */
     @GetMapping("/{id}")
     public ResponseEntity<BloodBankResponseDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(bloodBankService.findById(id));
+    }
+
+    /**
+     * Retrieves all blood banks with geolocation (latitude and longitude)
+     * to be displayed on the map.
+     *
+     * @return a list of blood banks with location data
+     */
+    @GetMapping("/locations")
+    public ResponseEntity<List<BloodBankResponseDTO>> getBloodBanksWithLocation() {
+        return ResponseEntity.ok(bloodBankService.getAllWithLocation());
     }
 }

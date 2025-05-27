@@ -1,6 +1,8 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // ➝ Importa CommonModule
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
+import { MapService, Location } from './map.service';
+import { Subscription } from 'rxjs';
 
 const blueIcon = new L.Icon({
   iconUrl: 'assets/marker-icon-2x.png',
@@ -13,45 +15,33 @@ const blueIcon = new L.Icon({
 
 @Component({
   selector: 'app-map',
-  standalone: true,   // ➝ Se você estiver usando standalone (provável)
-  imports: [CommonModule], // ➝ Adiciona aqui
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
   private map!: L.Map;
+  private markersLayer = L.layerGroup();
 
-  locations = [
-    {
-      name: 'Hemocentro Unicamp',
-      coords: [-22.82377468659109, -47.06238270403627],
-      address: 'Rua Tessália Vieira de Camargo, 126 - Cidade Universitária, Campinas - SP',
-      phone: '(19) 3521-8700',
-    },
-    {
-      name: 'Hemocentro Mario Gatti',
-      coords: [-22.90956414345422, -47.07029810970188],
-      address: 'Av. Pref. Faria Lima, 600 - Parque Itália, Campinas - SP',
-      phone: '(19) 3772-5915',
-    },
-    {
-      name: 'Centro de Hematologia e Hemoterapia Campinas',
-      coords: [-22.89376799958717, -47.05641652694881],
-      address: 'R. Luzitana, 1824 - Centro, Campinas - SP',
-      phone: '(19) 3251-9811',
-    },
-    {
-      name: 'CHCM Centro de Hemoterapia Celular em Medicina',
-      coords: [-22.89564858936956, -47.06825670047348],
-      address: 'Av. Andrade Neves, 1231 - Centro, Campinas - SP',
-      phone: '(19) 3231-1234',
-    },
-  ];
+  locations: Location[] = [];
+  selectedLocation: Location | null = null;
+  private locationsSub?: Subscription;
 
-  selectedLocation: any = null;
+  constructor(private mapService: MapService) {}
 
   ngAfterViewInit(): void {
-    this.initMap();
+    this.locationsSub = this.mapService.getLocations().subscribe({
+      next: (locs) => {
+        this.locations = locs;
+        if (!this.map) {
+          this.initMap();
+        } else {
+          this.updateMarkers();
+        }
+      },
+      error: (err) => console.error('Erro ao carregar locais', err),
+    });
   }
 
   private initMap(): void {
@@ -67,17 +57,29 @@ export class MapComponent implements AfterViewInit {
       attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
+    this.markersLayer.addTo(this.map); // Adiciona o layer dos marcadores
+
+    this.updateMarkers();
+  }
+
+  private updateMarkers(): void {
+    this.markersLayer.clearLayers(); // Limpa só os marcadores
+
     this.locations.forEach((loc) => {
       const marker = L.marker(loc.coords as L.LatLngExpression, { icon: blueIcon })
-        .addTo(this.map)
-        .on('click', () => this.selectLocation(loc));
+        .on('click', () => this.selectLocation(loc))
+        .bindPopup(`<b>${loc.name}</b><br>${loc.address}<br>${loc.phone}`);
 
-      marker.bindPopup(loc.name);
+      marker.addTo(this.markersLayer);
     });
   }
 
-  selectLocation(location: any) {
+  selectLocation(location: Location) {
     this.selectedLocation = location;
     this.map.setView(location.coords as L.LatLngExpression, 15);
+  }
+
+  ngOnDestroy(): void {
+    this.locationsSub?.unsubscribe();
   }
 }
