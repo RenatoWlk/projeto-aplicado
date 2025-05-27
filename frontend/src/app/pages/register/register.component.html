@@ -1,31 +1,226 @@
-<div class="register-container">
-  <form class="register-box" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <h2>
-      Criar Conta
-    </h2>
+<div class="stepper app-card">
+  <mat-horizontal-stepper [linear]=false>
+    <!-- Etapa 1: Escolher usuário -->
+    <mat-step>
+      <form [formGroup]="userForm">
+        <ng-template matStepLabel>Tipo de usuário</ng-template>
+        <div class="custom-radio-group">
+          <button mat-button matStepperNext
+            class="radio-option"
+            [class.selected]="selectedOption === 'donator'"
+            (click)="selectedOption = 'donator'"
+            data-tooltip="Quero doar sangue!"
+          >
+            <i class="fa-solid fa-users app-card-icon"></i>
+            <span>Doador</span>
+            
+          </button>
 
-    <div class="input-group">
-      <label for="name">Nome</label>
-      <input type="text" id="name" formControlName="name" required />
-    </div>
+          <button mat-button matStepperNext
+            class="radio-option"
+            [class.selected]="selectedOption === 'bloodbank'"
+            (click)="selectedOption = 'bloodbank'"
+            data-tooltip="Quero promover campanhas de doação de sangue!"
+          >
+            <i class="fa-solid fa-hospital app-card-icon"></i>
+            <span>Banco de Sangue</span>
+          </button>
 
-    <div class="input-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" formControlName="email" required />
-    </div>
-
-    <div class="input-group">
-      <label for="password">Senha</label>
-      <input type="password" id="password" formControlName="password" required />
-    </div>
-
-    <div class="actions">
-      <button type="submit">Registrar</button>
-    </div>
-
-    <div class="divider"></div>
-
-    <a routerLink="/login" class="forgot">Já tem conta? Faça login</a>
+          <button mat-button matStepperNext
+            class="radio-option"
+            [class.selected]="selectedOption === 'partner'"
+            (click)="selectedOption = 'partner'"
+            data-tooltip="Quero incentivar a doação de sangue!"
+          >
+            <i class="fa-solid fa-handshake-angle app-card-icon"></i>
+            <span>Parceiro</span>
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    Etapa 2: email e senha
+    <mat-step [stepControl]="credentialsGroup">
+      <form [formGroup]="credentialsGroup">
+        <ng-template matStepLabel>Dados de cadastro</ng-template>
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" required/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Senha</mat-label>
+          <input matInput formControlName="password" type="password" required/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Confirmar senha</mat-label>
+          <input matInput formControlName="confirmed_password" type="password" required/>
+        </mat-form-field>
+        <div class="actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-button matStepperNext>Próximo</button>
+        </div>
+      </form>
+    </mat-step>
     
-  </form>
+    <!-- Etapa 3: Dados pessoais: Donator -->
+     
+    <mat-step *ngIf="selectedOption === 'donator'"[stepControl]="personalInfoGroup">
+      <form [formGroup]="personalInfoGroup">
+        <ng-template matStepLabel>Dados Pessoais</ng-template>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="name" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CPF</mat-label>
+          <input matInput formControlName="cpf" required />
+          <mat-error *ngIf="personalInfoGroup.get('cpf')?.hasError('pattern')">
+            CPF deve conter 11 dígitos
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Gênero</mat-label>
+          <mat-select formControlName="gender" required>
+            <mat-option value="male">Masculino</mat-option>
+            <mat-option value="female">Feminino</mat-option>
+            <mat-option value="notInformed">Não informar</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo sanguíneo</mat-label>
+          <mat-select formControlName="bloodtype" required>
+            <mat-option value="Apos">A+</mat-option>
+            <mat-option value="Aneg">A-</mat-option>
+            <mat-option value="Bpos">B+</mat-option>
+            <mat-option value="Bneg">B-</mat-option>
+            <mat-option value="ABpos">AB+</mat-option>
+            <mat-option value="ABneg">AB-</mat-option>
+            <mat-option value="Opos">O+</mat-option>
+            <mat-option value="Oneg">O-</mat-option>
+            <mat-option value="unknown">Não sei informar</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-button matStepperNext>Próximo</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Etapa 3: Dados pessoais: bloodbank -->
+
+    <mat-step *ngIf="selectedOption === 'bloodbank'"[stepControl]="bloodbankInfoFormGroup">
+      <form [formGroup]="bloodbankInfoFormGroup">
+        <ng-template matStepLabel>Dados Pessoais</ng-template>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Nome da instituição</mat-label>
+          <input matInput formControlName="instituitonName" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CNPJ</mat-label>
+          <input matInput formControlName="cnpj" required />
+          <mat-error *ngIf="bloodbankInfoFormGroup.get('cnpj')?.hasError('pattern')">
+            CNPJ deve conter 11 dígitos
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Cidade</mat-label>
+          <input matInput formControlName="city" required/>
+        </mat-form-field>    
+
+        <mat-form-field appearance="fill">
+          <mat-label>Estado</mat-label>
+          <input matInput formControlName="state" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Rua</mat-label>
+          <input matInput formControlName="street" required/>
+        </mat-form-field>
+        
+        <mat-form-field appearance="fill">
+          <mat-label>Bairro</mat-label>
+          <input matInput formControlName="neighborhood" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CEP</mat-label>
+          <input matInput formControlName="zipcode" required/>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-button matStepperNext>Próximo</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Etapa 3: Dados pessoais: partner -->
+
+    <mat-step *ngIf="selectedOption === 'partner'"[stepControl]="partnerInfoFormGroup">
+      <form [formGroup]="partnerInfoFormGroup">
+        <ng-template matStepLabel>Dados Pessoais</ng-template>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Nome do Parcerio</mat-label>
+          <input matInput formControlName="partnerName" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CNPJ</mat-label>
+          <input matInput formControlName="cnpj" required />
+          <mat-error *ngIf="partnerInfoFormGroup.get('cnpj')?.hasError('pattern')">
+            CNPJ deve conter 11 dígitos
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Cidade</mat-label>
+          <input matInput formControlName="city" required/>
+        </mat-form-field>    
+
+        <mat-form-field appearance="fill">
+          <mat-label>Estado</mat-label>
+          <input matInput formControlName="state" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Rua</mat-label>
+          <input matInput formControlName="street" required/>
+        </mat-form-field>
+        
+        <mat-form-field appearance="fill">
+          <mat-label>Bairro</mat-label>
+          <input matInput formControlName="neighborhood" required/>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>CEP</mat-label>
+          <input matInput formControlName="zipcode" required/>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-button matStepperNext>Próximo</button>
+        </div>
+      </form>
+    </mat-step>
+
+
+    <!-- Etapa 4: Bem-vindo -->
+    <mat-step>
+      <ng-template matStepLabel>Concluído</ng-template>
+      <h2>Bem-vindo,!</h2>
+      <p>Seu cadastro foi realizado com sucesso.</p>
+      <button mat-button routerLink="/dashboard" (click)="submit()">Acessar o site</button>
+    </mat-step>
+
+  </mat-horizontal-stepper>
 </div>

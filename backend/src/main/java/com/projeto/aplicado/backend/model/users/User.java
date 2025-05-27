@@ -7,11 +7,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
+@Document(collection = "users")
 @TypeAlias("User")
 @EqualsAndHashCode(callSuper = true)
 @Data @NoArgsConstructor @AllArgsConstructor

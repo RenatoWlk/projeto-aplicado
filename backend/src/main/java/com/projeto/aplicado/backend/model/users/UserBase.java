@@ -10,8 +10,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "users")
-@TypeAlias("UserBase")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public abstract class UserBase {
     @Id
