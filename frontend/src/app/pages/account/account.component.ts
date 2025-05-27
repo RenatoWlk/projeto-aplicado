@@ -2,10 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccountService, User, BloodBankUser, Questionnaire } from '../account/account.service';
+import { UserAccountComponent } from './user-account/user-account.component';
+import { BloodBankAccountComponent } from './bloodbank-account/bloodbank-account.component';
 
 @Component({
   selector: 'app-account',
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    UserAccountComponent,
+    BloodBankAccountComponent
+  ],
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
 })
@@ -44,7 +51,9 @@ export class AccountComponent implements OnInit{
   //     {
   //       title: 'Primeira Doação',
   //       description: 'Parabéns pela sua primeira doação!',
-  //       iconUrl: 'assets/achievements.png'
+  //       imageUrl: 'assets/achievements.png',
+  //       points: 10,
+  //       rarity: 'comum'
   //     }
   //   ],
   //   role: 'USER',
