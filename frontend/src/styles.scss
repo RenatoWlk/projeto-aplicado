@@ -127,8 +127,8 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: underline;
 }
 
-/* --------------------- LOGIN BUTTON --------------------- */
-.login-btn {
+/* --------------------- APP BUTTON --------------------- */
+.app-button {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 700;
@@ -140,6 +140,6 @@ h1, h2, h3, h4, h5, h6 {
   transition: background-color 0.2s ease;
 }
 
-.login-btn:hover {
+.app-button:hover {
   background-color: #e53935;
 }
