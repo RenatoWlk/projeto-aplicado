@@ -2,6 +2,8 @@ export class DashboardConstants {
   public static readonly GET_CAMPAIGNS_ENDPOINT = '/api/dashboard/campaigns';
   public static readonly GET_OFFERS_ENDPOINT = '/api/dashboard/offers';
   public static readonly GET_NEARBY_BLOODBANKS_ENDPOINT = '/api/dashboard/nearbyBloodbanks';
+  public static readonly CREATE_CAMPAIGN_ENDPOINT = '/api/dashboard/campaign/create';
+  public static readonly CREATE_OFFER_ENDPOINT = '/api/dashboard/offer/create';
 
   public static readonly ERROR_GENERIC = 'Ocorreu um erro. Tente novamente.';
   public static readonly LOGIN_REQUIRED_MESSAGE = 'Você precisa estar logado para ver essas informações.';

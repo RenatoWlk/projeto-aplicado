@@ -16,19 +16,20 @@
 
     li {
         text-align: center;
+        margin-left: 0.5rem;
         
         a {
             font-weight: 600;
             font-size: large;
             color: white;
             text-decoration: none;
-            margin-left: 0.5rem;
         }
     }
 }
 
 .subheader-link {
     color: white;
+    transition: all 0.2s ease-in-out;
 }
 
 .subheader-link:hover {
@@ -45,7 +46,7 @@
 }
 
 .subheader-link.active {
-  .subheader-icon {
-    color: #d9534f;
-  }
+    .subheader-icon {
+        color: #d9534f;
+    }
 }
