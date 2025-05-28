@@ -7,11 +7,12 @@ import { RouterModule } from '@angular/router';
 import { UserRole } from '../../shared/app.enums';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { FormCreateItemComponent } from '../../shared/form-create-item/form-create-item.component';
+import { BloodbankDashboardComponent } from './bloodbank-dashboard/bloodbank-dashboard.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent],
+  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -26,8 +27,10 @@ export class DashboardComponent implements OnInit {
 
   // User data
   roles = UserRole;
-  isLoggedIn: boolean = false;
-  userRole: UserRole | null = null;
+  isLoggedIn: boolean = true;
+  //isLoggedIn: boolean = false;
+  userRole: UserRole | null = this.roles.Bloodbank;
+  //userRole: UserRole | null = null;
   
   // Dashboard data
   posts: Campaign[] = [];
@@ -40,11 +43,11 @@ export class DashboardComponent implements OnInit {
   constructor(private dashboardService: DashboardService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.isLoggedIn = this.authService.isAuthenticated();
+    //this.isLoggedIn = this.authService.isAuthenticated();
 
     if (this.isLoggedIn) {
       this.loadAllDashboardData();
-      this.userRole = this.authService.getCurrentUserRole();
+      //this.userRole = this.authService.getCurrentUserRole();
     } else {
       this.loadDashboardDataForUnloggedUsers();
     }

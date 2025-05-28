@@ -63,6 +63,11 @@
     </div>
   </section>
 
+  <!-- =================== -->
+  <!-- BLOODBANK DASHBOARD -->
+  <!-- =================== -->
+  <app-bloodbank-dashboard *ngIf="userRole === roles.Bloodbank"></app-bloodbank-dashboard>
+
   <!-- ========================= -->
   <!-- NEARBY BLOODBANKS SECTION -->
   <!-- ========================= -->

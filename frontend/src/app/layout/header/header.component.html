@@ -5,7 +5,9 @@
       </button>
     </div>
     <div class="left">
-      <div *ngIf="isLoggedIn">
+
+      <!-- IS NOT LOGGED IN -->
+      <div *ngIf="!isLoggedIn">
         <button class="header-btn" (click)="toggleMenu()">
           <mat-icon>account_circle</mat-icon>
         </button>
@@ -16,7 +18,9 @@
           </ul>
         </div>
       </div>
-      <div *ngIf="!isLoggedIn">
+
+      <!-- IS LOGGED IN -->
+      <div *ngIf="isLoggedIn">
         <div class="logged-in-container">
           <button class="header-btn">
             <mat-icon>notifications</mat-icon>
@@ -34,5 +38,6 @@
           </div>
         </div>
       </div>
+      
     </div>
 </div>
