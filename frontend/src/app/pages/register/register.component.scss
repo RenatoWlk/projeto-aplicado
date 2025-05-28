@@ -97,3 +97,84 @@ body, html {
     header-edit-state-icon-background-color: #c62828,
   ));
 }
+
+.custom-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.custom-form-field.mat-form-field {
+  font-family: 'Poppins', sans-serif;
+}
+
+.custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 12px;
+  border-color: #d1d1d1;
+}
+
+.custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  border-width: 1.5px;
+}
+
+.custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline-start,
+.custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline-end {
+  border-radius: 12px;
+}
+
+.custom-form-field .mat-input-element {
+  padding: 12px 14px;
+}
+
+.custom-form-field.mat-focused .mat-form-field-outline-thick {
+  border-color: #c62828;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
+  font-family: 'Poppins', sans-serif;
+  background-color: white;
+}
+
+.input-label {
+  font-family: 'Poppins', sans-serif;
+}
+
+.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input, .mat-mdc-select-value-text,
+.mat-mdc-option .mdc-list-item__primary-text, .register-title, .register-msg {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.mat-horizontal-content-container {
+  padding: 24px !important;
+}
+
+.register-title {
+  font-size: 36px;
+}
+
+.actions-register, .register-msg, .register-title {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.column {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

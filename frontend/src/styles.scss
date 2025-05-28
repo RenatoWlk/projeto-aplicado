@@ -129,19 +129,21 @@ h1, h2, h3, h4, h5, h6 {
 
 /* --------------------- APP BUTTON --------------------- */
 .app-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 700;
-  background-color: #ff4f42;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  background-color: #c62828;
   color: white;
-  border: none;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border: 2px solid #c62828;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s;
 }
 
 .app-button:hover {
-  background-color: #e53935;
+  background-color: white;
+  color: #c62828;
+  border: 2px solid #c62828;
 }
 
 html, body { height: 100%; }
