@@ -67,24 +67,6 @@ body, html {
       align-items: center;
       margin-bottom: 16px;
 
-      button {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 500;
-        background-color: #c62828;
-        color: white;
-        padding: 10px 20px;
-        border: 2px solid #c62828;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-
-        &:hover {
-          background-color: white;
-          color: #c62828;
-          border: 2px solid #c62828;
-        }
-      }
-
       .forgot {
         font-weight: 500;
         color: #c62828;

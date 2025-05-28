@@ -42,21 +42,21 @@
     <mat-step [stepControl]="credentialsGroup">
       <form [formGroup]="credentialsGroup">
         <ng-template matStepLabel>Dados de cadastro</ng-template>
-        <mat-form-field appearance="fill">
-          <mat-label>Email</mat-label>
+        <mat-form-field appearance="outline" class="custom-form-field">
+          <mat-label class="input-label">Email</mat-label>
           <input matInput formControlName="email" type="email" required/>
         </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Senha</mat-label>
+        <mat-form-field appearance="outline" class="custom-form-field">
+          <mat-label class="input-label">Senha</mat-label>
           <input matInput formControlName="password" type="password" required/>
         </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Confirmar senha</mat-label>
+        <mat-form-field appearance="outline" class="custom-form-field">
+          <mat-label class="input-label">Confirmar senha</mat-label>
           <input matInput formControlName="confirmed_password" type="password" required/>
         </mat-form-field>
         <div class="actions">
-          <button mat-button matStepperPrevious>Voltar</button>
-          <button mat-button matStepperNext>Próximo</button>
+          <button mat-button matStepperPrevious class="app-button">Voltar</button>
+          <button mat-button matStepperNext class="app-button">Próximo</button>
         </div>
       </form>
     </mat-step>
@@ -67,21 +67,21 @@
       <form [formGroup]="personalInfoGroup">
         <ng-template matStepLabel>Dados Pessoais</ng-template>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Nome</mat-label>
+        <mat-form-field appearance="outline" class="custom-form-field">
+          <mat-label class="input-label">Nome</mat-label>
           <input matInput formControlName="name" required />
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>CPF</mat-label>
+        <mat-form-field appearance="outline" class="custom-form-field">
+          <mat-label class="input-label">CPF</mat-label>
           <input matInput formControlName="cpf" required />
           <mat-error *ngIf="personalInfoGroup.get('cpf')?.hasError('pattern')">
             CPF deve conter 11 dígitos
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Gênero</mat-label>
+        <mat-form-field appearance="outline" class="custom-form-field">
+          <mat-label class="input-label">Gênero</mat-label>
           <mat-select formControlName="gender" required>
             <mat-option value="male">Masculino</mat-option>
             <mat-option value="female">Feminino</mat-option>
@@ -89,8 +89,8 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Tipo sanguíneo</mat-label>
+        <mat-form-field appearance="outline" class="custom-form-field select">
+          <mat-label class="input-label">Tipo sanguíneo</mat-label>
           <mat-select formControlName="bloodtype" required>
             <mat-option value="Apos">A+</mat-option>
             <mat-option value="Aneg">A-</mat-option>
@@ -105,110 +105,127 @@
         </mat-form-field>
 
         <div class="actions">
-          <button mat-button matStepperPrevious>Voltar</button>
-          <button mat-button matStepperNext>Próximo</button>
+          <button mat-button matStepperPrevious class="app-button">Voltar</button>
+          <button mat-button matStepperNext class="app-button">Próximo</button>
         </div>
       </form>
     </mat-step>
 
     <!-- Etapa 3: Dados pessoais: bloodbank -->
 
-    <mat-step *ngIf="selectedOption === 'bloodbank'"[stepControl]="bloodbankInfoFormGroup">
+    <mat-step *ngIf="selectedOption === 'bloodbank'" [stepControl]="bloodbankInfoFormGroup">
       <form [formGroup]="bloodbankInfoFormGroup">
         <ng-template matStepLabel>Dados Pessoais</ng-template>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Nome da instituição</mat-label>
-          <input matInput formControlName="instituitonName" required/>
-        </mat-form-field>
+        <div class="form-grid">
+          <!-- Coluna 1 -->
+          <div class="column">
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Nome da instituição</mat-label>
+              <input matInput formControlName="instituitonName" required />
+            </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>CNPJ</mat-label>
-          <input matInput formControlName="cnpj" required />
-          <mat-error *ngIf="bloodbankInfoFormGroup.get('cnpj')?.hasError('pattern')">
-            CNPJ deve conter 11 dígitos
-          </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Cidade</mat-label>
+              <input matInput formControlName="city" required />
+            </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Cidade</mat-label>
-          <input matInput formControlName="city" required/>
-        </mat-form-field>    
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Rua</mat-label>
+              <input matInput formControlName="street" required />
+            </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Estado</mat-label>
-          <input matInput formControlName="state" required/>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">CEP</mat-label>
+              <input matInput formControlName="zipcode" required />
+            </mat-form-field>
+          </div>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Rua</mat-label>
-          <input matInput formControlName="street" required/>
-        </mat-form-field>
-        
-        <mat-form-field appearance="fill">
-          <mat-label>Bairro</mat-label>
-          <input matInput formControlName="neighborhood" required/>
-        </mat-form-field>
+          <!-- Coluna 2 -->
+          <div class="column">
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">CNPJ</mat-label>
+              <input matInput formControlName="cnpj" required />
+              <mat-error *ngIf="bloodbankInfoFormGroup.get('cnpj')?.hasError('pattern')">
+                CNPJ deve conter 11 dígitos
+              </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>CEP</mat-label>
-          <input matInput formControlName="zipcode" required/>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Estado</mat-label>
+              <input matInput formControlName="state" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Bairro</mat-label>
+              <input matInput formControlName="neighborhood" required />
+            </mat-form-field>
+          </div>
+        </div>
 
         <div class="actions">
-          <button mat-button matStepperPrevious>Voltar</button>
-          <button mat-button matStepperNext>Próximo</button>
+          <button mat-button matStepperPrevious class="app-button">Voltar</button>
+          <button mat-button matStepperNext class="app-button">Próximo</button>
         </div>
       </form>
     </mat-step>
 
+
     <!-- Etapa 3: Dados pessoais: partner -->
 
-    <mat-step *ngIf="selectedOption === 'partner'"[stepControl]="partnerInfoFormGroup">
+    <mat-step *ngIf="selectedOption === 'partner'" [stepControl]="partnerInfoFormGroup">
       <form [formGroup]="partnerInfoFormGroup">
         <ng-template matStepLabel>Dados Pessoais</ng-template>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Nome do Parcerio</mat-label>
-          <input matInput formControlName="partnerName" required/>
-        </mat-form-field>
+        <div class="form-grid">
+          <!-- Coluna 1 -->
+          <div class="column">
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Nome do Parceiro</mat-label>
+              <input matInput formControlName="partnerName" required />
+            </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>CNPJ</mat-label>
-          <input matInput formControlName="cnpj" required />
-          <mat-error *ngIf="partnerInfoFormGroup.get('cnpj')?.hasError('pattern')">
-            CNPJ deve conter 11 dígitos
-          </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Cidade</mat-label>
+              <input matInput formControlName="city" required />
+            </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Cidade</mat-label>
-          <input matInput formControlName="city" required/>
-        </mat-form-field>    
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Rua</mat-label>
+              <input matInput formControlName="street" required />
+            </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Estado</mat-label>
-          <input matInput formControlName="state" required/>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">CEP</mat-label>
+              <input matInput formControlName="zipcode" required />
+            </mat-form-field>
+          </div>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Rua</mat-label>
-          <input matInput formControlName="street" required/>
-        </mat-form-field>
-        
-        <mat-form-field appearance="fill">
-          <mat-label>Bairro</mat-label>
-          <input matInput formControlName="neighborhood" required/>
-        </mat-form-field>
+          <!-- Coluna 2 -->
+          <div class="column">
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">CNPJ</mat-label>
+              <input matInput formControlName="cnpj" required />
+              <mat-error *ngIf="partnerInfoFormGroup.get('cnpj')?.hasError('pattern')">
+                CNPJ deve conter 11 dígitos
+              </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>CEP</mat-label>
-          <input matInput formControlName="zipcode" required/>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Estado</mat-label>
+              <input matInput formControlName="state" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Bairro</mat-label>
+              <input matInput formControlName="neighborhood" required />
+            </mat-form-field>
+          </div>
+        </div>
 
         <div class="actions">
-          <button mat-button matStepperPrevious>Voltar</button>
-          <button mat-button matStepperNext>Próximo</button>
+          <button mat-button matStepperPrevious class="app-button">Voltar</button>
+          <button mat-button matStepperNext class="app-button">Próximo</button>
         </div>
       </form>
     </mat-step>
@@ -217,9 +234,11 @@
     <!-- Etapa 4: Bem-vindo -->
     <mat-step>
       <ng-template matStepLabel>Concluído</ng-template>
-      <h2>Bem-vindo,!</h2>
-      <p>Seu cadastro foi realizado com sucesso.</p>
-      <button mat-button routerLink="/dashboard" (click)="submit()">Acessar o site</button>
+      <h2 class="register-title">Bem-vindo,!</h2>
+      <p class="register-msg">Seu cadastro foi realizado com sucesso.</p>
+      <div class="actions-register">
+        <button mat-button routerLink="/dashboard" (click)="submit()" class="app-button">Acessar o site</button>
+      </div>
     </mat-step>
 
   </mat-horizontal-stepper>
