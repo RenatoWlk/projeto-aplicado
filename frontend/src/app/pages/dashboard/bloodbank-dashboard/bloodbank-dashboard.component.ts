@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
-import { Chart, ChartTypeRegistry } from 'chart.js';
+import { Chart, ChartConfiguration, ChartTypeRegistry } from 'chart.js';
 
 @Component({
   selector: 'app-bloodbank-dashboard',
@@ -13,6 +13,31 @@ export class BloodbankDashboardComponent {
   donationsOverTimeChartData = [{ data: [21, 32, 28, 43, 29, 0], label: 'Doações' }];
   donationsOverTimeChartLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
   donationsOverTimeChartType = 'line' as keyof ChartTypeRegistry;
+  public donationsOverTimeChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          font: {
+            family: 'Poppins, sans-serif',
+            size: 16,
+            weight: 'bold'
+          }
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const value = context.raw;
+            return `Doado em ${context.label}: ${value}`;
+          },
+        },
+      },
+    },
+  };
 
   bloodTypeChartType = 'doughnut' as keyof ChartTypeRegistry;
   bloodTypeChartData = {
@@ -24,13 +49,33 @@ export class BloodbankDashboardComponent {
         backgroundColor: [
           '#78c2ff', '#ff5365', '#68e9ba', '#ffae78',
           '#9dace9', '#ffff96', '#c992ff', '#BFFCC6'
-        ]
+        ],
       } // deixaram um daltonico escolher as cores
     ]
   };
-
-  chartOptions = {
+  public bloodTypeChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-  }
+    
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          font: {
+            family: 'Poppins, sans-serif',
+            size: 16,
+            weight: 'bold'
+          }
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const value = context.raw;
+            return `Bolsas disponíveis: ${value}`;
+          },
+        },
+      },
+    },
+  };
 }
