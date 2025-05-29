@@ -1,8 +1,11 @@
 package com.projeto.aplicado.backend.dto.user;
 
 import com.projeto.aplicado.backend.model.enums.BloodType;
-import com.projeto.aplicado.backend.model.vo.Address;
+import com.projeto.aplicado.backend.model.Address;
 import lombok.Data;
+
+import java.time.Duration;
+import java.time.LocalDate;
 
 @Data
 public class UserRequestDTO {
@@ -14,4 +17,6 @@ public class UserRequestDTO {
     private String cpf;
     private String gender;
     private BloodType bloodType;
+    private Duration timeUntilNextDonation;
+    private LocalDate lastDonationDate;
 }

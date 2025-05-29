@@ -1,21 +1,27 @@
 .custom-header {
-    display: flex;
-    align-items: center;
-    padding: 0.5em;
-    background-color: #54B9CC;
-    border-radius: 15px 15px 0px 0px;
+  display: flex;
+  align-items: center;
+  padding: 0.5em;
+  background-color: #c62828;
+  border-radius: 15px 15px 0px 0px;
+  gap: 0.5em;
 }
 
 .custom-header-label {
-    flex: 1;
-    height: 1em;
-    text-align: center;
-    color: white;
+  font-family: 'Poppins', sans-serif;
+  flex-grow: 1; 
+  text-align: center;
+  color: white;
+  font-weight: bold;
 }
 
 .header-button {
-    background-color: #54B9CC;
-    border: none;
-    color:white;
-    cursor: pointer;
+  background-color: #c62828;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3em;
 }

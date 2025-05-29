@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Achievement } from '../account/account.service';
+import { DashboardConstants } from './constants/dashboard.constants';
+import { BloodType } from '../../shared/app.enums';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 export interface Address {
     street: string;
     city: string;
     state: string;
-    zip: string;
+    zipCode: string;
 }
 
 export interface Offer {
     partnerName: string;
     title: string;
-    description: string;
+    body: string;
     validUntil: Date;
     discountPercentage: number;
 }
@@ -26,6 +30,16 @@ export interface Campaign {
     phone: string;
 }
 
+export interface UserStats {
+    timesDonated: number;
+    potentialLivesSaved: number;
+    timeUntilNextDonation: string;
+    lastDonationDate: Date;
+    achievements: Achievement[];
+    totalPoints: number;
+    bloodType: BloodType;
+}
+
 export interface Bloodbank {
     name: string;
     address: Address;
@@ -36,21 +50,31 @@ export interface Bloodbank {
     providedIn: 'root'
 })
 export class DashboardService {
-    private offersUrl = '/api/dashboard/offers';
-    private campaignsUrl = '/api/dashboard/campaigns';
-    private nearbyBloodbanksUrl = '/api/dashboard/nearbyBloodbanks';
-
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private auth: AuthService) {}
 
     getOffers(): Observable<Offer[]> {
-        return this.http.get<Offer[]>(this.offersUrl);
+        return this.http.get<Offer[]>(DashboardConstants.GET_OFFERS_ENDPOINT);
     }
 
     getCampaigns(): Observable<Campaign[]> {
-        return this.http.get<Campaign[]>(this.campaignsUrl);
+        return this.http.get<Campaign[]>(DashboardConstants.GET_CAMPAIGNS_ENDPOINT);
     }
 
     getNearbyBloodbanks(): Observable<Bloodbank[]> {
-        return this.http.get<Bloodbank[]>(this.nearbyBloodbanksUrl);
+        return this.http.get<Bloodbank[]>(DashboardConstants.GET_NEARBY_BLOODBANKS_ENDPOINT);
+    }
+
+    getUserStats(userId: string): Observable<UserStats> {
+        return this.http.get<UserStats>(`/api/users/${userId}/stats`);
+    }
+
+    createCampaign(campaign: Campaign): Observable<Campaign> {
+        const data = {campaign, bloodbankEmail: this.auth.getCurrentUserEmail()};
+        return this.http.post<Campaign>(DashboardConstants.CREATE_CAMPAIGN_ENDPOINT, data);
+    }
+
+    createOffer(offer: Offer): Observable<Offer> {
+        const data = {offer, partnerEmail: this.auth.getCurrentUserEmail()};
+        return this.http.post<Offer>(DashboardConstants.CREATE_OFFER_ENDPOINT, data);
     }
 }

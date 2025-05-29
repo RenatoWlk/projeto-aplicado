@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
-import { QuestionnaireService } from '../services/questionnaire.service';
-
 
 @Component({
   selector: 'app-questionnaire',
@@ -39,8 +37,7 @@ export class QuestionnaireComponent {
   submitted = false;
   sucessoPreenchimento = false;
 
-  constructor(private fb: FormBuilder, private questionnaireService: QuestionnaireService) {
-    console.log("questionnaire component carregado.")
+  constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       sexo: ['', Validators.required],
       idade: ['', Validators.required],
@@ -122,7 +119,6 @@ export class QuestionnaireComponent {
     } else {
       this.resultado = 'Você está temporariamente ou definitivamente inapto(a) para doar sangue devido às seguintes respostas:';
     }
-    this.questionnaireService.saveForm(this.form.value);
   }
 
   responderNovamente() {

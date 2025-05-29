@@ -1,28 +1,86 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core'
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule, MatStepperModule, MatRadioModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,
+    MatIconModule, RouterModule,
+  ],
+  encapsulation: ViewEncapsulation.None,
 })
 export class RegisterComponent {
-  registerForm: FormGroup;
+  userForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    this.registerForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+  constructor(private fb: FormBuilder) {}
+
+  selectedOption: string = '';
+
+
+  ngOnInit(): void {
+    this.userForm = this.fb.group({
+      userType: ['', Validators.required],
+      credentials: this.fb.group({
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmed_password: ['', [Validators.required, Validators.minLength(6)]],
+      }),
+      personalInfo: this.fb.group({
+        name: ['', Validators.required],
+        cpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+        gender: ['', Validators.required],
+        bloodtype: ['', Validators.required],
+      }),
+      bloodbankInfo: this.fb.group({ 
+        instituitonName: ['', Validators.required],
+        cnpj: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required],
+        street: ['', Validators.required],
+        neighborhood: ['', Validators.required],
+        zipcode: ['', Validators.required],
+      }),
+      partnerInfo: this.fb.group({ 
+        partnerName: ['', Validators.required],
+        cnpj: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required],
+        street: ['', Validators.required],
+        neighborhood: ['', Validators.required],
+        zipcode: ['', Validators.required],
+      }),
     });
   }
 
-  onSubmit() {
-    if (this.registerForm.valid) {
-      const data = this.registerForm.value;
-      console.log('Dados de registro:', data);
-    }
+  get credentialsGroup() {
+    return this.userForm.get('credentials') as FormGroup;
+  }
+
+  get personalInfoGroup() {
+    return this.userForm.get('personalInfo') as FormGroup;
+  }
+
+  get bloodbankInfoFormGroup() {
+    return this.userForm.get('bloodbankInfo') as FormGroup;
+  }
+  
+  get partnerInfoFormGroup() {
+    return this.userForm.get('partnerInfo') as FormGroup;
+  }
+  
+  submit() {
+    console.log('Formulário enviado:', this.userForm.value);
   }
 }

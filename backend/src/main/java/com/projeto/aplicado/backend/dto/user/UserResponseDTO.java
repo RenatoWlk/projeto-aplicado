@@ -2,7 +2,7 @@ package com.projeto.aplicado.backend.dto.user;
 
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
-import com.projeto.aplicado.backend.model.vo.Address;
+import com.projeto.aplicado.backend.model.Address;
 import lombok.Data;
 
 @Data

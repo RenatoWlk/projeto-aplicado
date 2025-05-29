@@ -15,16 +15,33 @@ import java.util.List;
 public class PartnerController {
     private final PartnerService partnerService;
 
+    /**
+     * Creates a new partner.
+     * 
+     * @param dto the partner request DTO
+     * @return the created partner response DTO
+     */
     @PostMapping
     public ResponseEntity<PartnerResponseDTO> create(@RequestBody PartnerRequestDTO dto) {
         return ResponseEntity.ok(partnerService.create(dto));
     }
 
+    /**
+     * Gets all partners.
+     * 
+     * @return a list of partner response DTOs
+     */
     @GetMapping
     public ResponseEntity<List<PartnerResponseDTO>> getAll() {
         return ResponseEntity.ok(partnerService.findAll());
     }
 
+    /**
+     * Get an existing partner.
+     * 
+     * @param id the ID of the partner to get
+     * @return the partner response DTO
+     */
     @GetMapping("/{id}")
     public ResponseEntity<PartnerResponseDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(partnerService.findById(id));

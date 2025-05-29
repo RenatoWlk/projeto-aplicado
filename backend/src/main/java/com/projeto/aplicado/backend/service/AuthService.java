@@ -3,7 +3,7 @@ package com.projeto.aplicado.backend.service;
 import com.projeto.aplicado.backend.constants.Messages;
 import com.projeto.aplicado.backend.dto.auth.AuthRequest;
 import com.projeto.aplicado.backend.dto.auth.AuthResponse;
-import com.projeto.aplicado.backend.model.UserBase;
+import com.projeto.aplicado.backend.model.users.UserBase;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import com.projeto.aplicado.backend.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,12 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Authenticates a user by validating their credentials and generating a JWT token.
+     * 
+     * @param request The authentication request containing the user's email and password.
+     * @return An AuthResponse containing the generated JWT token.
+     */
     public AuthResponse authenticate(AuthRequest request) {
         UserBase user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
@@ -25,7 +31,7 @@ public class AuthService {
             throw new RuntimeException(Messages.INVALID_CREDENTIALS);
         }
 
-        String token = jwtUtil.generateToken(user.getId());
+        String token = jwtUtil.generateToken(user.getId(), user.getName(), user.getEmail(), user.getRole());
         return new AuthResponse(token);
     }
 }

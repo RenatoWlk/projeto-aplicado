@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardConstants } from './constants/dashboard.constants';
-import { Bloodbank, Campaign, DashboardService, Offer } from './dashboard.service';
+import { UserStats, Bloodbank, Campaign, DashboardService, Offer } from './dashboard.service';
+import { AuthService } from '../../core/services/auth/auth.service';
+import { RouterModule } from '@angular/router';
+import { UserRole } from '../../shared/app.enums';
+import { ModalComponent } from '../../shared/modal/modal.component';
+import { FormCreateItemComponent } from '../../shared/form-create-item/form-create-item.component';
+import { BloodbankDashboardComponent } from './bloodbank-dashboard/bloodbank-dashboard.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -13,43 +20,158 @@ export class DashboardComponent implements OnInit {
   // Constants
   postsSectionTitle: string = DashboardConstants.POSTS_SECTION_TITLE;
   offersSectionTitle: string = DashboardConstants.OFFERS_SECTION_TITLE;
+  nearbyBloodbanksSectionTitle: string = DashboardConstants.NEARBY_BLOODBANKS_SECTION_TITLE;
+  statsSectionTitle: string = DashboardConstants.STATS_SECTION_TITLE;
+  achievementsSectionTitle: string = DashboardConstants.ACHIEVEMENTS_SECTION_TITLE;
+  loginRequiredMessage: string = DashboardConstants.LOGIN_REQUIRED_MESSAGE;
 
-  // Variables
-  posts: Campaign[] = [{title: 'Título da campanha', body: 'A vida de alguém pode estar a uma doação de distância. Participe da nossa campanha de doação de sangue e ajude a encher os estoques dos hemocentros que salvam milhares de pessoas todos os dias. Seja você a diferença. Doe sangue, compartilhe vida.', startDate: new Date("05/05/25"), endDate: new Date("06/06/25"), location: {street: 'Rua 1', city: 'Campinas', state: 'SP', zip: '13087-607'}, phone: '(19) 99770-4598'}, {title: 'Título da campanha', body: 'A vida de alguém pode estar a uma doação de distância. Participe da nossa campanha de doação de sangue e ajude a encher os estoques dos hemocentros que salvam milhares de pessoas todos os dias. Seja você a diferença. Doe sangue, compartilhe vida.', startDate: new Date("05/05/25"), endDate: new Date("06/06/25"), location: {street: 'Rua 1', city: 'Campinas', state: 'SP', zip: '13087-607'}, phone: '(19) 99770-4598'}];
-  offers: Offer[] = [{partnerName: 'Farmácia 1', title: 'Título da oferta', description: 'Descrição da oferta', validUntil: new Date("06/06/25"), discountPercentage: 20}, {partnerName:'Farmácia 2', title: 'Título da oferta', description: 'Descrição da oferta', validUntil: new Date("06/06/25"), discountPercentage: 20}, {partnerName: 'Funerária Santa Maria', title: 'Sua morte nossa alegria', description: 'Morra e tenha 15% de desconto', validUntil: new Date("06/06/06"), discountPercentage: 15}];
-  nearbyBloodbanks: Bloodbank[] = [{name: 'Hemocentro de Campinas', address: {street: 'Rua 1', city: 'Campinas', state: 'SP', zip: '13087-607'}, phone: '(19) 99770-4598'}, {name: 'Hemocentro de São Paulo', address: {street: 'Rua 2', city: 'São Paulo', state: 'SP', zip: '13087-607'}, phone: '(11) 99770-4598'}, {name: 'Hemocentro de São José dos Campos', address: {street: 'Rua 3', city: 'São José dos Campos', state: 'SP', zip: '13087-607'}, phone: '(12) 99770-4598'}];
+  // User data
+  roles = UserRole;
+  isLoggedIn: boolean = true;
+  //isLoggedIn: boolean = false;
+  userRole: UserRole | null = this.roles.Bloodbank;
+  //userRole: UserRole | null = null;
+  
+  // Dashboard data
+  posts: Campaign[] = [];
+  offers: Offer[] = [];
+  nearbyBloodbanks: Bloodbank[] = [];
+  userStats: UserStats = {} as any;
+  isCampaignModalOpen: boolean = false;
+  isOfferModalOpen: boolean = false;
 
-  constructor(private dashboardService: DashboardService) {}
-
-  /**
-   * Fetches the offers from the dashboard service.
-   */
-  public getOffers(): void {
-    this.dashboardService.getOffers().subscribe((response: any) => {
-      this.offers = response;
-    });
-  }
-
-  /**
-   * Fetches the posts from the dashboard service.
-   */
-  public getPosts(): void {
-    this.dashboardService.getCampaigns().subscribe((response: any) => {
-      this.posts = response;
-    });
-  }
-
-  /**
-   * Fetches the nearby bloodbanks from the dashboard service.
-   */
-  public getNearbyBloodbanks(): void {
-    this.dashboardService.getNearbyBloodbanks().subscribe((response: any) => {
-      this.nearbyBloodbanks = response;
-    });
-  }
+  constructor(private dashboardService: DashboardService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    //this.isLoggedIn = this.authService.isAuthenticated();
+    //this.userRole = this.authService.getCurrentUserRole();
+
+    if (this.isLoggedIn && this.userRole === this.roles.User) {
+      this.loadAllDashboardData();
+    } else {
+      this.loadDashboardDataForPublicUsers();
+    }
+  }
+
+  /**
+   * Loads all required dashboard data for logged users.
+   */
+  private loadAllDashboardData(): void {
     this.getPosts();
     this.getOffers();
+    this.getNearbyBloodbanks();
+    this.getUserStats();
+  }
+
+  /**
+   * Loads the dashboard data for public users.
+   */
+  private loadDashboardDataForPublicUsers(): void {
+    this.getPosts();
+    this.getOffers();
+  }
+
+  /**
+   * Fetches campaigns from the server and stores them in the component.
+   */
+  private getPosts(): void {
+    this.dashboardService.getCampaigns().subscribe((posts: Campaign[]) => {
+      this.posts = posts;
+    });
+  }
+
+  /**
+   * Fetches offers from the server and stores them in the component.
+   */
+  private getOffers(): void {
+    this.dashboardService.getOffers().subscribe((offers: Offer[]) => {
+      this.offers = offers;
+    });
+  }
+
+  /**
+   * Fetches nearby blood banks from the server and stores them in the component.
+   */
+  private getNearbyBloodbanks(): void {
+    this.dashboardService.getNearbyBloodbanks().subscribe((banks: Bloodbank[]) => {
+      this.nearbyBloodbanks = banks;
+    });
+  }
+
+  /**
+   * Fetches user statistics from the server and processes them.
+   */
+  private getUserStats(): void {
+    const userId = this.authService.getCurrentUserId();
+    this.dashboardService.getUserStats(userId).subscribe((stats: UserStats) => {
+      stats.achievements = this.sortAchievementsByRarity(stats.achievements);
+      stats.potentialLivesSaved = this.calculatePotentialLivesSaved(stats.timesDonated);
+      stats.timeUntilNextDonation = this.getReadableTimeUntilNextDonation(stats.timeUntilNextDonation);
+      this.userStats = stats;
+    });
+  }
+
+  /**
+   * Returns a human-readable string for the time until the next donation.
+   * 
+   * @param secondsString - The time in seconds until the next donation.
+   * @returns A string representing the time in a human-readable format.
+   */
+  getReadableTimeUntilNextDonation(secondsString: string): string {
+    const seconds = parseInt(secondsString);
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    const parts: string[] = [];
+    if (days > 0) parts.push(`${days}d`);
+    if (hours > 0) parts.push(`${hours}h`);
+    if (minutes > 0) parts.push(`${minutes}min`);
+
+    return parts.length > 0 ? parts.join(' ') : 'Já pode doar';
+  }
+
+  /**
+   * Calculates how many lives were potentially saved.
+   * 
+   * @param donations - The number of donations made.
+   * @returns The number of potential lives saved (total donations * 4).
+   */
+  private calculatePotentialLivesSaved(donations: number): number {
+    return donations > 0 ? donations * 4 : 0;
+  }
+
+  /**
+   * Sorts achievements by rarity (comum → raro → épico → lendário → mítico).
+   * 
+   * @param achievements - The list of achievements to sort.
+   * @returns The sorted list of achievements.
+   */
+  private sortAchievementsByRarity(achievements: any[]): any[] {
+    const order: { [key: string]: number } = {
+      comum: 1,
+      raro: 2,
+      épico: 3,
+      lendário: 4,
+      mítico: 5
+    };
+
+    return achievements.sort((a, b) => order[a.rarity.toLowerCase()] - order[b.rarity.toLowerCase()]);
+  }
+
+  createNewCampaign(data: any): void {
+    this.isCampaignModalOpen = false;
+
+    this.dashboardService.createCampaign(data).subscribe(() => {
+      this.getPosts();
+    });
+  }
+
+  createNewOffer(data: any): void {
+    this.isOfferModalOpen = false;
+
+    this.dashboardService.createOffer(data).subscribe(() => {
+      this.getOffers();
+    });
   }
 }

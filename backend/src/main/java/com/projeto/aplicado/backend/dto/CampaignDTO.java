@@ -1,6 +1,6 @@
 package com.projeto.aplicado.backend.dto;
 
-import com.projeto.aplicado.backend.model.vo.Address;
+import com.projeto.aplicado.backend.model.Address;
 import lombok.Data;
 
 import java.time.LocalDate;

@@ -1,9 +1,10 @@
 package com.projeto.aplicado.backend.dto.bloodbank;
 
-import com.projeto.aplicado.backend.model.vo.Address;
-import com.projeto.aplicado.backend.model.vo.Campaign;
+import com.projeto.aplicado.backend.model.Address;
+import com.projeto.aplicado.backend.model.Campaign;
 import lombok.Data;
 
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -15,4 +16,8 @@ public class BloodBankRequestDTO {
     private String phone;
     private String cnpj;
     private List<Campaign> campaigns;
+
+    public List<Campaign> getCampaigns() {
+        return campaigns == null ? Collections.emptyList() : campaigns;
+    }
 }

@@ -1,5 +1,6 @@
 package com.projeto.aplicado.backend.security;
 
+import io.micrometer.common.lang.NonNullApi;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,9 +16,21 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@NonNullApi
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
+    /**
+     * This method is called for every request to check if the JWT token is present and valid.<br>
+     * If the token is valid, it sets the authentication in the security context.<br>
+     * If the token is not valid or not present, it continues the filter chain without setting authentication.
+     * 
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @param filterChain the filter chain
+     * @throws ServletException if an error occurs during the filter process
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

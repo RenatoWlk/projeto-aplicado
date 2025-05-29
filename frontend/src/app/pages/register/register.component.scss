@@ -1,84 +1,180 @@
-$primary-color: #54B9CC;
-$primary-hover: #1a5ed9;
-$error-color: red;
+@use '@angular/material' as mat;
 
 body, html {
   margin: 0;
   padding: 0;
-  font-family: Poppins, sans-serif;
-  background-color: $primary-color;
+  font-family: 'Poppins', sans-serif;
+  background-color: #3bacff;
+  font-family: 'Poppins', sans-serif;
+  background-color: #3bacff;
   height: 100vh;
-}
-
-.register-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: $primary-color;
+}
 
-  .register-box {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
+.mat-stepper-horizontal {
     width: 100%;
+    height: 100%;
+}
 
-    h2 {
-      text-align: center;
-      margin-bottom: 24px;
-      color: #333;
-    }
+.stepper.app-card {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    width: 1000px;
+    max-height: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
 
-    .input-group {
-      margin-bottom: 20px;
+.custom-radio-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 130px;
+  gap:1.5rem;
+}
 
-      label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: bold;
-        color: #444;
-      }
+.radio-option {
+  padding: 1.5rem;
+  border: #ccc;
+  background-color: #fafafa;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  height: 250px;
+  width: 600px;
+  justify-content: space-evenly;
+  flex-direction: column;
+  cursor: pointer;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
 
-      input {
-        width: 100%;
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        transition: border 0.3s;
+.app-card-icon {
+  font-size: 64px;
+}
 
-        &:focus {
-          border-color: $primary-color;
-          outline: none;
-        }
-      }
+.radio-option:hover {
+  transform: translateY(-4px);
+}
 
-      .error {
-        color: $error-color;
-        font-size: 13px;
-        margin-top: 4px;
-      }
-    }
+.radio-option::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
 
-    .actions {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+.radio-option:hover::after {
+  opacity: 1;
+}
 
-      button {
-        background-color: $primary-color;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+:root {
+   @include mat.stepper-overrides((
+    header-height: 50px,
+    header-selected-state-icon-background-color : #c62828,
+    header-label-text-font: 'Poppins',
+    header-label-text-size: 12px,
+    header-selected-state-label-text-size: 16px,
+    header-selected-state-label-text-weight: bold,
+    header-done-state-icon-foreground-color: #c62828,
+    header-edit-state-icon-background-color: #c62828,
+  ));
+}
 
-        &:hover {
-          background-color: $primary-hover;
-        }
-      }
-    }
-  }
+.custom-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.custom-form-field.mat-form-field {
+  font-family: 'Poppins', sans-serif;
+}
+
+.custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 12px;
+  border-color: #d1d1d1;
+}
+
+.custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  border-width: 1.5px;
+}
+
+.custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline-start,
+.custom-form-field.mat-form-field-appearance-outline .mat-form-field-outline-end {
+  border-radius: 12px;
+}
+
+.custom-form-field .mat-input-element {
+  padding: 12px 14px;
+}
+
+.custom-form-field.mat-focused .mat-form-field-outline-thick {
+  border-color: #c62828;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
+  font-family: 'Poppins', sans-serif;
+  background-color: white;
+}
+
+.input-label {
+  font-family: 'Poppins', sans-serif;
+}
+
+.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input, .mat-mdc-select-value-text,
+.mat-mdc-option .mdc-list-item__primary-text, .register-title, .register-msg {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.mat-horizontal-content-container {
+  padding: 24px !important;
+}
+
+.register-title {
+  font-size: 36px;
+}
+
+.actions-register, .register-msg, .register-title {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.column {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

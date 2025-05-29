@@ -1,0 +1,50 @@
+<!-- ============== -->
+<!-- OFFERS SECTION -->
+<!-- ============== -->
+<section class="app-card">
+    <div class="app-card-header">
+        <i class="fas fa-chart-line app-card-icon"></i>
+        <h2 class="app-card-title">Dados de doações</h2>
+    </div>
+    <div class="cards-grid-large">
+        <article class="card">
+            <header class="card-header">
+                <h3 class="card-title">Gráfico de doações ao longo do tempo</h3>
+            </header>
+            <div style="display: block; width: 850px; height: 500px;">
+                <canvas
+                    baseChart
+                    [type]="donationsOverTimeChartType"
+                    [datasets]="donationsOverTimeChartData"
+                    [labels]="donationsOverTimeChartLabels"
+                    [options]="donationsOverTimeChartOptions"
+                    [legend]="true">
+                </canvas>
+            </div>
+        </article>
+        <article class="card">
+            <header class="card-header">
+                <h3 class="card-title">Distribuição de tipos sanguíneos</h3>
+            </header>
+            <div style="display: block; width: 700px; height: 500px;">
+                <canvas
+                    baseChart
+                    [type]="bloodTypeChartType"
+                    [data]="bloodTypeChartData"
+                    [options]="bloodTypeChartOptions"
+                    [legend]="true">
+                </canvas>
+            </div>
+        </article>
+        <article class="card">
+            <header class="card-header">
+                <h3 class="card-title">Doações agendadas: {{ bloodbankStats.scheduledDonations }}</h3>
+            </header>
+        </article>
+        <article class="card">
+            <header class="card-header">
+                <h3 class="card-title">Total de doações: {{ bloodbankStats.totalDonations }}</h3>
+            </header>
+        </article>
+    </div>
+</section>

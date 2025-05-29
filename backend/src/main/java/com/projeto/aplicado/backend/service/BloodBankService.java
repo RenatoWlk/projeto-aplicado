@@ -3,20 +3,32 @@ package com.projeto.aplicado.backend.service;
 import com.projeto.aplicado.backend.constants.Messages;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
-import com.projeto.aplicado.backend.model.BloodBank;
+import com.projeto.aplicado.backend.dto.bloodbank.BloodBankStatsDTO;
+import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
+import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
+import com.projeto.aplicado.backend.model.users.BloodBank;
+import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BloodBankService {
     private final BloodBankRepository bloodBankRepository;
+    private final GeolocationService geolocationService;
 
+    /**
+     * Creates a new blood bank based on the provided request data. <br>
+     * Initializes default values for campaigns, total donations, blood bags, and donation history.
+     *
+     * @param dto the data transfer object containing blood bank creation data
+     * @return the created blood bank as a response DTO
+     */
     public BloodBankResponseDTO create(BloodBankRequestDTO dto) {
         BloodBank bloodBank = new BloodBank();
         bloodBank.setName(dto.getName());
@@ -26,23 +38,102 @@ public class BloodBankService {
         bloodBank.setPhone(dto.getPhone());
         bloodBank.setRole(Role.BLOODBANK);
         bloodBank.setCnpj(dto.getCnpj());
-        bloodBank.setCampaigns(dto.getCampaigns());
+        bloodBank.setCampaigns(new ArrayList<>());
+        bloodBank.setTotalDonations(0);
+        bloodBank.setScheduledDonations(0);
+
+        // Initialize all blood types with zero blood bags
+        Map<BloodType, Integer> initialBags = new EnumMap<>(BloodType.class);
+        Arrays.stream(BloodType.values()).forEach(type -> initialBags.put(type, 0));
+        bloodBank.setBloodTypeBloodBags(initialBags);
+
+        // Start with an empty donation history
+        bloodBank.setDonationsOverTime(new ArrayList<>());
+
         bloodBank = bloodBankRepository.save(bloodBank);
         return toResponseDTO(bloodBank);
     }
 
+    /**
+     * Retrieves all blood banks from the database.
+     *
+     * @return a list of blood bank response DTOs
+     */
     public List<BloodBankResponseDTO> findAll() {
         return bloodBankRepository.findAll().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Finds a blood bank by its ID.
+     *
+     * @param id the ID of the blood bank
+     * @return the blood bank as a response DTO
+     * @throws RuntimeException if no blood bank is found with the given ID
+     */
     public BloodBankResponseDTO findById(String id) {
         return bloodBankRepository.findById(id)
                 .map(this::toResponseDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
 
+    /**
+     * Retrieves statistical data for a specific blood bank.
+     *
+     * @param id the ID of the blood bank
+     * @return a DTO containing blood donation statistics
+     */
+    public BloodBankStatsDTO findStatsById(String id) {
+        return bloodBankRepository.findById(id)
+                .map(this::toStatsDTO)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+    }
+
+    /**
+     * Retrieves all blood banks and attempts to enrich each one with geolocation data. <br>
+     * If the address is incomplete or an error occurs, coordinates are set to 0.
+     *
+     * @return a list of blood bank DTOs including location information
+     */
+    public List<BloodBankResponseDTO> getAllWithLocation() {
+        return bloodBankRepository.findAll().stream().map(bloodBank -> {
+            BloodBankResponseDTO dto = toResponseDTO(bloodBank);
+
+            if (bloodBank.getAddress() == null ||
+                    bloodBank.getAddress().getStreet() == null ||
+                    bloodBank.getAddress().getCity() == null ||
+                    bloodBank.getAddress().getState() == null ||
+                    bloodBank.getAddress().getZipCode() == null) {
+                return dto;
+            }
+
+            try {
+                String fullAddress = String.format("%s, %s, %s, %s",
+                        bloodBank.getAddress().getStreet(),
+                        bloodBank.getAddress().getCity(),
+                        bloodBank.getAddress().getState(),
+                        bloodBank.getAddress().getZipCode());
+
+                double[] coordinates = geolocationService.getCoordinatesFromAddress(fullAddress);
+                dto.setLatitude(coordinates[0]);
+                dto.setLongitude(coordinates[1]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                dto.setLatitude(0.0);
+                dto.setLongitude(0.0);
+            }
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * Converts a BloodBank entity to its corresponding response DTO.
+     *
+     * @param bloodBank the blood bank entity
+     * @return the response DTO
+     */
     private BloodBankResponseDTO toResponseDTO(BloodBank bloodBank) {
         BloodBankResponseDTO dto = new BloodBankResponseDTO();
         dto.setId(bloodBank.getId());
@@ -53,6 +144,21 @@ public class BloodBankService {
         dto.setRole(bloodBank.getRole());
         dto.setCnpj(bloodBank.getCnpj());
         dto.setCampaigns(bloodBank.getCampaigns());
+        return dto;
+    }
+
+    /**
+     * Converts a BloodBank entity to a DTO containing statistical data.
+     *
+     * @param bloodBank the blood bank entity
+     * @return the statistics DTO
+     */
+    private BloodBankStatsDTO toStatsDTO(BloodBank bloodBank) {
+        BloodBankStatsDTO dto = new BloodBankStatsDTO();
+        dto.setTotalDonations(bloodBank.getTotalDonations());
+        dto.setDonationsOverTime(bloodBank.getDonationsOverTime());
+        dto.setBloodTypeBloodBags(bloodBank.getBloodTypeBloodBags());
+        dto.setScheduledDonations(bloodBank.getScheduledDonations());
         return dto;
     }
 }

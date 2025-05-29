@@ -1,64 +1,85 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
+import { MapService, Location } from './map.service';
+import { Subscription } from 'rxjs';
 
-const redIcon = new L.Icon({
+const blueIcon = new L.Icon({
   iconUrl: 'assets/marker-icon-2x.png',
   shadowUrl: 'assets/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+  shadowSize: [41, 41],
 });
 
 @Component({
-selector: 'app-map',
-templateUrl: './map.component.html',
-styleUrls: ['./map.component.scss']
+  selector: 'app-map',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
+  private map!: L.Map;
+  private markersLayer = L.layerGroup();
 
-private map!: L.Map;
+  locations: Location[] = [];
+  selectedLocation: Location | null = null;
+  private locationsSub?: Subscription;
 
-ngAfterViewInit(): void {
-    this.initMap();
+  constructor(private mapService: MapService) {}
+
+  ngAfterViewInit(): void {
+    this.locationsSub = this.mapService.getLocations().subscribe({
+      next: (locs) => {
+        this.locations = locs;
+        if (!this.map) {
+          this.initMap();
+        } else {
+          this.updateMarkers();
+        }
+      },
+      error: (err) => console.error('Erro ao carregar locais', err),
+    });
   }
 
   private initMap(): void {
-    // Criar o mapa já com as opções que bloqueiam o zoom out e limitam o zoom in
     this.map = L.map('map', {
       center: [-22.838659, -47.0498384],
       zoom: 13,
-      minZoom: 13,       // bloqueia zoom out
-      maxZoom: 18,       // máximo zoom in
-      zoomControl: false // esconde os controles padrão do Leaflet
+      minZoom: 10,
+      maxZoom: 18,
+      zoomControl: true,
     });
 
-    // Adicionar camada de tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+      attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
-    // Adiciona os marcadores com ícone vermelho
-    L.marker([-22.838659, -47.0498384], { icon: redIcon }).addTo(this.map)
-      .bindPopup('Casa do Renato');
+    this.markersLayer.addTo(this.map); // Adiciona o layer dos marcadores
 
-    L.marker([-22.82377468659109, -47.06238270403627], { icon: redIcon }).addTo(this.map)
-      .bindPopup('Hemocentro Unicamp');
+    this.updateMarkers();
+  }
 
-    L.marker([-22.90956414345422, -47.07029810970188], { icon: redIcon }).addTo(this.map)
-      .bindPopup('Hemocentro Mario Gatti');
+  private updateMarkers(): void {
+    this.markersLayer.clearLayers(); // Limpa só os marcadores
 
-    L.marker([-22.89376799958717, -47.05641652694881], { icon: redIcon }).addTo(this.map)
-      .bindPopup('Centro de Hematologia e Hemoterapia Campinas');
+    this.locations.forEach((loc) => {
+      const marker = L.marker(loc.coords as L.LatLngExpression, { icon: blueIcon })
+        .on('click', () => this.selectLocation(loc))
+        .bindPopup(`<b>${loc.name}</b><br>${loc.address}<br>${loc.phone}`);
 
-    L.marker([-22.89564858936956, -47.06825670047348], { icon: redIcon }).addTo(this.map)
-      .bindPopup('CHCM Centro de Hemoterapia Celular em Medicina');
-
-    // Para evitar zoom out via scroll do mouse, força o zoom mínimo
-    this.map.on('zoomend', () => {
-      if (this.map.getZoom() < 13) {
-        this.map.setZoom(13);
-      }
+      marker.addTo(this.markersLayer);
     });
+  }
+
+  selectLocation(location: Location) {
+    this.selectedLocation = location;
+    this.map.setView(location.coords as L.LatLngExpression, 15);
+  }
+
+  ngOnDestroy(): void {
+    this.locationsSub?.unsubscribe();
   }
 }

@@ -1,6 +1,6 @@
 package com.projeto.aplicado.backend.repository;
 
-import com.projeto.aplicado.backend.model.BloodBank;
+import com.projeto.aplicado.backend.model.users.BloodBank;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

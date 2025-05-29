@@ -4,7 +4,10 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
+    max-height: 40px;
 }
 
-
-
+.divider {
+    margin: 0;
+    padding: 0;
+}
