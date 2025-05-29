@@ -7,6 +7,8 @@ import com.projeto.aplicado.backend.model.User;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,12 +18,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder; 
 
     public UserResponseDTO create(UserRequestDTO dto) {
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setAddress(dto.getAddress());
         user.setPhone(dto.getPhone());
         user.setRole(Role.USER);

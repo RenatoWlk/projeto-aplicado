@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,18 +13,34 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
     this.loginForm = this.fb.group({
-      login: ['', Validators.required],
+      email: ['', Validators.required, Validators.email],
       password: ['', Validators.required]
     });
   }
 
   login() {
-    const { login, password } = this.loginForm.value;
-    console.log('Login:', login, 'Password:', password);
+    if (this.loginForm.invalid) {
+      this.errorMessage = 'Preencha todos os campos corretamente.';
+      return;
+    }
+
+    const { email, password } = this.loginForm.value;
+
+    this.authService.login(email, password).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.errorMessage = 'Login ou senha inválidos.';
+        console.error(err);
+      }
+    });
   }
+
 
   goToRegister() {
     this.router.navigate(['/register']);

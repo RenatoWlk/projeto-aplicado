@@ -1,5 +1,5 @@
 <div class="login-container">
-  <form class="login-box" [formGroup]="loginForm">
+  <form class="login-box" [formGroup]="loginForm" (ngSubmit)="login()">
     <h2>
       <img src="assets/icon-name.png" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
       Bem-vindo
@@ -7,7 +7,7 @@
 
     <div class="input-group">
       <label for="login">Login (email)</label>
-      <input type="text" id="login" formControlName="login" required />
+      <input type="text" id="login" formControlName="email" required />
     </div>
 
     <div class="input-group">
@@ -23,5 +23,8 @@
     <div class="divider"></div>
 
   <button type="button" class="register" routerLink="/registrar">Criar Conta</button>
+  <div class="error-message" *ngIf="errorMessage">
+  {{ errorMessage }}
+  </div>
   </form>
 </div>
