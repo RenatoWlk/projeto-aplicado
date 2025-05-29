@@ -34,7 +34,7 @@ body, html {
 .custom-radio-group {
   display: flex;
   justify-content: center;
-  margin-top: 130px;
+  margin-top: 80px;
   gap:1.5rem;
 }
 
@@ -157,6 +157,7 @@ body, html {
 
 .register-title {
   font-size: 36px;
+  margin-top: 10px;
 }
 
 .actions-register, .register-msg, .register-title {
