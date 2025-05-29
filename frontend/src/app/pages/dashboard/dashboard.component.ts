@@ -44,12 +44,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     //this.isLoggedIn = this.authService.isAuthenticated();
+    //this.userRole = this.authService.getCurrentUserRole();
 
-    if (this.isLoggedIn) {
+    if (this.isLoggedIn && this.userRole === this.roles.User) {
       this.loadAllDashboardData();
-      //this.userRole = this.authService.getCurrentUserRole();
     } else {
-      this.loadDashboardDataForUnloggedUsers();
+      this.loadDashboardDataForPublicUsers();
     }
   }
 
@@ -64,9 +64,9 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Loads the dashboard data for unlogged users.
+   * Loads the dashboard data for public users.
    */
-  private loadDashboardDataForUnloggedUsers(): void {
+  private loadDashboardDataForPublicUsers(): void {
     this.getPosts();
     this.getOffers();
   }

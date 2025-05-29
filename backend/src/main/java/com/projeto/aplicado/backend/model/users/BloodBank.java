@@ -7,11 +7,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Document(collection = "users")
 @TypeAlias("BloodBank")
 @EqualsAndHashCode(callSuper = true)
 @Data @NoArgsConstructor
