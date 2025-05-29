@@ -8,8 +8,8 @@ import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.projeto.aplicado.backend.service.EmailService;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder; 
     private final AchievementService achievementService;
     private final EmailService emailService;
-
 
     /**
      * Creates a new user in the system.
@@ -35,7 +35,7 @@ public class UserService {
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setAddress(dto.getAddress());
         user.setPhone(dto.getPhone());
         user.setRole(Role.USER);
