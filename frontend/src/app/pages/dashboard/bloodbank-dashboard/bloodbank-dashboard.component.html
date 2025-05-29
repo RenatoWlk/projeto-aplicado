@@ -1,7 +1,7 @@
-<!-- ============== -->
-<!-- OFFERS SECTION -->
-<!-- ============== -->
-<section class="app-card">
+<!-- ======================== -->
+<!-- CHARTS AND STATS SECTION -->
+<!-- ======================== -->
+<section class="app-card" style="margin-bottom: 2rem; gap: 2rem;">
     <div class="app-card-header">
         <i class="fas fa-chart-line app-card-icon"></i>
         <h2 class="app-card-title">Dados de doações</h2>
@@ -48,3 +48,50 @@
         </article>
     </div>
 </section>
+
+<!-- =========================== -->
+<!-- BLOODBANK CAMPAIGNS SECTION -->
+<!-- =========================== -->
+<section class="app-card">
+    <div class="app-card-header">
+        <i class="fas fa-chart-line app-card-icon"></i>
+        <h2 class="app-card-title">Minhas campanhas</h2>
+        <div class="create-post-container">
+        <button class="app-button create-post-button" (click)="isCampaignModalOpen = true">
+          <i class="fas fa-plus create-post-icon"></i>
+          Criar nova publicação
+        </button>
+      </div>
+    </div>
+    <div class="cards-grid-large cards-grid-overflow">
+      <article class="card" *ngFor="let post of bloodbankCampaigns">
+        <header class="card-header">
+          <h3 class="card-title">{{ post.title }}</h3>
+          <p class="card-subtitle">
+            <time [attr.datetime]="post.startDate">{{ post.startDate | date: 'dd/MM/yyyy' }}</time>
+            até
+            <time [attr.datetime]="post.endDate">{{ post.endDate | date: 'dd/MM/yyyy' }}</time>
+          </p>
+        </header>
+        <p class="card-body">{{ post.body }}</p>
+        <footer class="card-footer">
+          <p class="address">{{ post.location.street }} - {{ post.location.city }}-{{ post.location.state }} - {{ post.location.zipCode }}</p>
+          <a class="phone-link" [href]="'tel:' + post.phone">{{ post.phone }}</a>
+        </footer>
+      </article>
+    </div>
+</section>
+
+<!-- ========================= -->
+<!-- CREATE NEW CAMPAIGN MODAL -->
+<!-- ========================= -->
+<app-modal
+    [title]="'Criar nova publicação'"
+    [visible]="isCampaignModalOpen"
+    (close)="isCampaignModalOpen = false"
+    >
+    <app-form-create-item
+        [type]="'post'"
+        (submitForm)="createNewCampaign($event)">
+    </app-form-create-item>
+</app-modal>

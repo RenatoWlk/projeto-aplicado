@@ -37,7 +37,6 @@ export class DashboardComponent implements OnInit {
   offers: Offer[] = [];
   nearbyBloodbanks: Bloodbank[] = [];
   userStats: UserStats = {} as any;
-  isCampaignModalOpen: boolean = false;
   isOfferModalOpen: boolean = false;
 
   constructor(private dashboardService: DashboardService, private authService: AuthService) {}
@@ -157,14 +156,6 @@ export class DashboardComponent implements OnInit {
     };
 
     return achievements.sort((a, b) => order[a.rarity.toLowerCase()] - order[b.rarity.toLowerCase()]);
-  }
-
-  createNewCampaign(data: any): void {
-    this.isCampaignModalOpen = false;
-
-    this.dashboardService.createCampaign(data).subscribe(() => {
-      this.getPosts();
-    });
   }
 
   createNewOffer(data: any): void {

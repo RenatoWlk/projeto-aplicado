@@ -1,5 +1,10 @@
 <div class="dashboard-container">
 
+  <!-- =================== -->
+  <!-- BLOODBANK DASHBOARD -->
+  <!-- =================== -->
+  <app-bloodbank-dashboard *ngIf="userRole === roles.Bloodbank"></app-bloodbank-dashboard>
+
   <!-- ================= -->
   <!-- CAMPAIGNS SECTION -->
   <!-- ================= -->
@@ -7,12 +12,6 @@
     <div class="app-card-header">
       <i class="fas fa-book-medical app-card-icon"></i>
       <h2 class="app-card-title">{{ postsSectionTitle }}</h2>
-      <div *ngIf="userRole === roles.Bloodbank" class="create-post-container">
-        <button class="app-button create-post-button" (click)="isCampaignModalOpen = true">
-          <i class="fas fa-plus create-post-icon"></i>
-          Criar nova publicação
-        </button>
-      </div>
     </div>
     <div class="cards-grid-large cards-grid-overflow">
       <article class="card" *ngFor="let post of posts">
@@ -62,11 +61,6 @@
       </article>
     </div>
   </section>
-
-  <!-- =================== -->
-  <!-- BLOODBANK DASHBOARD -->
-  <!-- =================== -->
-  <app-bloodbank-dashboard *ngIf="userRole === roles.Bloodbank"></app-bloodbank-dashboard>
 
   <!-- ========================= -->
   <!-- NEARBY BLOODBANKS SECTION -->
@@ -177,20 +171,6 @@
       </p>
     </div>
   </ng-template>
-
-  <!-- ========================= -->
-  <!-- CREATE NEW CAMPAIGN MODAL -->
-  <!-- ========================= -->
-  <app-modal
-    [title]="'Criar nova publicação'"
-    [visible]="isCampaignModalOpen"
-    (close)="isCampaignModalOpen = false"
-  >
-    <app-form-create-item
-      [type]="'post'"
-      (submitForm)="createNewCampaign($event)">
-    </app-form-create-item>
-  </app-modal>
 
   <!-- ====================== -->
   <!-- CREATE NEW OFFER MODAL -->

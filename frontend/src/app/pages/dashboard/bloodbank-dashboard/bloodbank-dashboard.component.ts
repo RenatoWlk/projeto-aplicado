@@ -5,17 +5,23 @@ import { ChartConfiguration, ChartTypeRegistry } from 'chart.js';
 import { BloodBankDashboardService, BloodBankStats } from './bloodbank-dashboard.service';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { BloodType } from '../../../shared/app.enums';
+import { Campaign } from '../dashboard.service';
+import { ModalComponent } from '../../../shared/modal/modal.component';
+import { FormCreateItemComponent } from '../../../shared/form-create-item/form-create-item.component';
 
 const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
 @Component({
   selector: 'app-bloodbank-dashboard',
-  imports: [CommonModule, BaseChartDirective],
+  imports: [CommonModule, BaseChartDirective, ModalComponent, FormCreateItemComponent],
   templateUrl: './bloodbank-dashboard.component.html',
   styleUrl: './bloodbank-dashboard.component.scss'
 })
 export class BloodbankDashboardComponent implements OnInit {
   bloodbankStats: BloodBankStats = {} as any;
+  bloodbankCampaigns: Campaign[] = [];
+  bloodbankId: string = "6832a58fa21332b65c5584aa";
+  isCampaignModalOpen: boolean = false;
 
   /**
    * Donations over time chart data and configuration.
@@ -28,18 +34,39 @@ export class BloodbankDashboardComponent implements OnInit {
     responsive: true,
     maintainAspectRatio: false,
     
+    scales: {
+      y: {
+        beginAtZero: true,
+        min: 0
+      }
+    },
     plugins: {
       legend: {
         position: 'right',
         labels: {
           font: {
             family: 'Poppins, sans-serif',
-            size: 16,
+            size: 18,
             weight: 'bold',
           }
         }
       },
       tooltip: {
+        enabled: true,
+        backgroundColor: '#333',
+        titleColor: '#fff',
+        bodyColor: '#ddd',
+        borderColor: '#888',
+        borderWidth: 1,
+        cornerRadius: 8,
+        padding: 10,
+        titleFont: {
+          size: 17,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 15
+        },
         callbacks: {
           label: (context) => {
             const value = context.raw;
@@ -55,6 +82,16 @@ export class BloodbankDashboardComponent implements OnInit {
    * This chart displays the number of available blood bags for each blood type.
    */
   bloodTypeChartType = 'doughnut' as keyof ChartTypeRegistry;
+  bloodColors: Record<string, string> = {
+    'AB-': '#ffe139',   // strong yellow
+    'AB+': '#fff599',   // light yellow
+    'O-': '#ff2929',    // strong red
+    'O+': '#ff6262',    // light red
+    'A-': '#1b6e1b',    // strong green
+    'A+': '#75ee75',    // light green
+    'B-': '#1a81e9',    // strong blue
+    'B+': '#5dc2e4'     // light blue
+  };
   bloodTypeChartData = {
     labels: ['A+', 'A−', 'B+', 'B−', 'AB+', 'AB−', 'O+', 'O−'],
     datasets: [
@@ -62,12 +99,19 @@ export class BloodbankDashboardComponent implements OnInit {
         label: 'Bolsas disponíveis',
         data: [0,0,0,0,0,0,0,0],
         backgroundColor: [
-          '#78c2ff', '#ff5365', '#68e9ba', '#ffae78',
-          '#9dace9', '#ffff96', '#c992ff', '#BFFCC6'
+          this.bloodColors['AB+'],
+          this.bloodColors['AB-'],
+          this.bloodColors['O+'],
+          this.bloodColors['O-'],
+          this.bloodColors['A+'],
+          this.bloodColors['A-'],
+          this.bloodColors['B+'],
+          this.bloodColors['B-']
         ],
       } // deixaram um daltonico escolher as cores
     ]
   };
+  
   public bloodTypeChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
@@ -78,12 +122,27 @@ export class BloodbankDashboardComponent implements OnInit {
         labels: {
           font: {
             family: 'Poppins, sans-serif',
-            size: 16,
+            size: 20,
             weight: 'bold'
           }
         }
       },
       tooltip: {
+        enabled: true,
+        backgroundColor: '#333',
+        titleColor: '#fff',
+        bodyColor: '#ddd',
+        borderColor: '#888',
+        borderWidth: 1,
+        cornerRadius: 8,
+        padding: 10,
+        titleFont: {
+          size: 17,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 15
+        },
         callbacks: {
           label: (context) => {
             const value = context.raw;
@@ -99,6 +158,7 @@ export class BloodbankDashboardComponent implements OnInit {
   // Fetch blood bank statistics when the component initializes
   ngOnInit(): void {
     this.getBloodBankStats();
+    this.getBloodBankCampaigns();
   }
 
   /**
@@ -106,10 +166,19 @@ export class BloodbankDashboardComponent implements OnInit {
    * This includes total donations, scheduled donations, donations over time, and blood type distribution.
    */
   private getBloodBankStats(): void {
-    this.bbDashboardService.getBloodbankStats("6832a58fa21332b65c5584aa").subscribe((bloodbankStats: BloodBankStats) => {
+    this.bbDashboardService.getBloodbankStats(this.bloodbankId).subscribe((bloodbankStats: BloodBankStats) => {
       this.bloodbankStats = bloodbankStats;
       this.getDonationsOverTimeChartData();
       this.getBloodTypeChartData();
+    });
+  }
+
+  /**
+   * Fetches the bloodbank campaigns from the server and stores them in the component.
+   */
+  private getBloodBankCampaigns(): void {
+    this.bbDashboardService.getBloodbankCampaigns(this.bloodbankId).subscribe((bloodbankCampaigns: Campaign[]) => {
+      this.bloodbankCampaigns = bloodbankCampaigns;
     });
   }
 
@@ -120,8 +189,6 @@ export class BloodbankDashboardComponent implements OnInit {
   private getDonationsOverTimeChartData(): void {
     if (!this.bloodbankStats.donationsOverTime) return;
 
-    const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-
     const sortedData = [...this.bloodbankStats.donationsOverTime].sort((a, b) => {
       const aIndex = a.year * 100 + MONTHS.indexOf(a.month);
       const bIndex = b.year * 100 + MONTHS.indexOf(b.month);
@@ -130,7 +197,7 @@ export class BloodbankDashboardComponent implements OnInit {
 
     const last8 = sortedData.slice(-8);
 
-    this.donationsOverTimeChartLabels = last8.map(item => item.month);
+    this.donationsOverTimeChartLabels = last8.map(item => item.month + " de " + item.year);
     this.donationsOverTimeChartData = [{
       data: last8.map(item => item.donations),
       label: 'Doações'
@@ -153,10 +220,24 @@ export class BloodbankDashboardComponent implements OnInit {
         label: 'Bolsas disponíveis',
         data,
         backgroundColor: [
-          '#78c2ff', '#ff5365', '#68e9ba', '#ffae78',
-          '#9dace9', '#ffff96', '#c992ff', '#BFFCC6'
+          this.bloodColors['AB+'],
+          this.bloodColors['AB-'],
+          this.bloodColors['O+'],
+          this.bloodColors['O-'],
+          this.bloodColors['A+'],
+          this.bloodColors['A-'],
+          this.bloodColors['B+'],
+          this.bloodColors['B-']
         ],
       }]
     };
+  }
+
+  createNewCampaign(data: any): void {
+    this.isCampaignModalOpen = false;
+
+    this.bbDashboardService.createCampaign(data).subscribe(() => {
+      this.getBloodBankCampaigns();
+    });
   }
 }

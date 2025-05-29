@@ -1,10 +1,12 @@
 package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
+import com.projeto.aplicado.backend.dto.CampaignDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankStatsDTO;
 import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
+import com.projeto.aplicado.backend.model.Campaign;
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.model.users.BloodBank;
@@ -91,6 +93,18 @@ public class BloodBankService {
     }
 
     /**
+     * Retrieves all the campaigns for a specific blood bank.
+     *
+     * @param id the ID of the blood bank
+     * @return a list containing all the campaigns from the blood bank
+     */
+    public List<CampaignDTO> findCampaignsById(String id) {
+        return bloodBankRepository.findById(id)
+                .map(this::toCampaignsDTO)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+    }
+
+    /**
      * Retrieves all blood banks and attempts to enrich each one with geolocation data. <br>
      * If the address is incomplete or an error occurs, coordinates are set to 0.
      *
@@ -161,4 +175,28 @@ public class BloodBankService {
         dto.setScheduledDonations(bloodBank.getScheduledDonations());
         return dto;
     }
+
+    /**
+     * Converts a BloodBank entity to a DTO containing all the campaigns.
+     *
+     * @param bloodBank the blood bank entity
+     * @return the list of campaigns DTOs
+     */
+    private List<CampaignDTO> toCampaignsDTO(BloodBank bloodBank) {
+        List<CampaignDTO> dtoList = new ArrayList<>();
+
+        for (Campaign campaign : bloodBank.getCampaigns()) {
+            CampaignDTO dto = new CampaignDTO();
+            dto.setTitle(campaign.getTitle());
+            dto.setBody(campaign.getBody());
+            dto.setStartDate(campaign.getStartDate());
+            dto.setEndDate(campaign.getEndDate());
+            dto.setPhone(campaign.getPhone());
+            dto.setLocation(campaign.getLocation());
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
+
 }

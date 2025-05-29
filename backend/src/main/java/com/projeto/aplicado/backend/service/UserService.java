@@ -113,14 +113,14 @@ public class UserService {
     }
 
     public void sendPasswordRecoveryEmail(String email) {
-    Optional<User> userOpt = userRepository.findByEmail(email);
-    if (userOpt.isPresent()) {
-        User user = userOpt.get();
-        String message = "Olá " + user.getName() + ",\n\n" +
-                         "Seu login é: " + user.getEmail() + "\n\n" +
-                         "Sua senha é: " + user.getPassword() + "\n\n";
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            String message = "Olá " + user.getName() + ",\n\n" +
+                             "Seu login é: " + user.getEmail() + "\n\n" +
+                             "Sua senha é: " + user.getPassword() + "\n\n";
 
-        emailService.sendEmail(user.getEmail(), "Recuperação de Dados de Acesso", message);
+            emailService.sendEmail(user.getEmail(), "Recuperação de Dados de Acesso", message);
+        }
     }
-}
 }

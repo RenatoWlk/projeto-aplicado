@@ -68,11 +68,6 @@ export class DashboardService {
         return this.http.get<UserStats>(`/api/users/${userId}/stats`);
     }
 
-    createCampaign(campaign: Campaign): Observable<Campaign> {
-        const data = {campaign, bloodbankEmail: this.auth.getCurrentUserEmail()};
-        return this.http.post<Campaign>(DashboardConstants.CREATE_CAMPAIGN_ENDPOINT, data);
-    }
-
     createOffer(offer: Offer): Observable<Offer> {
         const data = {offer, partnerEmail: this.auth.getCurrentUserEmail()};
         return this.http.post<Offer>(DashboardConstants.CREATE_OFFER_ENDPOINT, data);
