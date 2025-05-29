@@ -11,7 +11,7 @@
             <header class="card-header">
                 <h3 class="card-title">Gráfico de doações ao longo do tempo</h3>
             </header>
-            <div style="display: block; width: 600px; height: 500px;">
+            <div style="display: block; width: 850px; height: 500px;">
                 <canvas
                     baseChart
                     [type]="donationsOverTimeChartType"
@@ -26,19 +26,24 @@
             <header class="card-header">
                 <h3 class="card-title">Distribuição de tipos sanguíneos</h3>
             </header>
-            <div style="display: block; width: 500px; height: 500px;">
+            <div style="display: block; width: 700px; height: 500px;">
                 <canvas
-                baseChart
-                [type]="bloodTypeChartType"
-                [data]="bloodTypeChartData"
-                [options]="bloodTypeChartOptions"
-                [legend]="true">
+                    baseChart
+                    [type]="bloodTypeChartType"
+                    [data]="bloodTypeChartData"
+                    [options]="bloodTypeChartOptions"
+                    [legend]="true">
                 </canvas>
             </div>
         </article>
         <article class="card">
             <header class="card-header">
-                <h3 class="card-title">Doações agendadas: 12</h3>
+                <h3 class="card-title">Doações agendadas: {{ bloodbankStats.scheduledDonations }}</h3>
+            </header>
+        </article>
+        <article class="card">
+            <header class="card-header">
+                <h3 class="card-title">Total de doações: {{ bloodbankStats.totalDonations }}</h3>
             </header>
         </article>
     </div>

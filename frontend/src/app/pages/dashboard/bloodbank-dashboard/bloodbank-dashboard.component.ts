@@ -35,7 +35,7 @@ export class BloodbankDashboardComponent implements OnInit {
           font: {
             family: 'Poppins, sans-serif',
             size: 16,
-            weight: 'bold'
+            weight: 'bold',
           }
         }
       },
@@ -106,7 +106,7 @@ export class BloodbankDashboardComponent implements OnInit {
    * This includes total donations, scheduled donations, donations over time, and blood type distribution.
    */
   private getBloodBankStats(): void {
-    this.bbDashboardService.getBloodbankStats(this.authService.getCurrentUserId()).subscribe((bloodbankStats: BloodBankStats) => {
+    this.bbDashboardService.getBloodbankStats("6832a58fa21332b65c5584aa").subscribe((bloodbankStats: BloodBankStats) => {
       this.bloodbankStats = bloodbankStats;
       this.getDonationsOverTimeChartData();
       this.getBloodTypeChartData();
