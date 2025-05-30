@@ -22,6 +22,7 @@ export class BloodbankDashboardComponent implements OnInit {
   bloodbankCampaigns: Campaign[] = [];
   bloodbankId: string = "6832a58fa21332b65c5584aa";
   isCampaignModalOpen: boolean = false;
+  averageDonation: number = 0;
 
   /**
    * Donations over time chart data and configuration.
@@ -170,6 +171,7 @@ export class BloodbankDashboardComponent implements OnInit {
       this.bloodbankStats = bloodbankStats;
       this.getDonationsOverTimeChartData();
       this.getBloodTypeChartData();
+      this.getAverageDonations();
     });
   }
 
@@ -202,6 +204,17 @@ export class BloodbankDashboardComponent implements OnInit {
       data: last8.map(item => item.donations),
       label: 'Doações'
     }];
+  }
+
+  private getAverageDonations(): void {
+    const donations = this.bloodbankStats.donationsOverTime;
+    if (!donations || donations.length === 0) {
+      this.averageDonation = 0;
+      return;
+    }
+
+    const total = donations.reduce((sum, d) => sum + d.donations, 0);
+    this.averageDonation = Math.round(total / donations.length);
   }
 
   /**

@@ -1,11 +1,16 @@
 <div class="header">
+
     <div class="right">
       <button class="logo-btn" [routerLink]="'/segredinho'">
         <img src="assets/logo.png" alt="Logo" class="logo" style="width: 152px; height: 69px;">
       </button>
     </div>
-    <div class="left">
 
+    <div class="center">
+      <p class="slogan">{{ slogan }}</p>
+    </div>
+
+    <div class="left">
       <!-- IS NOT LOGGED IN -->
       <div *ngIf="!isLoggedIn">
         <button class="header-btn" (click)="toggleMenu()">

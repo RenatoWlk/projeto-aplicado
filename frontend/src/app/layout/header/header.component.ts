@@ -3,6 +3,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
+import { HeaderService } from './header.service';
 
 @Component({
   selector: 'app-header',
@@ -15,10 +16,34 @@ export class HeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
   userName: string = 'Renas';
   userEmail: string = 'renas@gmail.com';
+  slogan: string = '';
 
-  constructor(private authService: AuthService) {}
+  private slogans: string[] = [
+    'Uma doação pode salvar até 4 vidas!',
+    'Doe sangue, salve vidas!',
+    'Cada gota conta!',
+    'Seja o herói de alguém hoje!',
+    'Você pode ser a diferença entre a vida e a morte!',
+    'Compartilhe vida, doe sangue!',
+    'Doe sangue, espalhe esperança!',
+    'Salve uma vida em menos de 30 minutos!',
+    'Seu sangue é um presente que vale vidas!',
+    'Doe hoje. Alguém precisa agora.',
+    'Ajude quem não tem tempo a esperar.',
+    'Seu gesto simples pode ser tudo para alguém!',
+    'A vida continua com a sua doação!',
+    'Um pequeno ato, um grande impacto!'
+  ];
+
+  constructor(private authService: AuthService, private headerService: HeaderService) {}
 
   ngOnInit(): void {
+    this.setRandomSlogan();
+
+    this.headerService.sloganTrigger.subscribe(() => {
+      this.setRandomSlogan();
+    });
+
     this.isLoggedIn = this.authService.isAuthenticated();
 
     if (this.isLoggedIn) {
@@ -39,5 +64,9 @@ export class HeaderComponent implements OnInit {
     if (!target.closest('.left')) {
       this.isMenuOpen = false;
     }
+  }
+
+  setRandomSlogan() {
+    this.slogan = this.slogans[Math.floor(Math.random() * this.slogans.length)];
   }
 }

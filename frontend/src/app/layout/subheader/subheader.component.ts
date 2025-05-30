@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HeaderService } from '../header/header.service';
 
 @Component({
   selector: 'app-subheader',
@@ -9,5 +10,9 @@ import { RouterModule } from '@angular/router';
   styleUrl: './subheader.component.scss'
 })
 export class SubheaderComponent {
+  constructor(private headerService: HeaderService) {}
 
+  changeSlogan() {
+    this.headerService.triggerSloganChange();
+  }
 }

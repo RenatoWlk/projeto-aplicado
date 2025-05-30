@@ -7,6 +7,7 @@
         <h2 class="app-card-title">Dados de doações</h2>
     </div>
     <div class="cards-grid-large">
+
         <article class="card">
             <header class="card-header">
                 <h3 class="card-title">Gráfico de doações ao longo do tempo</h3>
@@ -22,6 +23,7 @@
                 </canvas>
             </div>
         </article>
+
         <article class="card">
             <header class="card-header">
                 <h3 class="card-title">Distribuição de tipos sanguíneos</h3>
@@ -36,14 +38,36 @@
                 </canvas>
             </div>
         </article>
-        <article class="card">
+
+    </div>
+    <div class="cards-grid-medium" style="margin-top: 1rem;">
+        <article class="card stat-card stat-scheduled">
             <header class="card-header">
-                <h3 class="card-title">Doações agendadas: {{ bloodbankStats.scheduledDonations }}</h3>
+                <i class="fas fa-calendar-check stat-icon"></i>
+                <div class="stat-info">
+                    <h3 class="stat-value">{{ bloodbankStats.scheduledDonations }}</h3>
+                    <p class="stat-label">Doações Agendadas</p>
+                </div>
             </header>
         </article>
-        <article class="card">
+
+        <article class="card stat-card stat-total">
             <header class="card-header">
-                <h3 class="card-title">Total de doações: {{ bloodbankStats.totalDonations }}</h3>
+                <i class="fas fa-hand-holding-heart stat-icon"></i>
+                <div class="stat-info">
+                    <h3 class="stat-value">{{ bloodbankStats.totalDonations }}</h3>
+                    <p class="stat-label">Total de Doações</p>
+                </div>
+            </header>
+        </article>
+
+        <article class="card stat-card stat-average">
+            <header class="card-header">
+                <i class="fas fa-chart-bar stat-icon"></i>
+                <div class="stat-info">
+                    <h3 class="stat-value">{{ averageDonation }}</h3>
+                    <p class="stat-label">Média de Doações Mensais</p>
+                </div>
             </header>
         </article>
     </div>
