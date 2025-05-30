@@ -2,6 +2,7 @@ package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
 import com.projeto.aplicado.backend.dto.CampaignDTO;
+import com.projeto.aplicado.backend.dto.bloodbank.BloodBankNearbyDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankStatsDTO;
@@ -12,9 +13,11 @@ import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.model.users.BloodBank;
 import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
+import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BloodBankService {
     private final BloodBankRepository bloodBankRepository;
+    private final UserRepository userRepository;
     private final GeolocationService geolocationService;
 
     /**
@@ -62,7 +66,7 @@ public class BloodBankService {
      * @return a list of blood bank response DTOs
      */
     public List<BloodBankResponseDTO> findAll() {
-        return bloodBankRepository.findAll().stream()
+        return bloodBankRepository.findAllBloodBanks().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -111,7 +115,7 @@ public class BloodBankService {
      * @return a list of blood bank DTOs including location information
      */
     public List<BloodBankResponseDTO> getAllWithLocation() {
-        return bloodBankRepository.findAll().stream().map(bloodBank -> {
+        return bloodBankRepository.findAllBloodBanks().stream().map(bloodBank -> {
             BloodBankResponseDTO dto = toResponseDTO(bloodBank);
 
             if (bloodBank.getAddress() == null ||
@@ -133,13 +137,85 @@ public class BloodBankService {
                 dto.setLatitude(coordinates[0]);
                 dto.setLongitude(coordinates[1]);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("Error trying to get the coords");
+                System.err.println("Error message: " + e.getMessage());
                 dto.setLatitude(0.0);
                 dto.setLongitude(0.0);
             }
 
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public List<BloodBankNearbyDTO> getNearbyBloodbanksFromUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+
+        if (user.getAddress() == null ||
+                user.getAddress().getStreet() == null ||
+                user.getAddress().getCity() == null ||
+                user.getAddress().getState() == null ||
+                user.getAddress().getZipCode() == null) {
+            throw new RuntimeException(Messages.USER_ADDRESS_INCOMPLETE);
+        }
+
+        String userAddress = removeAccents(user.getAddress().getStreet().toLowerCase());
+        double[] userCoordinates = geolocationService.getCoordinatesFromAddress(userAddress);
+        double userLat = userCoordinates[0];
+        double userLon = userCoordinates[1];
+
+        System.out.println("\n\nLat: " + userLat + " - Lon: " + userLon);
+
+        final double MAX_DISTANCE_KM = 80.0;
+
+        return bloodBankRepository.findAllBloodBanks().stream().map(bloodBank -> {
+            BloodBankNearbyDTO dto = toNearbyDTO(bloodBank, 0.0);
+
+            try {
+                if (bloodBank.getAddress() != null) {
+                    String fullAddress = removeAccents(bloodBank.getAddress().getStreet().toLowerCase());
+
+                    double[] coordinates = geolocationService.getCoordinatesFromAddress(fullAddress);
+
+                    if (coordinates[0] != 0.0) {
+                        double bankLat = coordinates[0];
+                        double bankLon = coordinates[1];
+
+                        double distance = calculateDistance(userLat, userLon, bankLat, bankLon);
+
+                        if (distance <= MAX_DISTANCE_KM) {
+                            dto.setDistance(distance);
+                            System.out.println("Distance: " + distance);
+                            return dto;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("\n\n\n\nError trying to get the coords");
+                System.err.println("Error message: " + e.getMessage());
+            }
+
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int EARTH_RADIUS_KM = 6371;
+
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS_KM * c;
+    }
+
+    public String removeAccents(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 
     /**
@@ -199,4 +275,12 @@ public class BloodBankService {
         return dtoList;
     }
 
+    private BloodBankNearbyDTO toNearbyDTO(BloodBank bloodBank, Double distance) {
+        BloodBankNearbyDTO dto = new BloodBankNearbyDTO();
+        dto.setName(bloodBank.getName());
+        dto.setAddress(bloodBank.getAddress());
+        dto.setPhone(bloodBank.getPhone());
+        dto.setDistance(distance);
+        return dto;
+    }
 }

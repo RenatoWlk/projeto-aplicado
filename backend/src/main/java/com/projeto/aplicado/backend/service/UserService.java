@@ -43,7 +43,7 @@ public class UserService {
         user.setGender(dto.getGender());
         user.setBloodType(dto.getBloodType());
         user.setTimesDonated(0);
-        user.setTimeUntilNextDonation(dto.getTimeUntilNextDonation());
+        user.setTimeUntilNextDonation(0);
         user.setLastDonationDate(dto.getLastDonationDate());
         user.setUnlockedAchievements(List.of());
         user.setTotalPoints(0);
@@ -58,7 +58,7 @@ public class UserService {
      * @return a list of user response DTOs
      */
     public List<UserResponseDTO> findAll() {
-        return userRepository.findAll().stream()
+        return userRepository.findAllUsers().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }

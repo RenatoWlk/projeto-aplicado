@@ -29,8 +29,9 @@ export class DashboardComponent implements OnInit {
   roles = UserRole;
   isLoggedIn: boolean = true;
   //isLoggedIn: boolean = false;
-  userRole: UserRole | null = this.roles.Bloodbank;
+  userRole: UserRole | null = this.roles.User;
   //userRole: UserRole | null = null;
+  private userId: string = "6832a1d0a21332b65c5584a9";
   
   // Dashboard data
   posts: Campaign[] = [];
@@ -46,6 +47,7 @@ export class DashboardComponent implements OnInit {
     //this.userRole = this.authService.getCurrentUserRole();
 
     if (this.isLoggedIn && this.userRole === this.roles.User) {
+      //this.userId = this.authService.getCurrentUserId();
       this.loadAllDashboardData();
     } else {
       this.loadDashboardDataForPublicUsers();
@@ -92,17 +94,25 @@ export class DashboardComponent implements OnInit {
    * Fetches nearby blood banks from the server and stores them in the component.
    */
   private getNearbyBloodbanks(): void {
-    this.dashboardService.getNearbyBloodbanks().subscribe((banks: Bloodbank[]) => {
+    this.dashboardService.getNearbyBloodbanks(this.userId).subscribe((banks: Bloodbank[]) => {
       this.nearbyBloodbanks = banks;
     });
+  }
+
+  getReadableBloodbankDistance(distance: number): string {
+    if (distance < 1) {
+      const meters = Math.round(distance * 1000);
+      return `${meters} m`;
+    } else {
+      return `${distance.toFixed(1)} km`;
+    }
   }
 
   /**
    * Fetches user statistics from the server and processes them.
    */
   private getUserStats(): void {
-    const userId = this.authService.getCurrentUserId();
-    this.dashboardService.getUserStats(userId).subscribe((stats: UserStats) => {
+    this.dashboardService.getUserStats(this.userId).subscribe((stats: UserStats) => {
       stats.achievements = this.sortAchievementsByRarity(stats.achievements);
       stats.potentialLivesSaved = this.calculatePotentialLivesSaved(stats.timesDonated);
       stats.timeUntilNextDonation = this.getReadableTimeUntilNextDonation(stats.timeUntilNextDonation);

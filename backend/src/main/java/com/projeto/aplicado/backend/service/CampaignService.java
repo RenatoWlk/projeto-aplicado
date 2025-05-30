@@ -48,7 +48,7 @@ public class CampaignService {
      * @return a list of CampaignDTO objects representing all campaigns.
      */
     public List<CampaignDTO> getAllCampaigns() {
-        return bloodBankRepository.findAll().stream()
+        return bloodBankRepository.findAllBloodBanks().stream()
                 .flatMap(b -> b.getCampaigns().stream())
                 .map(c -> {
                     CampaignDTO dto = new CampaignDTO();

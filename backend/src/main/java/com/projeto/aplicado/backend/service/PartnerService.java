@@ -44,7 +44,7 @@ public class PartnerService {
      * @return a list of partner response DTOs
      */
     public List<PartnerResponseDTO> findAll() {
-        return partnerRepository.findAll().stream()
+        return partnerRepository.findAllPartners().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
