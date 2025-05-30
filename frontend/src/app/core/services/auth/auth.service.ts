@@ -72,9 +72,9 @@ export class AuthService {
   }
 
   /** Returns the current user role from the token */
-  getCurrentUserRole(): UserRole | null {
+  getCurrentUserRole(): UserRole | undefined {
     const token = this.tokenService.getToken();
-    if (!token) return null;
+    if (!token) return undefined;
 
     const decoded: any = jwtDecode(token);
     const role = decoded.role || decoded.userRole;
@@ -84,6 +84,6 @@ export class AuthService {
       return role as UserRole;
     }
 
-    return null;
+    return undefined;
   }
 }

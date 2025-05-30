@@ -1,0 +1,30 @@
+.banner {
+    padding: 12px 16px;
+    margin: 10px 0;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    opacity: 1;
+    transition: opacity 0.5 ease;
+}
+
+.banner-sucess {
+    background-color: #4caf50;
+}
+
+.banner-warning {
+    background-color: #ff9800;
+}
+
+.banner-error {
+    background-color: #f44336;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
