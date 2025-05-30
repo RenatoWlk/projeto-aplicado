@@ -16,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 export class BloodbankCalendarComponent {
 
   readonly customHeader = CustomHeaderComponent;
-  selected: Date | undefined = new Date();
+  selected: Date = new Date();
 
   calendarStats : CalendarStats = {
     lastDonationDate : new Date(),
@@ -25,8 +25,8 @@ export class BloodbankCalendarComponent {
 
   }
 
-  startDate: Date | undefined = undefined;
-  endDate: Date | undefined = undefined;
+  startDate: Date | null = null;
+  endDate: Date | null = null;
 
   constructor(
     private bloodbankService: BloodbankService,
@@ -43,7 +43,7 @@ export class BloodbankCalendarComponent {
   selectDate(date: Date) {
     if (!this.startDate || (this.startDate && this.endDate)) {
       this.startDate = date;
-      this.endDate = undefined;
+      this.endDate = null;
     } else if (date < this.startDate) {
       this.endDate = this.startDate;
       this.startDate = date;
