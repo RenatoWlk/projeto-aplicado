@@ -8,11 +8,12 @@ import { UserRole } from '../../shared/app.enums';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { FormCreateItemComponent } from '../../shared/form-create-item/form-create-item.component';
 import { BloodbankDashboardComponent } from './bloodbank-dashboard/bloodbank-dashboard.component';
+import { LeaderboardsComponent } from "./leaderboards/leaderboards.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent],
+  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent, LeaderboardsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
