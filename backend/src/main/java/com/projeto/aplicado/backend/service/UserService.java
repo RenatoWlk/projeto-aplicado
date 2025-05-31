@@ -9,12 +9,10 @@ import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.projeto.aplicado.backend.service.EmailService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,7 +68,7 @@ public class UserService {
      * @return the user response DTO
      */
     public UserResponseDTO findById(String id) {
-        return userRepository.findById(id)
+        return userRepository.findUserById(id)
                 .map(this::toResponseDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
@@ -82,7 +80,7 @@ public class UserService {
      * @return the user statistics DTO
      */
     public UserStatsDTO findStatsById(String id) {
-        return userRepository.findById(id)
+        return userRepository.findUserById(id)
                 .map(this::toStatsDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }

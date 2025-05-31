@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { TokenService } from '../token/token.service';
 import { jwtDecode } from 'jwt-decode';
 import { UserRole } from '../../../shared/app.enums';
+import { Router } from '@angular/router';
 
 interface AuthRequest {
   email: string;
@@ -33,7 +34,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private router: Router
   ) {}
 
   /**
@@ -59,7 +61,9 @@ export class AuthService {
    * Clears the stored JWT token (logout).
    */
   logout(): void {
+    console.log("logout: " + localStorage.getItem("token"))
     this.tokenService.clearToken();
+    this.router.navigate(['/login']);
   }
 
   /**

@@ -79,7 +79,7 @@ public class BloodBankService {
      * @throws RuntimeException if no blood bank is found with the given ID
      */
     public BloodBankResponseDTO findById(String id) {
-        return bloodBankRepository.findById(id)
+        return bloodBankRepository.findBloodBankById(id)
                 .map(this::toResponseDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
@@ -91,7 +91,7 @@ public class BloodBankService {
      * @return a DTO containing blood donation statistics
      */
     public BloodBankStatsDTO findStatsById(String id) {
-        return bloodBankRepository.findById(id)
+        return bloodBankRepository.findBloodBankById(id)
                 .map(this::toStatsDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
@@ -103,7 +103,7 @@ public class BloodBankService {
      * @return a list containing all the campaigns from the blood bank
      */
     public List<CampaignDTO> findCampaignsById(String id) {
-        return bloodBankRepository.findById(id)
+        return bloodBankRepository.findBloodBankById(id)
                 .map(this::toCampaignsDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
@@ -148,7 +148,7 @@ public class BloodBankService {
     }
 
     public List<BloodBankNearbyDTO> getNearbyBloodbanksFromUser(String userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
 
         if (user.getAddress() == null ||

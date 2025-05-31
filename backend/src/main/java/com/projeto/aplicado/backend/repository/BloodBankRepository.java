@@ -10,8 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface BloodBankRepository extends MongoRepository<BloodBank, String> {
+    @Query("{ '_id': ?0, 'role': 'BLOODBANK' }")
+    Optional<BloodBank> findBloodBankById(String id);
+
+    @Query("{ 'email': ?0, 'role': 'BLOODBANK' }")
     Optional<BloodBank> findByEmail(String email);
-    boolean existsByEmail(String email);
 
     @Query("{ 'role': 'BLOODBANK' }")
     List<BloodBank> findAllBloodBanks();

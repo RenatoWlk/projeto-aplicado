@@ -10,10 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
+    @Query("{ '_id': ?0, 'role': 'USER' }")
+    Optional<User> findUserById(String id);
+
+    @Query("{ 'email': ?0, 'role': 'USER' }")
     Optional<User> findByEmail(String email);
-    Optional<User> findByEmailAndPassword(String email, String password);
-    boolean existsByEmail(String email);
-    boolean existsByCpf(String cpf);
 
     @Query("{ 'role': 'USER' }")
     List<User> findAllUsers();

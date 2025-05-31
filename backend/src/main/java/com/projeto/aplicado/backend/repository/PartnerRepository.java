@@ -10,8 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface PartnerRepository extends MongoRepository<Partner, String> {
+    @Query("{ '_id': ?0, 'role': 'PARTNER' }")
+    Optional<Partner> findPartnerById(String id);
+
+    @Query("{ 'email': ?0, 'role': 'PARTNER' }")
     Optional<Partner> findByEmail(String email);
-    boolean existsByCnpj(String cnpj);
 
     @Query("{ 'role': 'PARTNER' }")
     List<Partner> findAllPartners();

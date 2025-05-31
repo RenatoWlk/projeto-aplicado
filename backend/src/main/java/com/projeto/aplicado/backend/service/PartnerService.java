@@ -56,7 +56,7 @@ public class PartnerService {
      * @return the partner response DTO
      */
     public PartnerResponseDTO findById(String id) {
-        return partnerRepository.findById(id)
+        return partnerRepository.findPartnerById(id)
                 .map(this::toResponseDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }

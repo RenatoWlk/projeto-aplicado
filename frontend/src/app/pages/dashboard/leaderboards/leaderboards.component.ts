@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Donor, PointUser, LeaderboardsService } from './leaderboards.service';
+import { TopDonor, TopPointsUser, LeaderboardsService } from './leaderboards.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,25 +11,19 @@ import { CommonModule } from '@angular/common';
 export class LeaderboardsComponent implements OnInit {
   activeTab: 'donors' | 'points' = 'donors';
 
-  topDonors: Donor[] = [];
-  topPoints: PointUser[] = [];
+  topDonors: TopDonor[] = [];
+  topPoints: TopPointsUser[] = [];
 
   constructor(private leaderboardsService: LeaderboardsService) {}
 
   ngOnInit(): void {
-    this.fetchTopDonors();
-    this.fetchTopPoints();
+    this.fetchLeaderboards();
   }
 
-  fetchTopDonors(): void {
-    this.leaderboardsService.getTopDonors().subscribe((donors) => {
-      this.topDonors = donors;
-    });
-  }
-
-  fetchTopPoints(): void {
-    this.leaderboardsService.getTopPointUsers().subscribe((users) => {
-      this.topPoints = users;
+  fetchLeaderboards(): void {
+    this.leaderboardsService.getLeaderboards().subscribe((leaderboards) => {
+      this.topDonors = leaderboards.topDonors;
+      this.topPoints = leaderboards.topPointsUsers;
     });
   }
 }
