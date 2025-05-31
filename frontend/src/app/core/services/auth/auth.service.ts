@@ -14,6 +14,17 @@ interface AuthResponse {
   token: string;
 }
 
+interface DecodedToken {
+  sub?: string;
+  id?: string;
+  name?: string;
+  userName?: string;
+  email?: string;
+  userEmail?: string;
+  role?: string;
+  userRole?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,64 +37,94 @@ export class AuthService {
   ) {}
 
   /**
-   * Send credentials to the backend and, on success,
-   * store the token and return the Observable<AuthResponse>.
+   * Sends login credentials to the backend and stores the returned JWT token.
+   * @param email - User's email
+   * @param password - User's password
+   * @returns Observable of AuthResponse containing the token
    */
   login(email: string, password: string): Observable<AuthResponse> {
     const payload: AuthRequest = { email, password };
-    return this.http.post<AuthResponse>(`${this.API}/login`, payload)
-      .pipe(
-        tap(response => this.tokenService.setToken(response.token))
-      );
+    return this.loginAndGetToken(payload).pipe(
+      tap((response: AuthResponse) => {
+        this.tokenService.setToken(response.token);
+      })
+    );
   }
 
-  /** Cleans the token (logout) */
+  loginAndGetToken(payload: AuthRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`/api/auth/login`, payload);
+  }
+
+  /**
+   * Clears the stored JWT token (logout).
+   */
   logout(): void {
     this.tokenService.clearToken();
   }
 
-  /** Returns true if authenticated */
+  /**
+   * Checks whether a valid token is stored.
+   * @returns true if authenticated, false otherwise
+   */
   isAuthenticated(): boolean {
     return this.tokenService.isLogged();
   }
 
-  /** Returns the current user ID from the token */
+  /**
+   * Retrieves the current user's ID from the token.
+   * @returns user ID or empty string
+   */
   getCurrentUserId(): string {
-    const token = this.tokenService.getToken();
-    if (!token) return '';
-    const decoded: any = jwtDecode(token);
-    return decoded.sub || decoded.id || '';
+    const decoded = this.decodeToken();
+    return decoded?.sub || decoded?.id || '';
   }
 
-  /** Returns the current user's name from the token */
+  /**
+   * Retrieves the current user's name from the token.
+   * @returns user name or empty string
+   */
   getCurrentUserName(): string {
-    const token = this.tokenService.getToken();
-    if (!token) return '';
-    const decoded: any = jwtDecode(token);
-    return decoded.name || decoded.userName || '';
+    const decoded = this.decodeToken();
+    return decoded?.name || decoded?.userName || '';
   }
 
-  /** Returns the current user email from the token */
+  /**
+   * Retrieves the current user's email from the token.
+   * @returns user email or empty string
+   */
   getCurrentUserEmail(): string {
-    const token = this.tokenService.getToken();
-    if (!token) return '';
-    const decoded: any = jwtDecode(token);
-    return decoded.email || decoded.userEmail || '';
+    const decoded = this.decodeToken();
+    return decoded?.email || decoded?.userEmail || '';
   }
 
-  /** Returns the current user role from the token */
+  /**
+   * Retrieves the current user's role from the token.
+   * @returns user role as UserRole enum or null if invalid
+   */
   getCurrentUserRole(): UserRole | null {
-    const token = this.tokenService.getToken();
-    if (!token) return null;
+    const decoded = this.decodeToken();
+    const role = decoded?.role || decoded?.userRole;
 
-    const decoded: any = jwtDecode(token);
-    const role = decoded.role || decoded.userRole;
-
-    // Check if role is a valid UserRole enum value
-    if (Object.values(UserRole).includes(role)) {
+    if (role && Object.values(UserRole).includes(role as UserRole)) {
       return role as UserRole;
     }
 
     return null;
+  }
+
+  /**
+   * Decodes the JWT token safely.
+   * @returns DecodedToken object or null if token is missing or invalid
+   */
+  private decodeToken(): DecodedToken | null {
+    const token = this.tokenService.getToken();
+    if (!token) return null;
+
+    try {
+      return jwtDecode<DecodedToken>(token);
+    } catch (error) {
+      console.error('Invalid or malformed token:', error);
+      return null;
+    }
   }
 }

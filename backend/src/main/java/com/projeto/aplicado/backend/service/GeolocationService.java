@@ -31,8 +31,6 @@ public class GeolocationService {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("\n\n\nRESPONSE: " + response);
-            System.out.println("\n\n\nRESPONSE BODY: " + response.body());
 
             JSONArray jsonArray = new JSONArray(response.body());
 

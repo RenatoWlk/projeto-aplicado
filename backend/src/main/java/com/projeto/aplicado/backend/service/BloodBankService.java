@@ -164,8 +164,6 @@ public class BloodBankService {
         double userLat = userCoordinates[0];
         double userLon = userCoordinates[1];
 
-        System.out.println("\n\nLat: " + userLat + " - Lon: " + userLon);
-
         final double MAX_DISTANCE_KM = 80.0;
 
         return bloodBankRepository.findAllBloodBanks().stream().map(bloodBank -> {
@@ -185,7 +183,6 @@ public class BloodBankService {
 
                         if (distance <= MAX_DISTANCE_KM) {
                             dto.setDistance(distance);
-                            System.out.println("Distance: " + distance);
                             return dto;
                         }
                     }

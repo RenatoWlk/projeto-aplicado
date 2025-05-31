@@ -27,11 +27,9 @@ export class DashboardComponent implements OnInit {
 
   // User data
   roles = UserRole;
-  isLoggedIn: boolean = true;
-  //isLoggedIn: boolean = false;
-  userRole: UserRole | null = this.roles.User;
-  //userRole: UserRole | null = null;
-  private userId: string = "6832a1d0a21332b65c5584a9";
+  isLoggedIn: boolean = false;
+  userRole: UserRole | null = null;
+  private userId: string = "";
   
   // Dashboard data
   posts: Campaign[] = [];
@@ -43,11 +41,11 @@ export class DashboardComponent implements OnInit {
   constructor(private dashboardService: DashboardService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    //this.isLoggedIn = this.authService.isAuthenticated();
-    //this.userRole = this.authService.getCurrentUserRole();
+    this.isLoggedIn = this.authService.isAuthenticated();
+    this.userRole = this.authService.getCurrentUserRole();
 
     if (this.isLoggedIn && this.userRole === this.roles.User) {
-      //this.userId = this.authService.getCurrentUserId();
+      this.userId = this.authService.getCurrentUserId();
       this.loadAllDashboardData();
     } else {
       this.loadDashboardDataForPublicUsers();
