@@ -23,8 +23,10 @@
     </div>
 
     <div class="tab-content">
+        <app-preloader *ngIf="isLoadingLeaderboards" type="spinner" [visible]="true"></app-preloader>
+
         <!-- Top 50 Donors -->
-        <ul *ngIf="activeTab === 'donors'" class="ranking-list">
+        <ul *ngIf="activeTab === 'donors' && !isLoadingLeaderboards" class="ranking-list">
             <li *ngFor="let donor of topDonors; let i = index">
                 <span class="position">
                     <span class="position">
@@ -43,7 +45,7 @@
         </ul>
 
         <!-- Top 50 by Points -->
-        <ul *ngIf="activeTab === 'points'" class="ranking-list">
+        <ul *ngIf="activeTab === 'points' && !isLoadingLeaderboards" class="ranking-list">
             <li *ngFor="let user of topPoints; let i = index">
                 <span class="position">
                     <span class="position">

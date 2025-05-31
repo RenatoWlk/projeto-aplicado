@@ -8,21 +8,26 @@ import { BloodType } from '../../../shared/app.enums';
 import { Campaign } from '../dashboard.service';
 import { ModalComponent } from '../../../shared/modal/modal.component';
 import { FormCreateItemComponent } from '../../../shared/form-create-item/form-create-item.component';
+import { PreloaderComponent } from "../../../shared/preloader/preloader.component";
 
 const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
 @Component({
   selector: 'app-bloodbank-dashboard',
-  imports: [CommonModule, BaseChartDirective, ModalComponent, FormCreateItemComponent],
+  imports: [CommonModule, BaseChartDirective, ModalComponent, FormCreateItemComponent, PreloaderComponent],
   templateUrl: './bloodbank-dashboard.component.html',
   styleUrl: './bloodbank-dashboard.component.scss'
 })
 export class BloodbankDashboardComponent implements OnInit {
   bloodbankStats: BloodBankStats = {} as any;
   bloodbankCampaigns: Campaign[] = [];
-  bloodbankId: string = "6832a58fa21332b65c5584aa";
+  private bloodbankId: string = "";
   isCampaignModalOpen: boolean = false;
   averageDonation: number = 0;
+
+  // Preloaders
+  isLoadingBloodbankStats: boolean = true;
+  isLoadingBloodbankCampaigns: boolean = true;
 
   /**
    * Donations over time chart data and configuration.
@@ -158,6 +163,7 @@ export class BloodbankDashboardComponent implements OnInit {
 
   // Fetch blood bank statistics when the component initializes
   ngOnInit(): void {
+    this.bloodbankId = this.authService.getCurrentUserId();
     this.getBloodBankStats();
     this.getBloodBankCampaigns();
   }
@@ -172,6 +178,7 @@ export class BloodbankDashboardComponent implements OnInit {
       this.getDonationsOverTimeChartData();
       this.getBloodTypeChartData();
       this.getAverageDonations();
+      this.isLoadingBloodbankStats = false;
     });
   }
 
@@ -181,6 +188,7 @@ export class BloodbankDashboardComponent implements OnInit {
   private getBloodBankCampaigns(): void {
     this.bbDashboardService.getBloodbankCampaigns(this.bloodbankId).subscribe((bloodbankCampaigns: Campaign[]) => {
       this.bloodbankCampaigns = bloodbankCampaigns;
+      this.isLoadingBloodbankCampaigns = false;
     });
   }
 

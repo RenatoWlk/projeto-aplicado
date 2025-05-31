@@ -111,7 +111,7 @@ public class UserService {
     }
 
     public void sendPasswordRecoveryEmail(String email) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findUserByEmail(email);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             String message = "Olá " + user.getName() + ",\n\n" +

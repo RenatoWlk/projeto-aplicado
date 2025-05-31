@@ -19,7 +19,6 @@ public class LeaderboardsService {
 
     public LeaderboardsDTO getLeaderboards() {
         List<User> users = userRepository.findAllUsers();
-        System.out.println(users);
 
         List<TopDonor> topDonors = users.stream()
                 .filter(user -> user.getTimesDonated() > 0)

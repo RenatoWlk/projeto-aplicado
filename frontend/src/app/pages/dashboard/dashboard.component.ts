@@ -9,11 +9,12 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 import { FormCreateItemComponent } from '../../shared/form-create-item/form-create-item.component';
 import { BloodbankDashboardComponent } from './bloodbank-dashboard/bloodbank-dashboard.component';
 import { LeaderboardsComponent } from "./leaderboards/leaderboards.component";
+import { PreloaderComponent } from "../../shared/preloader/preloader.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent, LeaderboardsComponent],
+  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent, LeaderboardsComponent, PreloaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -38,6 +39,12 @@ export class DashboardComponent implements OnInit {
   nearbyBloodbanks: Bloodbank[] = [];
   userStats: UserStats = {} as any;
   isOfferModalOpen: boolean = false;
+
+  // Preloaders
+  loadingPosts: boolean = true;
+  loadingOffers: boolean = true;
+  loadingBloodbanks: boolean = true;
+  loadingStatsAndAchievements: boolean = true;
 
   constructor(private dashboardService: DashboardService, private authService: AuthService) {}
 
@@ -77,6 +84,7 @@ export class DashboardComponent implements OnInit {
   private getPosts(): void {
     this.dashboardService.getCampaigns().subscribe((posts: Campaign[]) => {
       this.posts = posts;
+      this.loadingPosts = false;
     });
   }
 
@@ -86,6 +94,7 @@ export class DashboardComponent implements OnInit {
   private getOffers(): void {
     this.dashboardService.getOffers().subscribe((offers: Offer[]) => {
       this.offers = offers;
+      this.loadingOffers = false;
     });
   }
 
@@ -95,6 +104,7 @@ export class DashboardComponent implements OnInit {
   private getNearbyBloodbanks(): void {
     this.dashboardService.getNearbyBloodbanks(this.userId).subscribe((banks: Bloodbank[]) => {
       this.nearbyBloodbanks = banks;
+      this.loadingBloodbanks = false;
     });
   }
 
@@ -116,6 +126,7 @@ export class DashboardComponent implements OnInit {
       stats.potentialLivesSaved = this.calculatePotentialLivesSaved(stats.timesDonated);
       stats.timeUntilNextDonation = this.getReadableTimeUntilNextDonation(stats.timeUntilNextDonation);
       this.userStats = stats;
+      this.loadingStatsAndAchievements = false;
     });
   }
 
