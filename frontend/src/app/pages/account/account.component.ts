@@ -36,25 +36,34 @@ export class AccountComponent implements OnInit{
     active: true
   };
   editingCampaignIndex: number | null = null;
+  isLoading = false;
+  error: string | null = null;
   
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-  //mock user
-  //this.user = this.accountService.getMockUser();
-  //mock partner
-  this.user = this.accountService.getMockPartner();
-  //mock blood bank user
-  //this.user = this.accountService.getMockBloodBankUser();
+    //mock user
+    this.user = this.accountService.getMockUser();
+    //mock partner
+    //this.user = this.accountService.getMockPartner();
+    //mock blood bank user
+    //this.user = this.accountService.getMockBloodBankUser();
+  }
 
-   
-  this.lastQuestionnaire = {
-    date: new Date(2024, 10, 15).toISOString(),
-    answers: [
-      { question: 'Você está bem de saúde?', answer: 'Sim' },
-      { question: 'Dormiu bem na última noite?', answer: 'Sim' }
-    ]
-  };
+  private loadUserData() {
+    this.isLoading = true;
+    this.error = null;
+    
+    // Aqui você faria a chamada real para o backend
+    // Por enquanto, usando mock
+    try {
+      this.user = this.accountService.getMockUser();
+      //this.loadLastQuestionnaire();
+    } catch (error) {
+      this.error = 'Erro ao carregar dados do usuário';
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   onEditProfile() {

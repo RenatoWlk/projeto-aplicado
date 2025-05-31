@@ -1,28 +1,16 @@
 .container {
-  max-width: 700px;
-  margin: 2.5rem auto;
-  padding: 2.5rem 1.5rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-
-  h1 {
-    font-size: 2.3rem;
-    color: #b71c1c;
-    text-align: center;
-    letter-spacing: 1px;
-    font-weight: 700;
-  }
-
-  hr {
-    margin: 2rem 0 1.5rem 0;
-    border: none;
-    border-top: 1.5px solid #eee;
-  }
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  overflow: hidden;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .container {
-    padding: 1.2rem 0.4rem;
+    margin: 1rem;
+    border-radius: 12px;
   }
 }
