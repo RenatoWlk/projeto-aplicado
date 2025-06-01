@@ -11,6 +11,8 @@ import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
@@ -23,6 +25,7 @@ public class BloodBankService {
     private final BloodBankRepository bloodBankRepository;
     private final UserRepository userRepository;
     private final GeolocationService geolocationService;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Creates a new blood bank based on the provided request data. <br>
@@ -35,7 +38,7 @@ public class BloodBankService {
         BloodBank bloodBank = new BloodBank();
         bloodBank.setName(dto.getName());
         bloodBank.setEmail(dto.getEmail());
-        bloodBank.setPassword(dto.getPassword());
+        bloodBank.setPassword(passwordEncoder.encode(dto.getPassword()));
         bloodBank.setAddress(dto.getAddress());
         bloodBank.setPhone(dto.getPhone());
         bloodBank.setRole(Role.BLOODBANK);
