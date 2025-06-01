@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { User, Questionnaire, AccountService, UserRequestDTO } from '../account.service';
+import { User, Questionnaire, AccountService, UserRequestDTO, BloodBankUser, PartnerUser } from '../account.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -11,7 +11,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './user-account.component.html',
   styleUrls: ['./user-account.component.scss'],
 })
-export class UserAccountComponent implements OnInit {
+export class UserAccountComponent implements OnInit, OnChanges {
   @Input() user?: User;
   @Input() lastQuestionnaire?: Questionnaire;
   @Output() userChange = new EventEmitter<User>();
@@ -39,6 +39,12 @@ export class UserAccountComponent implements OnInit {
   ngOnInit() {
     this.setupProfileForm();
     console.log('UserAccountComponent initialized with user:', this.user);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+  if (changes['user'] && changes['user'].currentValue) {
+    this.setupProfileForm();
+    }
   }
 
   private initializeForms() {

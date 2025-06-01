@@ -171,4 +171,9 @@ export class AccountComponent implements OnInit {
   get partnerUser(): PartnerUser | undefined {
     return this.user?.role === 'PARTNER' ? (this.user as PartnerUser) : undefined;
   }
+  
+  onUserUpdated(updatedUser: User) {
+  this.user = updatedUser;
+}
+
 }
