@@ -21,7 +21,7 @@ public class PartnerController {
      * @param dto the partner request DTO
      * @return the created partner response DTO
      */
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<PartnerResponseDTO> create(@RequestBody PartnerRequestDTO dto) {
         return ResponseEntity.ok(partnerService.create(dto));
     }

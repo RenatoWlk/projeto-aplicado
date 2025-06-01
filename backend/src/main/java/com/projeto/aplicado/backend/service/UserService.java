@@ -2,7 +2,6 @@ package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
 import com.projeto.aplicado.backend.dto.ChangePasswordDTO;
-import com.projeto.aplicado.backend.dto.bloodbank.BloodBankMapDTO;
 import com.projeto.aplicado.backend.dto.user.UserLocationDTO;
 import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
@@ -11,7 +10,6 @@ import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import com.projeto.aplicado.backend.service.EmailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
