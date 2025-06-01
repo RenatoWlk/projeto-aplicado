@@ -1,5 +1,6 @@
 <div class="stepper app-card">
   <mat-horizontal-stepper [linear]=false>
+
     <!-- Etapa 1: Escolher usuário -->
     <mat-step>
       <form [formGroup]="userForm">
@@ -14,7 +15,6 @@
           >
             <i class="fa-solid fa-users app-card-icon"></i>
             <span>Doador</span>
-            
           </button>
 
           <button mat-button matStepperNext
@@ -39,7 +39,8 @@
         </div>
       </form>
     </mat-step>
-    Etapa 2: email e senha
+
+    <!-- Etapa 2: email e senha -->
     <mat-step [stepControl]="credentialsGroup">
       <form [formGroup]="credentialsGroup">
         <ng-template matStepLabel>Dados de cadastro</ng-template>
@@ -62,8 +63,7 @@
       </form>
     </mat-step>
     
-    <!-- Etapa 3: Dados pessoais: Donator -->
-     
+    <!-- Etapa 3: Dados pessoais: DONATOR -->
     <mat-step *ngIf="selectedOption === 'donator'"[stepControl]="personalInfoGroup">
       <form [formGroup]="personalInfoGroup">
         <ng-template matStepLabel>Dados Pessoais</ng-template>
@@ -105,6 +105,11 @@
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field appearance="outline" class="custom-form-field">
+          <mat-label class="input-label">Telefone</mat-label>
+          <input matInput formControlName="telephone" required />
+        </mat-form-field>
+
         <div class="actions">
           <button mat-button matStepperPrevious class="app-button">Voltar</button>
           <button mat-button matStepperNext class="app-button">Próximo</button>
@@ -112,8 +117,7 @@
       </form>
     </mat-step>
 
-    <!-- Etapa 3: Dados pessoais: bloodbank -->
-
+    <!-- Etapa 3: Dados pessoais: BLOOD BANK -->
     <mat-step *ngIf="selectedOption === 'bloodbank'" [stepControl]="bloodbankInfoFormGroup">
       <form [formGroup]="bloodbankInfoFormGroup">
         <ng-template matStepLabel>Dados Pessoais</ng-template>
@@ -161,6 +165,11 @@
               <mat-label class="input-label">Bairro</mat-label>
               <input matInput formControlName="neighborhood" required />
             </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Telefone</mat-label>
+              <input matInput formControlName="telephone" required />
+            </mat-form-field>
           </div>
         </div>
 
@@ -172,8 +181,7 @@
     </mat-step>
 
 
-    <!-- Etapa 3: Dados pessoais: partner -->
-
+    <!-- Etapa 3: Dados pessoais: PARTNER -->
     <mat-step *ngIf="selectedOption === 'partner'" [stepControl]="partnerInfoFormGroup">
       <form [formGroup]="partnerInfoFormGroup">
         <ng-template matStepLabel>Dados Pessoais</ng-template>
@@ -220,6 +228,11 @@
             <mat-form-field appearance="outline" class="custom-form-field">
               <mat-label class="input-label">Bairro</mat-label>
               <input matInput formControlName="neighborhood" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Telefone</mat-label>
+              <input matInput formControlName="telephone" required />
             </mat-form-field>
           </div>
         </div>

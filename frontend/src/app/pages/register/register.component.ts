@@ -53,6 +53,7 @@ export class RegisterComponent {
         street: ['', Validators.required],
         neighborhood: ['', Validators.required],
         zipcode: ['', Validators.required],
+        telephone: ['', Validators.required],
       }),
       partnerInfo: this.fb.group({ 
         partnerName: ['', Validators.required],
@@ -62,6 +63,7 @@ export class RegisterComponent {
         street: ['', Validators.required],
         neighborhood: ['', Validators.required],
         zipcode: ['', Validators.required],
+        telephone: ['', Validators.required],
       }),
     });
   }
@@ -83,86 +85,96 @@ export class RegisterComponent {
   }
   
   submit() {
-  const email = this.credentialsGroup.get('email')?.value;
-  const password = this.credentialsGroup.get('password')?.value;
+    const email = this.credentialsGroup.get('email')?.value;
+    const password = this.credentialsGroup.get('password')?.value;
 
-  if (this.selectedOption === 'donator') {
-    const payload = {
-      name: this.personalInfoGroup.get('name')?.value,
-      email: email,
-      password: password,
-      cpf: this.personalInfoGroup.get('cpf')?.value,
-      gender: this.personalInfoGroup.get('gender')?.value,
-      bloodType: this.personalInfoGroup.get('bloodtype')?.value
-    };
+    /**
+     * DONATOR 
+     */
+    if (this.selectedOption === 'donator') {
+      const payload = {
+        name: this.personalInfoGroup.get('name')?.value,
+        email: email,
+        password: password,
+        cpf: this.personalInfoGroup.get('cpf')?.value,
+        gender: this.personalInfoGroup.get('gender')?.value,
+        bloodType: this.personalInfoGroup.get('bloodtype')?.value,
+        phone: this.personalInfoGroup.get('telephone')?.value,
+      };
 
-    this.registerService.registerDonator(payload).subscribe({
-      next: (res) => {
-        console.log('Doador cadastrado com sucesso!', res);
-        alert('Cadastro realizado com sucesso!');
-      },
-      error: (err) => {
-        console.error('Erro ao cadastrar doador', err);
-        alert('Erro ao cadastrar doador.');
-      }
-    });
+      this.registerService.registerDonator(payload).subscribe({
+        next: (res) => {
+          console.log('Doador cadastrado com sucesso!', res);
+          alert('Cadastro realizado com sucesso!');
+        },
+        error: (err) => {
+          console.error('Erro ao cadastrar doador', err);
+          alert('Erro ao cadastrar doador.');
+        }
+      });
 
-  } else if (this.selectedOption === 'bloodbank') {
-    const payload = {
-      name: this.bloodbankInfoFormGroup.get('instituitonName')?.value,
-      email: email,
-      password: password,
-      phone: '', 
-      cnpj: this.bloodbankInfoFormGroup.get('cnpj')?.value,
-      address: {
-        city: this.bloodbankInfoFormGroup.get('city')?.value,
-        state: this.bloodbankInfoFormGroup.get('state')?.value,
-        street: this.bloodbankInfoFormGroup.get('street')?.value,
-        neighborhood: this.bloodbankInfoFormGroup.get('neighborhood')?.value,
-        zipCode: this.bloodbankInfoFormGroup.get('zipcode')?.value
-      },
-      campaigns: []
-    };
+    /**
+     * BLOOD BANK
+     */
+    } else if (this.selectedOption === 'bloodbank') {
+      const payload = {
+        name: this.bloodbankInfoFormGroup.get('instituitonName')?.value,
+        email: email,
+        password: password,
+        cnpj: this.bloodbankInfoFormGroup.get('cnpj')?.value,
+        address: {
+          city: this.bloodbankInfoFormGroup.get('city')?.value,
+          state: this.bloodbankInfoFormGroup.get('state')?.value,
+          street: this.bloodbankInfoFormGroup.get('street')?.value,
+          neighborhood: this.bloodbankInfoFormGroup.get('neighborhood')?.value,
+          zipCode: this.bloodbankInfoFormGroup.get('zipcode')?.value,
+        },
+        campaigns: [],
+        phone: this.bloodbankInfoFormGroup.get('telephone')?.value,
+      };
 
-    this.registerService.registerBloodBank(payload).subscribe({
-      next: (res) => {
-        console.log('Banco de sangue cadastrado com sucesso!', res);
-        alert('Cadastro realizado com sucesso!');
-      },
-      error: (err) => {
-        console.error('Erro ao cadastrar banco de sangue', err);
-        alert('Erro ao cadastrar banco de sangue.');
-      }
-    });
+      this.registerService.registerBloodBank(payload).subscribe({
+        next: (res) => {
+          console.log('Banco de sangue cadastrado com sucesso!', res);
+          alert('Cadastro realizado com sucesso!');
+        },
+        error: (err) => {
+          console.error('Erro ao cadastrar banco de sangue', err);
+          alert('Erro ao cadastrar banco de sangue.');
+        }
+      });
 
-  } else if (this.selectedOption === 'partner') {
-    const payload = {
-      name: this.partnerInfoFormGroup.get('partnerName')?.value,
-      email: email,
-      password: password,
-      phone: '', 
-      cnpj: this.partnerInfoFormGroup.get('cnpj')?.value,
-      address: {
-        city: this.partnerInfoFormGroup.get('city')?.value,
-        state: this.partnerInfoFormGroup.get('state')?.value,
-        street: this.partnerInfoFormGroup.get('street')?.value,
-        neighborhood: this.partnerInfoFormGroup.get('neighborhood')?.value,
-        zipCode: this.partnerInfoFormGroup.get('zipcode')?.value
-      },
-      offers: []
-    };
+    /**
+     * PARTNER
+     */
+    } else if (this.selectedOption === 'partner') {
+      const payload = {
+        name: this.partnerInfoFormGroup.get('partnerName')?.value,
+        email: email,
+        password: password,
+        cnpj: this.partnerInfoFormGroup.get('cnpj')?.value,
+        address: {
+          city: this.partnerInfoFormGroup.get('city')?.value,
+          state: this.partnerInfoFormGroup.get('state')?.value,
+          street: this.partnerInfoFormGroup.get('street')?.value,
+          neighborhood: this.partnerInfoFormGroup.get('neighborhood')?.value,
+          zipCode: this.partnerInfoFormGroup.get('zipcode')?.value
+        },
+        offers: [],
+        phone: this.partnerInfoFormGroup.get('telephone')?.value,
+      };
 
-    this.registerService.registerPartner(payload).subscribe({
-      next: (res) => {
-        console.log('Parceiro cadastrado com sucesso!', res);
-        alert('Cadastro realizado com sucesso!');
-      },
-      error: (err) => {
-        console.error('Erro ao cadastrar parceiro', err);
-        alert('Erro ao cadastrar parceiro.');
-      }
-    });
+      this.registerService.registerPartner(payload).subscribe({
+        next: (res) => {
+          console.log('Parceiro cadastrado com sucesso!', res);
+          alert('Cadastro realizado com sucesso!');
+        },
+        error: (err) => {
+          console.error('Erro ao cadastrar parceiro', err);
+          alert('Erro ao cadastrar parceiro.');
+        }
+      });
+    }
   }
-}
 }
 
