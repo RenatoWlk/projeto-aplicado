@@ -13,7 +13,8 @@ import { UserRole } from '../../shared/app.enums';
 export class SubheaderComponent {
   constructor(private headerService: HeaderService) {}
 
-  @Input() userType!: UserRole | undefined;
+  readonly roles = UserRole;
+  @Input() userRole: UserRole | null = null;
 
   changeSlogan() {
     this.headerService.triggerSloganChange();

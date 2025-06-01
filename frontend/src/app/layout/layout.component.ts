@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { SubheaderComponent } from './subheader/subheader.component';
 import { CommonModule } from '@angular/common';
 import { UserRole } from '../shared/app.enums';
+import { AuthService } from '../core/services/auth/auth.service';
 
 @Component({
   standalone: true,
@@ -17,17 +18,12 @@ import { UserRole } from '../shared/app.enums';
   styleUrls: ['./layout.component.scss',]
 })
 export class LayoutComponent implements OnInit{
+  userRole: UserRole | null = null;
+  readonly roles = UserRole;
   
-  userType: UserRole = UserRole.User;
-
-  readonly UserRole = UserRole;
-  
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    //this.userType = this.authService.getCurrentUserRole();
-    this.userType = UserRole.Bloodbank;
-    //this.userType = UserRole.User;
-    //this.userType = UserRole.Partner;
+    this.userRole = this.authService.getCurrentUserRole();
   }
 }

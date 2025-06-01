@@ -40,7 +40,10 @@ export class BloodbankCalendarComponent {
   };
 
 
-  selectDate(date: Date) {
+  selectDate(date: Date | null) {
+    if (date == null) {
+      return
+    }
     if (!this.startDate || (this.startDate && this.endDate)) {
       this.startDate = date;
       this.endDate = null;

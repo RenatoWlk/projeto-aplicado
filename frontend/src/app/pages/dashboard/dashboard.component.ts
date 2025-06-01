@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   loginRequiredMessage: string = DashboardConstants.LOGIN_REQUIRED_MESSAGE;
 
   // User data
-  roles = UserRole;
+  readonly roles = UserRole;
   isLoggedIn: boolean = false;
   userRole: UserRole | null = null;
   private userId: string = "";

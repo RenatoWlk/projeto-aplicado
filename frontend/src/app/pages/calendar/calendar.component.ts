@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, model, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import {MatCalendar, MatDatepickerModule} from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -23,15 +23,13 @@ import { UserRole } from '../../shared/app.enums';
 export class CalendarComponent {
   readonly customHeader = CustomHeaderComponent;
 
-  userType: UserRole | undefined;
+  readonly roles = UserRole;
+  userRole: UserRole | null = null;
 
   constructor(private authService : AuthService) {}
 
   ngOnInit() {
-    //this.userType = this.authService.getCurrentUserRole();
-    this.userType = UserRole.Bloodbank;
-    //this.userType = UserRole.User;
+    this.userRole = this.authService.getCurrentUserRole();
   }
-
 }
 
