@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AccountService, User, BloodBankUser, Questionnaire, partner } from '../account/account.service';
+import { AccountService, User, BloodBankUser, Questionnaire, PartnerUser } from '../account/account.service';
+import { AuthService } from '../../core/services/auth/auth.service';
 import { UserAccountComponent } from './user-account/user-account.component';
 import { BloodBankAccountComponent } from './bloodbank-account/bloodbank-account.component';
 import { PartnerAccountComponent } from './partner-account/partner-account.component';
 
 @Component({
   selector: 'app-account',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -18,12 +20,15 @@ import { PartnerAccountComponent } from './partner-account/partner-account.compo
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
 })
-export class AccountComponent implements OnInit{
-  user?: User | BloodBankUser | partner;
-  editUser?: User | BloodBankUser | partner;
+export class AccountComponent implements OnInit {
+  user?: User | BloodBankUser | PartnerUser;
+  editUser?: User | BloodBankUser | PartnerUser;
+
+  private userId: string | null = null;
   editProfileMode = false;
   changePasswordMode = false;
   newPassword = '';
+  currentPassword = '';
   lastQuestionnaire?: Questionnaire;
   showAchievements = false;
   showQuestionnaires = false;
@@ -36,25 +41,42 @@ export class AccountComponent implements OnInit{
     active: true
   };
   editingCampaignIndex: number | null = null;
-  
-  constructor(private accountService: AccountService) {}
+  isLoading = false;
+  error: string | null = null;
+
+  constructor(
+    private accountService: AccountService,
+    private authService: AuthService 
+  ) {}
 
   ngOnInit() {
-  //mock user
-  //this.user = this.accountService.getMockUser();
-  //mock partner
-  this.user = this.accountService.getMockPartner();
-  //mock blood bank user
-  //this.user = this.accountService.getMockBloodBankUser();
+    this.userId = this.authService.getCurrentUserId();
+    console.log('User ID:', this.userId);
+    this.loadUserData();
+  }
 
-   
-  this.lastQuestionnaire = {
-    date: new Date(2024, 10, 15).toISOString(),
-    answers: [
-      { question: 'Você está bem de saúde?', answer: 'Sim' },
-      { question: 'Dormiu bem na última noite?', answer: 'Sim' }
-    ]
-  };
+  private loadUserData() {
+    this.isLoading = true;
+    this.error = null;
+
+    if (!this.userId) {
+      this.error = 'Usuário não autenticado.';
+      this.isLoading = false;
+      return;
+    }
+
+    this.accountService.getUserById(this.userId).subscribe({
+      next: (userData) => {
+        console.log('User data loaded:', userData);
+        this.user = userData;
+        console.log('User:', this.user);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Erro ao carregar dados do usuário';
+        this.isLoading = false;
+      }
+    });
   }
 
   onEditProfile() {
@@ -63,10 +85,10 @@ export class AccountComponent implements OnInit{
   }
 
   saveProfile() {
-  if (!this.editUser) return;
-  this.user = { ...this.editUser };
-  this.editProfileMode = false;
-}
+    if (!this.editUser) return;
+    this.user = { ...this.editUser };
+    this.editProfileMode = false;
+  }
 
   cancelEdit() {
     this.editProfileMode = false;
@@ -79,7 +101,7 @@ export class AccountComponent implements OnInit{
 
   savePassword() {
     if (!this.user) return;
-    this.accountService.changePassword(this.user.id, this.newPassword).subscribe(() => {
+    this.accountService.changePassword(this.user.id!, this.currentPassword, this.newPassword).subscribe(() => {
       this.changePasswordMode = false;
       this.newPassword = '';
     });
@@ -95,7 +117,7 @@ export class AccountComponent implements OnInit{
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.user = { ...(this.user as User), photoUrl: reader.result as string }; 
+        this.user = { ...(this.user as User), photoUrl: reader.result as string };
       };
       reader.readAsDataURL(file);
     }
@@ -143,10 +165,10 @@ export class AccountComponent implements OnInit{
   }
 
   get bloodBankUser(): BloodBankUser | undefined {
-    return this.user?.role === 'BLOODBANK' ? this.user as BloodBankUser : undefined;
+    return this.user?.role === 'BLOODBANK' ? (this.user as BloodBankUser) : undefined;
   }
 
-  get partnerUser(): partner | undefined {
-    return this.user?.role === 'partner' ? this.user as partner : undefined;
+  get partnerUser(): PartnerUser | undefined {
+    return this.user?.role === 'PARTNER' ? (this.user as PartnerUser) : undefined;
   }
 }

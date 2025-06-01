@@ -1,9 +1,10 @@
 <div class="container">
-  <app-user-account
-    *ngIf="user?.role === 'USER'"    [user]="user"
-    [lastQuestionnaire]="lastQuestionnaire"
-    (userChange)="user = $event">
-  </app-user-account>
+    <app-user-account
+      *ngIf="User"
+      [user]="user"
+      [lastQuestionnaire]="lastQuestionnaire"
+      (userChange)="user = $event"
+    ></app-user-account>
 
   <app-bloodbank-account
     *ngIf="bloodBankUser"
