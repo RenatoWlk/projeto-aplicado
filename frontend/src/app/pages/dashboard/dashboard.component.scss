@@ -11,7 +11,18 @@
   padding-left: 1rem;
 }
 
+/* ----------------------------- CAMPAIGNS ----------------------------- */
+.post {
+  border-left: 3px solid #ccc;
+  border-left-color: #e74c3c;
+}
+
 /* ----------------------------- OFFERS ----------------------------- */
+.offer {
+  border-left: 3px solid #ccc;
+  border-left-color: #48a2dd;
+}
+
 .offer-discount {
   font-weight: bold;
   font-size: large;
@@ -21,6 +32,12 @@
 .offer-valid-until {
   font-size: 0.85rem;
   color: #555;
+}
+
+/* ----------------------------- NEARBY BLOODBANKS ----------------------------- */
+.bloodbank {
+  border-left: 3px solid #ccc;
+  border-left-color: #8e44ad;
 }
 
 /* ----------------------------- STATS ----------------------------- */
@@ -50,6 +67,7 @@
   background-color: #f9f9f9;
   border-radius: 12px;
   padding: 16px;
+  padding-top: 34px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.2s ease;

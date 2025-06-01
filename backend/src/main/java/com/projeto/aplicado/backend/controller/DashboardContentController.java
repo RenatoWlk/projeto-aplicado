@@ -53,8 +53,8 @@ public class DashboardContentController {
      * @return the new campaign created
      */
     @PostMapping("/campaign/create")
-    public ResponseEntity<CampaignDTO> createCampaign(CampaignDTO campaignDTO, String bloodbankName) {
-        return ResponseEntity.ok(campaignService.create(campaignDTO, bloodbankName));
+    public ResponseEntity<CampaignDTO> createCampaign(@RequestBody CampaignDTO campaignDTO) {
+        return ResponseEntity.ok(campaignService.create(campaignDTO));
     }
 
     /**

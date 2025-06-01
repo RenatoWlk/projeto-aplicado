@@ -76,7 +76,7 @@ export class BloodbankDashboardComponent implements OnInit {
         callbacks: {
           label: (context) => {
             const value = context.raw;
-            return `Doado em ${context.label}: ${value}`;
+            return ` ${context.label}: ${value} doações`;
           },
         },
       },
@@ -151,8 +151,13 @@ export class BloodbankDashboardComponent implements OnInit {
         },
         callbacks: {
           label: (context) => {
-            const value = context.raw;
-            return `Bolsas disponíveis: ${value}`;
+            const bags = context.raw as number;
+            const averageLiters = 0.445; // 445ml = média entre 420ml e 470ml
+            const totalLiters = (bags * averageLiters).toFixed(1);
+            return [
+              ` Bolsas disponíveis: ${bags}`,
+              ` Volume aproximado: ${totalLiters} L`
+            ];
           },
         },
       },

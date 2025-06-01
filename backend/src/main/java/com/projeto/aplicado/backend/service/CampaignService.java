@@ -23,8 +23,8 @@ public class CampaignService {
      * @param dto the campaign DTO containing campaign details
      * @return the created campaign DTO
      */
-    public CampaignDTO create(CampaignDTO dto, String bloodbankEmail) {
-        var bb = bloodBankRepository.findByEmail(bloodbankEmail)
+    public CampaignDTO create(CampaignDTO dto) {
+        var bb = bloodBankRepository.findByEmail(dto.getBloodbankEmail())
                 .orElseThrow(() -> new RuntimeException("Bloodbank email not found"));
 
         Campaign camp = new Campaign();

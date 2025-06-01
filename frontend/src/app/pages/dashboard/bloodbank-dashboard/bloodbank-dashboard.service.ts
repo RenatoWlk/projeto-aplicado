@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BloodType } from '../../../shared/app.enums';
-import { Campaign } from '../dashboard.service';
 import { DashboardConstants } from '../constants/dashboard.constants';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { Address, Campaign } from '../dashboard.service';
 
 export interface DonationsOverTime {
     donations: number;
@@ -21,6 +21,16 @@ export interface BloodBankStats {
     };
 }
 
+export interface NewCampaign {
+    bloodbankEmail: string;
+    title: string;
+    body: string;
+    startDate: Date;
+    endDate: Date;
+    location: Address;
+    phone: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -35,8 +45,8 @@ export class BloodBankDashboardService {
         return this.http.get<Campaign[]>(`/api/bloodbanks/${bloodbankId}/campaigns`);
     }
 
-    createCampaign(campaign: Campaign): Observable<Campaign> {
-        const data = {campaign, bloodbankEmail: this.auth.getCurrentUserEmail()};
-        return this.http.post<Campaign>(DashboardConstants.CREATE_CAMPAIGN_ENDPOINT, data);
+    createCampaign(campaign: NewCampaign): Observable<Campaign> {
+        campaign.bloodbankEmail = this.auth.getCurrentUserEmail();
+        return this.http.post<NewCampaign>(DashboardConstants.CREATE_CAMPAIGN_ENDPOINT, campaign);
     }
 }
