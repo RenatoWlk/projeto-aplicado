@@ -4,12 +4,16 @@ import com.projeto.aplicado.backend.dto.CampaignDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankStatsDTO;
+import com.projeto.aplicado.backend.model.Campaign;
 import com.projeto.aplicado.backend.service.BloodBankService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bloodbanks")
@@ -50,6 +54,19 @@ public class BloodBankController {
     }
 
     /**
+     * Upload blood bank photo.
+     */
+    @PostMapping(value = "/{id}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> uploadPhoto(
+            @PathVariable String id,
+            @RequestParam("file") MultipartFile file) {
+        String photoUrl = bloodBankService.uploadPhoto(id, file);
+        return ResponseEntity.ok(Map.of("photoUrl", photoUrl));
+    }
+
+
+
+    /**
      * Retrieves all blood banks with geolocation (latitude and longitude)
      * to be displayed on the map.
      *
@@ -80,5 +97,37 @@ public class BloodBankController {
     @GetMapping("/{id}/campaigns")
     public ResponseEntity<List<CampaignDTO>> getCampaignsById(@PathVariable String id) {
         return ResponseEntity.ok(bloodBankService.findCampaignsById(id));
+    }
+
+    /**
+     * Create a new campaign.
+     */
+    @PostMapping("/{id}/campaigns")
+    public ResponseEntity<CampaignDTO> createCampaign(
+            @PathVariable String id,
+            @RequestBody CampaignDTO dto) {
+        return ResponseEntity.ok(bloodBankService.createCampaign(id, dto));
+    }
+
+    /**
+     * Update campaign.
+     */
+    @PutMapping("/{id}/campaigns/{campaignId}")
+    public ResponseEntity<CampaignDTO> updateCampaign(
+            @PathVariable String id,
+            @PathVariable String campaignId,
+            @RequestBody CampaignDTO dto) {
+        return ResponseEntity.ok(bloodBankService.updateCampaign(id, campaignId, dto));
+    }
+
+    /**
+     * Delete campaign.
+     */
+    @DeleteMapping("/{id}/campaigns/{campaignId}")
+    public ResponseEntity<Void> deleteCampaign(
+            @PathVariable String id,
+            @PathVariable String campaignId) {
+        bloodBankService.deleteCampaign(id, campaignId);
+        return ResponseEntity.noContent().build();
     }
 }

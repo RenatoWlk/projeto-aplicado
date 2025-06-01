@@ -27,4 +27,5 @@ public class User extends UserBase {
     private LocalDate lastDonationDate;
     private List<UnlockedAchievement> unlockedAchievements; // IDs and unlocked date of achievements
     private int totalPoints;
+    private Integer totalDonations;
 }

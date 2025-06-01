@@ -20,4 +20,5 @@ public abstract class UserBase {
     private Address address;
     private String phone;
     private Role role; // "USER", "PARTNER" and "BLOODBANK"
+    private String photoUrl;
 }

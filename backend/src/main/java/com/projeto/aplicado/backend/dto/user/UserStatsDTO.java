@@ -16,4 +16,6 @@ public class UserStatsDTO {
     private LocalDate lastDonationDate;
     private List<Achievement> achievements;
     private int totalPoints;
+    private LocalDate nextDonationDate;
+    private int totalDonations;
 }

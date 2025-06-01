@@ -24,7 +24,7 @@ public class AuthService {
      * @return An AuthResponse containing the generated JWT token.
      */
     public AuthResponse authenticate(AuthRequest request) {
-        UserBase user = userRepository.findByEmail(request.getEmail())
+        UserBase user = userRepository.findUserByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {

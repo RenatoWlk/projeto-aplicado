@@ -14,7 +14,11 @@ import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -199,4 +203,92 @@ public class BloodBankService {
         return dtoList;
     }
 
+    /**
+     * Cria uma nova campanha para um banco de sangue.
+     */
+    public CampaignDTO createCampaign(String bloodBankId, CampaignDTO campaignDTO) {
+        BloodBank bloodBank = bloodBankRepository.findById(bloodBankId)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+
+        Campaign campaign = new Campaign();
+        campaign.setTitle(campaignDTO.getTitle());
+        campaign.setBody(campaignDTO.getBody());
+        campaign.setStartDate(campaignDTO.getStartDate());
+        campaign.setEndDate(campaignDTO.getEndDate());
+        campaign.setPhone(campaignDTO.getPhone());
+        campaign.setLocation(campaignDTO.getLocation());
+
+        bloodBank.getCampaigns().add(campaign);
+        bloodBankRepository.save(bloodBank);
+
+        // Se Campaign tiver ID gerado, pode ser interessante retornar o DTO atualizado
+        return campaignDTO;
+    }
+
+    /**
+     * Edita uma campanha existente de um banco de sangue.
+     */
+    public CampaignDTO updateCampaign(String bloodBankId, String campaignId, CampaignDTO campaignDTO) {
+        BloodBank bloodBank = bloodBankRepository.findById(bloodBankId)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+
+        Campaign campaign = bloodBank.getCampaigns().stream()
+                .filter(c -> c.getId().equals(campaignId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Campanha não encontrada"));
+
+        campaign.setTitle(campaignDTO.getTitle());
+        campaign.setBody(campaignDTO.getBody());
+        campaign.setStartDate(campaignDTO.getStartDate());
+        campaign.setEndDate(campaignDTO.getEndDate());
+        campaign.setPhone(campaignDTO.getPhone());
+        campaign.setLocation(campaignDTO.getLocation());
+
+        bloodBankRepository.save(bloodBank);
+
+        return campaignDTO;
+    }
+
+    /**
+     * Remove uma campanha de um banco de sangue.
+     */
+    public void deleteCampaign(String bloodBankId, String campaignId) {
+        BloodBank bloodBank = bloodBankRepository.findById(bloodBankId)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+
+        boolean removed = bloodBank.getCampaigns().removeIf(c -> c.getId().equals(campaignId));
+        if (!removed) {
+            throw new RuntimeException("Campanha não encontrada");
+        }
+
+        bloodBankRepository.save(bloodBank);
+    }
+
+    public String uploadPhoto(String bloodBankId, MultipartFile file) {
+        BloodBank bloodBank = bloodBankRepository.findById(bloodBankId)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+
+        try {
+            // Defina o diretório onde as fotos serão salvas
+            String uploadDir = "uploads/bloodbanks/" + bloodBankId;
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // Salve o arquivo com um nome único
+            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = uploadPath.resolve(filename);
+            Files.copy(file.getInputStream(), filePath);
+
+            // Gere a URL da foto (ajuste conforme sua configuração)
+            String photoUrl = "/uploads/bloodbanks/" + bloodBankId + "/" + filename;
+            bloodBank.setPhotoUrl(photoUrl);
+            bloodBankRepository.save(bloodBank);
+
+            return photoUrl;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao fazer upload da foto", e);
+        }
+    }
 }
