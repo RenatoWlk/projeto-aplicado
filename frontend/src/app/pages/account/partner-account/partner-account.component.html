@@ -1,5 +1,5 @@
 <!-- HTML melhorado para partner-account.component.html -->
-<ng-container *ngIf="user?.role === 'partner'">
+<ng-container *ngIf="user?.role === 'PARTNER'">
   <ng-container *ngIf="partnerUser as partner">
     
     <!-- Loading e mensagens -->
@@ -170,7 +170,7 @@
 
         <!-- Lista de Ofertas -->
         <ul *ngIf="hasOffers; else noOffers">
-          <li *ngFor="let offer of partner.offer; let i = index">
+          <li *ngFor="let offer of partner.offers; let i = index">
             <div class="offer-info">
               <div class="offer-header">
                 <strong>{{ offer.title }}</strong>
@@ -185,12 +185,12 @@
                 </span>
               </div>
               
-              <div class="offer-description">{{ offer.description }}</div>
+              <div class="offer-description">{{ offer.body }}</div>
               
               <div class="offer-details">
-                <span *ngIf="offer.discount" class="offer-discount">
+                <span *ngIf="offer.discountPercentage" class="offer-discount">
                   <i class="fa-solid fa-percentage"></i>
-                  {{ offer.discount }}% de desconto
+                  {{ offer.discountPercentage }}% de desconto
                 </span>
                 <span *ngIf="offer.validUntil" class="offer-validity">
                   <i class="fa-solid fa-calendar"></i>

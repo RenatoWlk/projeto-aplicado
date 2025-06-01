@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { BloodBankUser, AccountService, Campaign, CampaignRequest, BloodBankUpdateRequest } from '../account.service';
+import { BloodBankUser, AccountService, Campaign, CampaignDTO, BloodBankRequestDTO } from '../account.service';
 
 @Component({
   selector: 'app-bloodbank-account',
@@ -103,7 +103,7 @@ export class BloodBankAccountComponent implements OnInit {
     this.clearMessages();
 
     try {
-      const updateData: BloodBankUpdateRequest = this.profileForm.value;
+      const updateData: BloodBankRequestDTO = this.profileForm.value;
       
       // Para desenvolvimento, atualizar localmente
       this.user = { ...this.user, ...updateData };
@@ -218,7 +218,7 @@ export class BloodBankAccountComponent implements OnInit {
     this.clearMessages();
 
     try {
-      const campaignData: CampaignRequest = this.campaignForm.value;
+      const campaignData: CampaignDTO = this.campaignForm.value;
       
       if (this.addCampaignMode) {
         // Adicionar nova campanha

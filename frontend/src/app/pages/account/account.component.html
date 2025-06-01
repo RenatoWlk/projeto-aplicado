@@ -1,6 +1,6 @@
 <div class="container">
   <app-user-account
-    *ngIf="user?.role === 'USER'"    [user]="user"
+    *ngIf="user?.role === 'USER'" 
     [lastQuestionnaire]="lastQuestionnaire"
     (userChange)="user = $event">
   </app-user-account>

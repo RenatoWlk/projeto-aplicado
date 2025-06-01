@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { partner, Offer, AccountService, PartnerUpdateRequest, OfferRequest } from '../account.service';
+import { PartnerUser, Offer, AccountService, PartnerRequestDTO, OfferDTO } from '../account.service';
 
 @Component({
   selector: 'app-partner-account',
@@ -11,8 +11,8 @@ import { partner, Offer, AccountService, PartnerUpdateRequest, OfferRequest } fr
   styleUrls: ['./partner-account.component.scss'],
 })
 export class PartnerAccountComponent implements OnInit {
-  @Input() user?: partner;
-  @Output() userChange = new EventEmitter<partner>();
+  @Input() user?: PartnerUser;
+  @Output() userChange = new EventEmitter<PartnerUser>();
 
   // Estados do componente
   editProfileMode = false;
@@ -102,7 +102,7 @@ export class PartnerAccountComponent implements OnInit {
     this.clearMessages();
 
     try {
-      const updateData: PartnerUpdateRequest = this.profileForm.value;
+      const updateData: PartnerRequestDTO = this.profileForm.value;
       
       // Para desenvolvimento, atualizar localmente
       this.user = { ...this.user, ...updateData };
@@ -193,10 +193,10 @@ export class PartnerAccountComponent implements OnInit {
   editOffer(offer: Offer, index: number) {
     this.offerForm.patchValue({
       title: offer.title,
-      description: offer.description,
+      description: offer.body,
       active: offer.active,
       validUntil: offer.validUntil || '',
-      discount: offer.discount || '',
+      discount: offer.discountPercentage || '',
       termsAndConditions: offer.termsAndConditions || ''
     });
     this.editOfferMode = true;
@@ -215,23 +215,22 @@ export class PartnerAccountComponent implements OnInit {
     this.clearMessages();
 
     try {
-      const offerData: OfferRequest = this.offerForm.value;
+      const offerData: OfferDTO = this.offerForm.value;
       
       if (this.addOfferMode) {
-        // Adicionar nova oferta
         const newOffer: Offer = {
           id: Date.now().toString(),
+          partnerName: this.user.name,
           title: offerData.title,
-          description: offerData.description,
+          body: offerData.body,
           active: offerData.active,
           validUntil: offerData.validUntil,
-          discount: offerData.discount,
-          termsAndConditions: offerData.termsAndConditions,
+          discountPercentage: offerData.discountPercentage,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         };
         
-        this.user.offer = [...(this.user.offer || []), newOffer];
+        this.user.offers = [...(this.user.offers || []), newOffer];
         this.showSuccess('Oferta criada com sucesso!');
         
         // Quando tiver backend integrado:
@@ -240,19 +239,19 @@ export class PartnerAccountComponent implements OnInit {
         
       } else if (this.editOfferMode && this.editingOfferIndex !== null) {
         // Editar oferta existente
-        const offerId = this.user.offer[this.editingOfferIndex].id;
+        const offerId = this.user.offers[this.editingOfferIndex].id;
         const updatedOffer: Offer = {
           id: offerId,
+          partnerName: this.user.name,
           title: offerData.title,
-          description: offerData.description,
+          body: offerData.body,
           active: offerData.active,
           validUntil: offerData.validUntil,
-          discount: offerData.discount,
-          termsAndConditions: offerData.termsAndConditions,
-          createdAt: this.user.offer[this.editingOfferIndex].createdAt,
+          discountPercentage: offerData.discountPercentage,
+          createdAt: this.user.offers[this.editingOfferIndex].createdAt,
           updatedAt: new Date().toISOString()
         };
-        this.user.offer[this.editingOfferIndex] = updatedOffer;
+        this.user.offers[this.editingOfferIndex] = updatedOffer;
         this.showSuccess('Oferta atualizada com sucesso!');
         
         // Quando tiver backend integrado:
@@ -286,7 +285,7 @@ export class PartnerAccountComponent implements OnInit {
     this.clearMessages();
 
     try {
-      this.user.offer = this.user.offer.filter(o => o.id !== offer.id);
+      this.user.offers = this.user.offers.filter((o: Offer) => o.id !== offer.id);
       this.userChange.emit(this.user);
       this.showSuccess('Oferta removida com sucesso!');
       
@@ -322,8 +321,8 @@ export class PartnerAccountComponent implements OnInit {
   }
 
   // === GETTERS ===
-  get partnerUser(): partner | undefined {
-    return this.user?.role === 'partner' ? this.user as partner : undefined;
+  get partnerUser(): PartnerUser | undefined {
+    return this.user?.role === 'PARTNER' ? this.user as PartnerUser : undefined;
   }
 
   get profileFormControls() {
@@ -335,15 +334,15 @@ export class PartnerAccountComponent implements OnInit {
   }
 
   get hasOffers(): boolean {
-    return !!(this.user?.offer && this.user.offer.length > 0);
+    return !!(this.user?.offers && this.user.offers.length > 0);
   }
 
   get offersCount(): number {
-    return this.user?.offer?.length || 0;
+    return this.user?.offers?.length || 0;
   }
 
   get activeOffersCount(): number {
-    return this.user?.offer?.filter(offer => offer.active).length || 0;
+    return this.user?.offers?.filter((offer: Offer) => offer.active).length || 0;
   }
 
   // === VALIDATION HELPERS ===

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AccountService, User, BloodBankUser, Questionnaire, partner } from '../account/account.service';
+import { AccountService, User, BloodBankUser, Questionnaire, PartnerUser } from '../account/account.service';
 import { UserAccountComponent } from './user-account/user-account.component';
 import { BloodBankAccountComponent } from './bloodbank-account/bloodbank-account.component';
 import { PartnerAccountComponent } from './partner-account/partner-account.component';
@@ -19,11 +19,12 @@ import { PartnerAccountComponent } from './partner-account/partner-account.compo
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit{
-  user?: User | BloodBankUser | partner;
-  editUser?: User | BloodBankUser | partner;
+  user?: User | BloodBankUser | PartnerUser;
+  editUser?: User | BloodBankUser | PartnerUser;
   editProfileMode = false;
   changePasswordMode = false;
   newPassword = '';
+  currentPassword = '';
   lastQuestionnaire?: Questionnaire;
   showAchievements = false;
   showQuestionnaires = false;
@@ -88,7 +89,7 @@ export class AccountComponent implements OnInit{
 
   savePassword() {
     if (!this.user) return;
-    this.accountService.changePassword(this.user.id, this.newPassword).subscribe(() => {
+    this.accountService.changePassword(this.user.id!,this.currentPassword, this.newPassword).subscribe(() => {
       this.changePasswordMode = false;
       this.newPassword = '';
     });
@@ -156,7 +157,7 @@ export class AccountComponent implements OnInit{
     return this.user?.role === 'BLOODBANK' ? this.user as BloodBankUser : undefined;
   }
 
-  get partnerUser(): partner | undefined {
-    return this.user?.role === 'partner' ? this.user as partner : undefined;
+  get partnerUser(): PartnerUser | undefined {
+    return this.user?.role === 'PARTNER' ? this.user as PartnerUser : undefined;
   }
 }

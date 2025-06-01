@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { User, Questionnaire, AccountService, UserUpdateRequest } from '../account.service';
+import { User, Questionnaire, AccountService, UserRequestDTO } from '../account.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-user-account',
@@ -98,35 +99,36 @@ export class UserAccountComponent implements OnInit {
   }
 
   async saveProfile() {
-    if (!this.profileForm.valid || !this.user) {
-      this.markFormGroupTouched(this.profileForm);
-      return;
-    }
-
-    this.isLoading = true;
-    this.clearMessages();
-
-    try {
-      const updateData: UserUpdateRequest = this.profileForm.value;
-      
-      // Para desenvolvimento, atualizar localmente
-      this.user = { ...this.user, ...updateData };
-      this.userChange.emit(this.user);
-      this.editProfileMode = false;
-      
-      // Quando tiver backend integrado:
-      // const updatedUser = await this.accountService.updateProfile(this.user.id, updateData).toPromise();
-      // this.user = updatedUser;
-      // this.userChange.emit(this.user);
-      
-      this.showSuccess('Perfil atualizado com sucesso!');
-    } catch (error) {
-      this.error = 'Erro ao salvar perfil. Tente novamente.';
-      console.error('Erro ao salvar perfil:', error);
-    } finally {
-      this.isLoading = false;
-    }
+  if (!this.profileForm.valid || !this.user) {
+    this.markFormGroupTouched(this.profileForm);
+    return;
   }
+
+  this.isLoading = true;
+  this.clearMessages();
+
+  try {
+    const updateData: UserRequestDTO = this.profileForm.value;
+
+    // === MOCK LOCAL (comentado, agora usamos o backend)
+    // this.user = { ...this.user, ...updateData };
+    // this.userChange.emit(this.user);
+    // this.editProfileMode = false;
+
+    // === CHAMADA REAL AO BACKEND
+    const updatedUser = await this.accountService.updateProfile(this.user.id!, updateData).toPromise();
+    this.user = updatedUser;
+    this.userChange.emit(this.user);
+    this.editProfileMode = false;
+
+    this.showSuccess('Perfil atualizado com sucesso!');
+  } catch (error) {
+    this.error = 'Erro ao salvar perfil. Tente novamente.';
+    console.error('Erro ao salvar perfil:', error);
+  } finally {
+    this.isLoading = false;
+  }
+}
 
   cancelEdit() {
     this.editProfileMode = false;
@@ -142,32 +144,35 @@ export class UserAccountComponent implements OnInit {
   }
 
   async savePassword() {
-    if (!this.passwordForm.valid || !this.user) {
-      this.markFormGroupTouched(this.passwordForm);
-      return;
-    }
-
-    this.isLoading = true;
-    this.clearMessages();
-
-    try {
-      const newPassword = this.passwordForm.get('newPassword')?.value;
-      
-      // Para desenvolvimento, simular sucesso
-      this.changePasswordMode = false;
-      this.passwordForm.reset();
-      
-      // Quando tiver backend integrado:
-      // await this.accountService.changePassword(this.user.id, newPassword).toPromise();
-      
-      this.showSuccess('Senha alterada com sucesso!');
-    } catch (error) {
-      this.error = 'Erro ao alterar senha. Tente novamente.';
-      console.error('Erro ao alterar senha:', error);
-    } finally {
-      this.isLoading = false;
-    }
+  if (!this.passwordForm.valid || !this.user) {
+    this.markFormGroupTouched(this.passwordForm);
+    return;
   }
+
+  this.isLoading = true;
+  this.clearMessages();
+
+  try {
+    const newPassword = this.passwordForm.get('newPassword')?.value;
+    const currentPassword = this.passwordForm.get('currentPassword')?.value;
+
+    // === MOCK (comentado, agora usamos o backend)
+    // this.changePasswordMode = false;
+    // this.passwordForm.reset();
+
+    // === CHAMADA REAL AO BACKEND
+    await this.accountService.changePassword(this.user.id as string, currentPassword, newPassword);
+    this.changePasswordMode = false;
+    this.passwordForm.reset();
+
+    this.showSuccess('Senha alterada com sucesso!');
+  } catch (error) {
+    this.error = 'Erro ao alterar senha. Tente novamente.';
+    console.error('Erro ao alterar senha:', error);
+  } finally {
+    this.isLoading = false;
+  }
+}
 
   cancelPassword() {
     this.changePasswordMode = false;
@@ -177,48 +182,47 @@ export class UserAccountComponent implements OnInit {
 
   // === FOTO METHODS ===
   async onPhotoSelected(event: any): Promise<void> {
-    const file = event.target.files[0];
-    if (!file || !this.user) return;
+  const file = event.target.files[0];
+  if (!file || !this.user) return;
 
-    // Validar tipo de arquivo
-    if (!file.type.startsWith('image/')) {
-      this.error = 'Por favor, selecione apenas arquivos de imagem.';
-      return;
-    }
-
-    // Validar tamanho (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      this.error = 'A imagem deve ter no máximo 5MB.';
-      return;
-    }
-
-    this.isLoading = true;
-    this.clearMessages();
-
-    try {
-      // Para desenvolvimento, usar FileReader
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (this.user) {
-          this.user = { ...this.user, photoUrl: reader.result as string };
-          this.userChange.emit(this.user);
-          this.showSuccess('Foto atualizada com sucesso!');
-        }
-      };
-      reader.readAsDataURL(file);
-      
-      // Quando tiver backend integrado:
-      // const response = await this.accountService.uploadPhoto(this.user.id, file).toPromise();
-      // this.user = { ...this.user, photoUrl: response.photoUrl };
-      // this.userChange.emit(this.user);
-      
-    } catch (error) {
-      this.error = 'Erro ao fazer upload da foto. Tente novamente.';
-      console.error('Erro no upload:', error);
-    } finally {
-      this.isLoading = false;
-    }
+  if (!file.type.startsWith('image/')) {
+    this.error = 'Por favor, selecione apenas arquivos de imagem.';
+    return;
   }
+
+  if (file.size > 5 * 1024 * 1024) {
+    this.error = 'A imagem deve ter no máximo 5MB.';
+    return;
+  }
+
+  this.isLoading = true;
+  this.clearMessages();
+
+  try {
+    // === MOCK COM FILE READER (comentado)
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   if (this.user) {
+    //     this.user = { ...this.user, photoUrl: reader.result as string };
+    //     this.userChange.emit(this.user);
+    //     this.showSuccess('Foto atualizada com sucesso!');
+    //   }
+    // };
+    // reader.readAsDataURL(file);
+
+    // === CHAMADA REAL AO BACKEND
+    const response = await firstValueFrom(this.accountService.uploadPhoto(this.user.id!, file));
+    this.user = { ...this.user, photoUrl: response.photoUrl };
+    this.userChange.emit(this.user);
+
+    this.showSuccess('Foto atualizada com sucesso!');
+  } catch (error) {
+    this.error = 'Erro ao fazer upload da foto. Tente novamente.';
+    console.error('Erro no upload:', error);
+  } finally {
+    this.isLoading = false;
+  }
+}
 
   // === VIEWS METHODS ===
   showAchievementsView() {
