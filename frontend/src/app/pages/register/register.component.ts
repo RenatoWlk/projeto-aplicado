@@ -10,6 +10,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { RegisterService } from '../../pages/register/register.service';
+
 
 
 @Component({
@@ -24,7 +26,7 @@ import { RouterModule } from '@angular/router';
 export class RegisterComponent {
   userForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private registerService: RegisterService) {}
 
   selectedOption: string = '';
 
@@ -81,6 +83,86 @@ export class RegisterComponent {
   }
   
   submit() {
-    console.log('Formulário enviado:', this.userForm.value);
+  const email = this.credentialsGroup.get('email')?.value;
+  const password = this.credentialsGroup.get('password')?.value;
+
+  if (this.selectedOption === 'donator') {
+    const payload = {
+      name: this.personalInfoGroup.get('name')?.value,
+      email: email,
+      password: password,
+      cpf: this.personalInfoGroup.get('cpf')?.value,
+      gender: this.personalInfoGroup.get('gender')?.value,
+      bloodType: this.personalInfoGroup.get('bloodtype')?.value
+    };
+
+    this.registerService.registerDonator(payload).subscribe({
+      next: (res) => {
+        console.log('Doador cadastrado com sucesso!', res);
+        alert('Cadastro realizado com sucesso!');
+      },
+      error: (err) => {
+        console.error('Erro ao cadastrar doador', err);
+        alert('Erro ao cadastrar doador.');
+      }
+    });
+
+  } else if (this.selectedOption === 'bloodbank') {
+    const payload = {
+      name: this.bloodbankInfoFormGroup.get('instituitonName')?.value,
+      email: email,
+      password: password,
+      phone: '', 
+      cnpj: this.bloodbankInfoFormGroup.get('cnpj')?.value,
+      address: {
+        city: this.bloodbankInfoFormGroup.get('city')?.value,
+        state: this.bloodbankInfoFormGroup.get('state')?.value,
+        street: this.bloodbankInfoFormGroup.get('street')?.value,
+        neighborhood: this.bloodbankInfoFormGroup.get('neighborhood')?.value,
+        zipCode: this.bloodbankInfoFormGroup.get('zipcode')?.value
+      },
+      campaigns: []
+    };
+
+    this.registerService.registerBloodBank(payload).subscribe({
+      next: (res) => {
+        console.log('Banco de sangue cadastrado com sucesso!', res);
+        alert('Cadastro realizado com sucesso!');
+      },
+      error: (err) => {
+        console.error('Erro ao cadastrar banco de sangue', err);
+        alert('Erro ao cadastrar banco de sangue.');
+      }
+    });
+
+  } else if (this.selectedOption === 'partner') {
+    const payload = {
+      name: this.partnerInfoFormGroup.get('partnerName')?.value,
+      email: email,
+      password: password,
+      phone: '', 
+      cnpj: this.partnerInfoFormGroup.get('cnpj')?.value,
+      address: {
+        city: this.partnerInfoFormGroup.get('city')?.value,
+        state: this.partnerInfoFormGroup.get('state')?.value,
+        street: this.partnerInfoFormGroup.get('street')?.value,
+        neighborhood: this.partnerInfoFormGroup.get('neighborhood')?.value,
+        zipCode: this.partnerInfoFormGroup.get('zipcode')?.value
+      },
+      offers: []
+    };
+
+    this.registerService.registerPartner(payload).subscribe({
+      next: (res) => {
+        console.log('Parceiro cadastrado com sucesso!', res);
+        alert('Cadastro realizado com sucesso!');
+      },
+      error: (err) => {
+        console.error('Erro ao cadastrar parceiro', err);
+        alert('Erro ao cadastrar parceiro.');
+      }
+    });
   }
 }
+}
+
