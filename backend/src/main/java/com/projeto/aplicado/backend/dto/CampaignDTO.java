@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class CampaignDTO {
+    private String bloodbankEmail;
     private String title;
     private String body;
     private LocalDate startDate;

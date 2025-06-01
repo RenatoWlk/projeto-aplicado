@@ -1,7 +1,10 @@
 package com.projeto.aplicado.backend.controller;
 
+import com.projeto.aplicado.backend.dto.CampaignDTO;
+import com.projeto.aplicado.backend.dto.bloodbank.BloodBankMapDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
+import com.projeto.aplicado.backend.dto.bloodbank.BloodBankStatsDTO;
 import com.projeto.aplicado.backend.service.BloodBankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +57,29 @@ public class BloodBankController {
      * @return a list of blood banks with location data
      */
     @GetMapping("/locations")
-    public ResponseEntity<List<BloodBankResponseDTO>> getBloodBanksWithLocation() {
+    public ResponseEntity<List<BloodBankMapDTO>> getBloodBanksWithLocation() {
         return ResponseEntity.ok(bloodBankService.getAllWithLocation());
+    }
+
+    /**
+     * Get the stats of a blood bank by ID.
+     *
+     * @param id the ID of the blood bank to retrieve the stats
+     * @return the blood bank stats DTO
+     */
+    @GetMapping("/{id}/stats")
+    public ResponseEntity<BloodBankStatsDTO> getStatsById(@PathVariable String id) {
+        return ResponseEntity.ok(bloodBankService.findStatsById(id));
+    }
+
+    /**
+     * Get the campaigns of a blood bank by ID.
+     *
+     * @param id the ID of the blood bank to retrieve the campaigns
+     * @return the blood bank campaigns DTO
+     */
+    @GetMapping("/{id}/campaigns")
+    public ResponseEntity<List<CampaignDTO>> getCampaignsById(@PathVariable String id) {
+        return ResponseEntity.ok(bloodBankService.findCampaignsById(id));
     }
 }

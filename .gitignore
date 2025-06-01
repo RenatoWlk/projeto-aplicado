@@ -7,7 +7,6 @@ HELP.md
 .env.local
 .DS_Store
 Thumbs.db
-frontend/yarn.lock
 
 # ============================
 # BACKEND - Java / Spring Boot
@@ -62,6 +61,10 @@ out/
 /frontend/.angular/config.json
 /frontend/.env
 /frontend/.env.*.local
+/frontend/yarn.lock
+/frontend/package-lock.json
+yarn.lock
+package-lock.json
 
 # npm / yarn logs
 /frontend/npm-debug.log*
@@ -73,3 +76,42 @@ out/
 
 # VS Code
 .vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typingss
+
+# System files
+.DS_Store
+Thumbs.db

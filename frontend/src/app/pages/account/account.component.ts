@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AccountService, User, BloodBankUser, Questionnaire } from '../account/account.service';
+import { AccountService, User, BloodBankUser, Questionnaire, partner } from '../account/account.service';
 import { UserAccountComponent } from './user-account/user-account.component';
 import { BloodBankAccountComponent } from './bloodbank-account/bloodbank-account.component';
+import { PartnerAccountComponent } from './partner-account/partner-account.component';
 
 @Component({
   selector: 'app-account',
@@ -11,14 +12,15 @@ import { BloodBankAccountComponent } from './bloodbank-account/bloodbank-account
     CommonModule,
     FormsModule,
     UserAccountComponent,
-    BloodBankAccountComponent
+    BloodBankAccountComponent,
+    PartnerAccountComponent
   ],
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit{
-  user?: User | BloodBankUser;
-  editUser?: User | BloodBankUser;
+  user?: User | BloodBankUser | partner;
+  editUser?: User | BloodBankUser | partner;
   editProfileMode = false;
   changePasswordMode = false;
   newPassword = '';
@@ -38,49 +40,14 @@ export class AccountComponent implements OnInit{
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-  // Exemplo para banco de sangue
-    this.user = {
-  //   id: '1',
-  //   name: 'Pedro Silva',
-  //   email: 'pedro@email.com',
-  //   bloodType: 'O+',
-  //   photoUrl: 'assets/profile2.png',
-  //   lastDonation: '2024-05-01',
-  //   nextEligibleDonation: '2024-08-01',
-  //   achievements: [
-  //     {
-  //       title: 'Primeira Doação',
-  //       description: 'Parabéns pela sua primeira doação!',
-  //       imageUrl: 'assets/achievements.png',
-  //       points: 10,
-  //       rarity: 'comum'
-  //     }
-  //   ],
-  //   role: 'USER',
-  //   address: 'Rua das Flores, 123',
-  //   phone: '(11) 91234-5678',
-  //   cpf: '123.456.789-00',
-  //   gender: 'Masculino'
-  // };
-  // this.editUser = { ...this.user };
-    id: '2',
-    name: 'Banco de Sangue Vida',
-    email: 'contato@bancovida.com',
-    bloodType: '',
-    lastDonation: '',
-    nextEligibleDonation: '',
-    photoUrl: 'assets/profile2.png',
-    role: 'BLOODBANK',
-    address: 'Rua Central, 123',
-    phone: '(11) 99999-9999',
-    cnpj: '12.345.678/0001-99',
-    campaigns: [
-      { id: '1', title: 'Doe Sangue, Salve Vidas', description: 'Campanha de inverno', active: true },
-      { id: '2', title: 'Natal Solidário', description: 'Doe antes do Natal!', active: false }
-    ]
-  };
-  this.editUser = { ...this.user };
+  //mock user
+  //this.user = this.accountService.getMockUser();
+  //mock partner
+  this.user = this.accountService.getMockPartner();
+  //mock blood bank user
+  //this.user = this.accountService.getMockBloodBankUser();
 
+   
   this.lastQuestionnaire = {
     date: new Date(2024, 10, 15).toISOString(),
     answers: [
@@ -128,7 +95,6 @@ export class AccountComponent implements OnInit{
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        console.log('Imagem carregada:', reader.result);
         this.user = { ...(this.user as User), photoUrl: reader.result as string }; 
       };
       reader.readAsDataURL(file);
@@ -178,5 +144,9 @@ export class AccountComponent implements OnInit{
 
   get bloodBankUser(): BloodBankUser | undefined {
     return this.user?.role === 'BLOODBANK' ? this.user as BloodBankUser : undefined;
+  }
+
+  get partnerUser(): partner | undefined {
+    return this.user?.role === 'partner' ? this.user as partner : undefined;
   }
 }

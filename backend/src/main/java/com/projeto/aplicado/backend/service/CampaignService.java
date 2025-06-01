@@ -23,8 +23,8 @@ public class CampaignService {
      * @param dto the campaign DTO containing campaign details
      * @return the created campaign DTO
      */
-    public CampaignDTO create(CampaignDTO dto, String bloodbankEmail) {
-        var bb = bloodBankRepository.findByEmail(bloodbankEmail)
+    public CampaignDTO create(CampaignDTO dto) {
+        var bb = bloodBankRepository.findByEmail(dto.getBloodbankEmail())
                 .orElseThrow(() -> new RuntimeException("Bloodbank email not found"));
 
         Campaign camp = new Campaign();
@@ -48,7 +48,7 @@ public class CampaignService {
      * @return a list of CampaignDTO objects representing all campaigns.
      */
     public List<CampaignDTO> getAllCampaigns() {
-        return bloodBankRepository.findAll().stream()
+        return bloodBankRepository.findAllBloodBanks().stream()
                 .flatMap(b -> b.getCampaigns().stream())
                 .map(c -> {
                     CampaignDTO dto = new CampaignDTO();

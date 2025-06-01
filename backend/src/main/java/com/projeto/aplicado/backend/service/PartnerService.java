@@ -47,7 +47,7 @@ public class PartnerService {
      * @return a list of partner response DTOs
      */
     public List<PartnerResponseDTO> findAll() {
-        return partnerRepository.findAll().stream()
+        return partnerRepository.findAllPartners().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -59,7 +59,7 @@ public class PartnerService {
      * @return the partner response DTO
      */
     public PartnerResponseDTO findById(String id) {
-        return partnerRepository.findById(id)
+        return partnerRepository.findPartnerById(id)
                 .map(this::toResponseDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }

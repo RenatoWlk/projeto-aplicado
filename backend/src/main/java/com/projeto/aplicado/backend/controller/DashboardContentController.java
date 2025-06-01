@@ -1,16 +1,13 @@
 package com.projeto.aplicado.backend.controller;
 
 import com.projeto.aplicado.backend.dto.CampaignDTO;
+import com.projeto.aplicado.backend.dto.LeaderboardsDTO;
 import com.projeto.aplicado.backend.dto.OfferDTO;
-import com.projeto.aplicado.backend.repository.BloodBankRepository;
-import com.projeto.aplicado.backend.service.CampaignService;
-import com.projeto.aplicado.backend.service.OfferService;
+import com.projeto.aplicado.backend.dto.bloodbank.BloodBankNearbyDTO;
+import com.projeto.aplicado.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,11 +16,15 @@ import java.util.List;
 public class DashboardContentController {
     private final OfferService offerService;
     private final CampaignService campaignService;
+    private final BloodBankService bloodBankService;
+    private final LeaderboardsService leaderboardsService;
 
     @Autowired
-    public DashboardContentController(OfferService offerService, CampaignService campaignService) {
+    public DashboardContentController(OfferService offerService, CampaignService campaignService, BloodBankService bloodBankService, LeaderboardsService leaderboardsService) {
         this.offerService = offerService;
         this.campaignService = campaignService;
+        this.bloodBankService = bloodBankService;
+        this.leaderboardsService = leaderboardsService;
     }
 
     /**
@@ -52,8 +53,8 @@ public class DashboardContentController {
      * @return the new campaign created
      */
     @PostMapping("/campaign/create")
-    public ResponseEntity<CampaignDTO> createCampaign(CampaignDTO campaignDTO, String bloodbankName) {
-        return ResponseEntity.ok(campaignService.create(campaignDTO, bloodbankName));
+    public ResponseEntity<CampaignDTO> createCampaign(@RequestBody CampaignDTO campaignDTO) {
+        return ResponseEntity.ok(campaignService.create(campaignDTO));
     }
 
     /**
@@ -64,5 +65,25 @@ public class DashboardContentController {
     @PostMapping("/offer/create")
     public ResponseEntity<OfferDTO> createOffer(OfferDTO offerDTO, String partnerName) {
         return ResponseEntity.ok(offerService.create(offerDTO, partnerName));
+    }
+
+    /**
+     * Gets nearby blood banks from the user.
+     *
+     * @return a list of campaigns
+     */
+    @GetMapping("/{id}/nearbyBloodbanks")
+    public ResponseEntity<List<BloodBankNearbyDTO>> getNearbyBloodbanks(@PathVariable String id) {
+        return ResponseEntity.ok(bloodBankService.getNearbyBloodbanksFromUser(id));
+    }
+
+    /**
+     * Gets the leaderboards (top donors and top points)
+     *
+     * @return a leaderboards DTO with top donors and top points lists
+     */
+    @GetMapping("/leaderboards")
+    public ResponseEntity<LeaderboardsDTO> getLeaderboards() {
+        return ResponseEntity.ok(leaderboardsService.getLeaderboards());
     }
 }

@@ -7,11 +7,14 @@ import { RouterModule } from '@angular/router';
 import { UserRole } from '../../shared/app.enums';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { FormCreateItemComponent } from '../../shared/form-create-item/form-create-item.component';
+import { BloodbankDashboardComponent } from './bloodbank-dashboard/bloodbank-dashboard.component';
+import { LeaderboardsComponent } from "./leaderboards/leaderboards.component";
+import { PreloaderComponent } from "../../shared/preloader/preloader.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent],
+  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent, LeaderboardsComponent, PreloaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -28,25 +31,32 @@ export class DashboardComponent implements OnInit {
   roles = UserRole;
   isLoggedIn: boolean = false;
   userRole: UserRole | null = null;
+  private userId: string = "";
   
   // Dashboard data
   posts: Campaign[] = [];
   offers: Offer[] = [];
   nearbyBloodbanks: Bloodbank[] = [];
   userStats: UserStats = {} as any;
-  isCampaignModalOpen: boolean = false;
   isOfferModalOpen: boolean = false;
+
+  // Preloaders
+  loadingPosts: boolean = true;
+  loadingOffers: boolean = true;
+  loadingBloodbanks: boolean = true;
+  loadingStatsAndAchievements: boolean = true;
 
   constructor(private dashboardService: DashboardService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuthenticated();
+    this.userRole = this.authService.getCurrentUserRole();
 
-    if (this.isLoggedIn) {
+    if (this.isLoggedIn && this.userRole === this.roles.User) {
+      this.userId = this.authService.getCurrentUserId();
       this.loadAllDashboardData();
-      this.userRole = this.authService.getCurrentUserRole();
     } else {
-      this.loadDashboardDataForUnloggedUsers();
+      this.loadDashboardDataForPublicUsers();
     }
   }
 
@@ -61,9 +71,9 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Loads the dashboard data for unlogged users.
+   * Loads the dashboard data for public users.
    */
-  private loadDashboardDataForUnloggedUsers(): void {
+  private loadDashboardDataForPublicUsers(): void {
     this.getPosts();
     this.getOffers();
   }
@@ -74,6 +84,7 @@ export class DashboardComponent implements OnInit {
   private getPosts(): void {
     this.dashboardService.getCampaigns().subscribe((posts: Campaign[]) => {
       this.posts = posts;
+      this.loadingPosts = false;
     });
   }
 
@@ -83,6 +94,7 @@ export class DashboardComponent implements OnInit {
   private getOffers(): void {
     this.dashboardService.getOffers().subscribe((offers: Offer[]) => {
       this.offers = offers;
+      this.loadingOffers = false;
     });
   }
 
@@ -90,21 +102,31 @@ export class DashboardComponent implements OnInit {
    * Fetches nearby blood banks from the server and stores them in the component.
    */
   private getNearbyBloodbanks(): void {
-    this.dashboardService.getNearbyBloodbanks().subscribe((banks: Bloodbank[]) => {
+    this.dashboardService.getNearbyBloodbanks(this.userId).subscribe((banks: Bloodbank[]) => {
       this.nearbyBloodbanks = banks;
+      this.loadingBloodbanks = false;
     });
+  }
+
+  getReadableBloodbankDistance(distance: number): string {
+    if (distance < 1) {
+      const meters = Math.round(distance * 1000);
+      return `${meters} m`;
+    } else {
+      return `${distance.toFixed(1)} km`;
+    }
   }
 
   /**
    * Fetches user statistics from the server and processes them.
    */
   private getUserStats(): void {
-    const userId = this.authService.getCurrentUserId();
-    this.dashboardService.getUserStats(userId).subscribe((stats: UserStats) => {
+    this.dashboardService.getUserStats(this.userId).subscribe((stats: UserStats) => {
       stats.achievements = this.sortAchievementsByRarity(stats.achievements);
       stats.potentialLivesSaved = this.calculatePotentialLivesSaved(stats.timesDonated);
       stats.timeUntilNextDonation = this.getReadableTimeUntilNextDonation(stats.timeUntilNextDonation);
       this.userStats = stats;
+      this.loadingStatsAndAchievements = false;
     });
   }
 
@@ -154,14 +176,6 @@ export class DashboardComponent implements OnInit {
     };
 
     return achievements.sort((a, b) => order[a.rarity.toLowerCase()] - order[b.rarity.toLowerCase()]);
-  }
-
-  createNewCampaign(data: any): void {
-    this.isCampaignModalOpen = false;
-
-    this.dashboardService.createCampaign(data).subscribe(() => {
-      this.getPosts();
-    });
   }
 
   createNewOffer(data: any): void {

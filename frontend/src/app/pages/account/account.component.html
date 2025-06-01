@@ -1,7 +1,6 @@
 <div class="container">
   <app-user-account
-    *ngIf="user?.role !== 'BLOODBANK'"
-    [user]="user"
+    *ngIf="user?.role === 'USER'"    [user]="user"
     [lastQuestionnaire]="lastQuestionnaire"
     (userChange)="user = $event">
   </app-user-account>
@@ -11,4 +10,10 @@
     [user]="bloodBankUser"
     (userChange)="user = $event">
   </app-bloodbank-account>
+
+  <app-partner-account
+    *ngIf="partnerUser"
+    [user]="partnerUser"
+    (userChange)="user = $event">
+  </app-partner-account>
 </div>

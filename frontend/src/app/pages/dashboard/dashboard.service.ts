@@ -44,6 +44,7 @@ export interface Bloodbank {
     name: string;
     address: Address;
     phone: string;
+    distance: number;
 }
 
 @Injectable({
@@ -60,17 +61,12 @@ export class DashboardService {
         return this.http.get<Campaign[]>(DashboardConstants.GET_CAMPAIGNS_ENDPOINT);
     }
 
-    getNearbyBloodbanks(): Observable<Bloodbank[]> {
-        return this.http.get<Bloodbank[]>(DashboardConstants.GET_NEARBY_BLOODBANKS_ENDPOINT);
+    getNearbyBloodbanks(userId: string): Observable<Bloodbank[]> {
+        return this.http.get<Bloodbank[]>(`/api/dashboard/${userId}/nearbyBloodbanks`);
     }
 
     getUserStats(userId: string): Observable<UserStats> {
         return this.http.get<UserStats>(`/api/users/${userId}/stats`);
-    }
-
-    createCampaign(campaign: Campaign): Observable<Campaign> {
-        const data = {campaign, bloodbankEmail: this.auth.getCurrentUserEmail()};
-        return this.http.post<Campaign>(DashboardConstants.CREATE_CAMPAIGN_ENDPOINT, data);
     }
 
     createOffer(offer: Offer): Observable<Offer> {

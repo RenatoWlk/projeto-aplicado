@@ -52,7 +52,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .cards-grid-medium {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 1.5rem;
 }
 
@@ -144,6 +144,17 @@ h1, h2, h3, h4, h5, h6 {
   background-color: white;
   color: #c62828;
   border: 2px solid #c62828;
+}
+
+/* --------------------- NOTIFICATION BANNER --------------------- */
+.banner {
+  position: fixed;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  max-width: 90%;
+  z-index: 1000;
 }
 
 html, body { height: 100%; }
