@@ -1,6 +1,8 @@
 package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
+import com.projeto.aplicado.backend.dto.bloodbank.BloodBankMapDTO;
+import com.projeto.aplicado.backend.dto.user.UserLocationDTO;
 import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
 import com.projeto.aplicado.backend.dto.user.UserResponseDTO;
@@ -9,12 +11,11 @@ import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.projeto.aplicado.backend.service.EmailService;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +25,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder; 
     private final AchievementService achievementService;
     private final EmailService emailService;
+    private final GeolocationService geolocationService;
 
     /**
      * Creates a new user in the system.
@@ -43,7 +45,7 @@ public class UserService {
         user.setGender(dto.getGender());
         user.setBloodType(dto.getBloodType());
         user.setTimesDonated(0);
-        user.setTimeUntilNextDonation(dto.getTimeUntilNextDonation());
+        user.setTimeUntilNextDonation(0);
         user.setLastDonationDate(dto.getLastDonationDate());
         user.setUnlockedAchievements(List.of());
         user.setTotalPoints(0);
@@ -58,7 +60,7 @@ public class UserService {
      * @return a list of user response DTOs
      */
     public List<UserResponseDTO> findAll() {
-        return userRepository.findAll().stream()
+        return userRepository.findAllUsers().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -70,7 +72,7 @@ public class UserService {
      * @return the user response DTO
      */
     public UserResponseDTO findById(String id) {
-        return userRepository.findById(id)
+        return userRepository.findUserById(id)
                 .map(this::toResponseDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
@@ -82,9 +84,44 @@ public class UserService {
      * @return the user statistics DTO
      */
     public UserStatsDTO findStatsById(String id) {
-        return userRepository.findById(id)
+        return userRepository.findUserById(id)
                 .map(this::toStatsDTO)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+    }
+
+    /**
+     * Retrieves all blood banks and attempts to enrich each one with geolocation data. <br>
+     * If the address is incomplete or an error occurs, coordinates are set to 0.
+     *
+     * @return a list of blood bank DTOs including location information
+     */
+    public UserLocationDTO findLocationById(String id) {
+        return userRepository.findById(id)
+            .map(user -> {
+                UserLocationDTO dto = toLocationDTO(user);
+
+                if (user.getAddress() == null ||
+                        user.getAddress().getStreet() == null ||
+                        user.getAddress().getCity() == null ||
+                        user.getAddress().getState() == null ||
+                        user.getAddress().getZipCode() == null) {
+                    return dto;
+                }
+
+                try {
+                    String address = removeAccents(user.getAddress().getStreet().toLowerCase());
+                    double[] coordinates = geolocationService.getCoordinatesFromAddress(address);
+                    dto.setLatitude(coordinates[0]);
+                    dto.setLongitude(coordinates[1]);
+                } catch (Exception e) {
+                    System.err.println("Error trying to get the coords: " + e.getMessage());
+                    dto.setLatitude(0.0);
+                    dto.setLongitude(0.0);
+                }
+
+                return dto;
+            })
+            .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
 
     private UserResponseDTO toResponseDTO(User user) {
@@ -112,8 +149,16 @@ public class UserService {
         return dto;
     }
 
+    private UserLocationDTO toLocationDTO(User user) {
+        UserLocationDTO dto = new UserLocationDTO();
+        dto.setName(user.getName());
+        dto.setPhone(user.getPhone());
+        dto.setAddress(user.getAddress());
+        return dto;
+    }
+
     public void sendPasswordRecoveryEmail(String email) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findUserByEmail(email);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             String message = "Olá " + user.getName() + ",\n\n" +
@@ -122,5 +167,10 @@ public class UserService {
 
             emailService.sendEmail(user.getEmail(), "Recuperação de Dados de Acesso", message);
         }
+    }
+
+    public String removeAccents(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 }

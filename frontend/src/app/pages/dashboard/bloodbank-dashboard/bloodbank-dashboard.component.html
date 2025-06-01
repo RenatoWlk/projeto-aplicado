@@ -6,7 +6,10 @@
         <i class="fas fa-chart-line app-card-icon"></i>
         <h2 class="app-card-title">Dados de doações</h2>
     </div>
-    <div class="cards-grid-large">
+
+    <app-preloader *ngIf="isLoadingBloodbankStats" type="spinner" [visible]="true"></app-preloader>
+
+    <div class="cards-grid-large" *ngIf="!isLoadingBloodbankStats">
 
         <article class="card">
             <header class="card-header">
@@ -40,7 +43,7 @@
         </article>
 
     </div>
-    <div class="cards-grid-medium" style="margin-top: 1rem;">
+    <div class="cards-grid-medium" style="margin-top: 1rem;" *ngIf="!isLoadingBloodbankStats">
         <article class="card stat-card stat-scheduled">
             <header class="card-header">
                 <i class="fas fa-calendar-check stat-icon"></i>
@@ -87,6 +90,9 @@
         </button>
       </div>
     </div>
+
+    <app-preloader *ngIf="isLoadingBloodbankCampaigns" type="spinner" [visible]="true"></app-preloader>
+
     <div class="cards-grid-large cards-grid-overflow">
       <article class="card" *ngFor="let post of bloodbankCampaigns">
         <header class="card-header">

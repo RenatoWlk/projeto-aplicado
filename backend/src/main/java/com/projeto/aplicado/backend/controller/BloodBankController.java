@@ -1,6 +1,7 @@
 package com.projeto.aplicado.backend.controller;
 
 import com.projeto.aplicado.backend.dto.CampaignDTO;
+import com.projeto.aplicado.backend.dto.bloodbank.BloodBankMapDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankStatsDTO;
@@ -56,7 +57,7 @@ public class BloodBankController {
      * @return a list of blood banks with location data
      */
     @GetMapping("/locations")
-    public ResponseEntity<List<BloodBankResponseDTO>> getBloodBanksWithLocation() {
+    public ResponseEntity<List<BloodBankMapDTO>> getBloodBanksWithLocation() {
         return ResponseEntity.ok(bloodBankService.getAllWithLocation());
     }
 

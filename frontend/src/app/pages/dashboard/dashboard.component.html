@@ -13,6 +13,9 @@
       <i class="fas fa-book-medical app-card-icon"></i>
       <h2 class="app-card-title">{{ postsSectionTitle }}</h2>
     </div>
+
+    <app-preloader *ngIf="loadingPosts" type="skeleton-cards" [count]="3" [size]="'large'" [visible]="true"></app-preloader>
+
     <div class="cards-grid-large cards-grid-overflow">
       <article class="card" *ngFor="let post of posts">
         <header class="card-header">
@@ -46,6 +49,9 @@
         </button>
       </div>
     </div>
+
+    <app-preloader *ngIf="loadingOffers" type="skeleton-cards" [count]="3" [size]="'medium'" [visible]="true"></app-preloader>
+
     <div class="cards-grid-medium cards-grid-overflow">
       <article class="card" *ngFor="let offer of offers">
         <header class="card-header">
@@ -73,10 +79,14 @@
     <!-- VISIBLE ONLY TO LOGGED-IN USERS WITH ROLE 'USER' -->
     <ng-container *ngIf="isLoggedIn; else loginPrompt">
       <ng-container *ngIf="userRole === roles.User; else restrictedRolePrompt">
+
+        <app-preloader *ngIf="loadingBloodbanks" type="skeleton-cards" [count]="3" [size]="'medium'" [visible]="true"></app-preloader>
+
         <div class="cards-grid-medium cards-grid-overflow">
           <article class="card" *ngFor="let bloodbank of nearbyBloodbanks">
             <header class="card-header">
               <h3 class="card-title">{{ bloodbank.name }}</h3>
+              <p class="card-title">{{ getReadableBloodbankDistance(bloodbank.distance) }} de distância</p>
               <p class="address">{{ bloodbank.address.street }} - {{ bloodbank.address.city }}-{{ bloodbank.address.state }} - {{ bloodbank.address.zipCode }}</p>
             </header>
             <footer class="card-footer">
@@ -99,7 +109,10 @@
     <!-- VISIBLE ONLY TO LOGGED-IN USERS WITH ROLE 'USER' -->
     <ng-container *ngIf="isLoggedIn; else loginPrompt">
       <ng-container *ngIf="userRole === roles.User; else restrictedRolePrompt">
-        <div class="cards-grid-small">
+
+        <app-preloader *ngIf="loadingStatsAndAchievements" type="skeleton-cards" [count]="6" [size]="'small'" [visible]="true"></app-preloader>
+
+        <div class="cards-grid-small" *ngIf="!loadingStatsAndAchievements">
           <div class="stat-card" *ngFor="let stat of [
             { icon: 'fa-hand-holding-heart', label: 'Doações', value: userStats.timesDonated },
             { icon: 'fa-heartbeat', label: 'Vidas salvas', value: userStats.potentialLivesSaved },
@@ -133,7 +146,10 @@
     <!-- VISIBLE ONLY TO LOGGED-IN USERS WITH ROLE 'USER' -->
     <ng-container *ngIf="isLoggedIn; else loginPrompt">
       <ng-container *ngIf="userRole === roles.User; else restrictedRolePrompt">
-        <div class="achievements-grid">
+
+        <app-preloader *ngIf="loadingStatsAndAchievements" type="spinner" [visible]="true"></app-preloader>
+
+        <div class="achievements-grid" *ngIf="!loadingStatsAndAchievements">
           <div
             *ngFor="let achievement of userStats.achievements"
             class="achievement-square-card tooltip-container"
@@ -151,6 +167,11 @@
     </ng-container>
   </section>
 
+  <!-- ==================== -->
+  <!-- LEADERBOARDS SECTION -->
+  <!-- ==================== -->
+  <app-leaderboards></app-leaderboards>
+
   <!-- ======================= -->
   <!-- LOGIN REQUIRED TEMPLATE -->
   <!-- ======================= -->
@@ -167,7 +188,7 @@
   <ng-template #restrictedRolePrompt>
     <div class="card">
       <p class="card-title">
-        Esta seção é exclusiva para doadores. Sua função atual não permite visualizar essas informações.
+        Esta seção é exclusiva para doadores.
       </p>
     </div>
   </ng-template>

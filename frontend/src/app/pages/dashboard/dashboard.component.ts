@@ -8,11 +8,13 @@ import { UserRole } from '../../shared/app.enums';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { FormCreateItemComponent } from '../../shared/form-create-item/form-create-item.component';
 import { BloodbankDashboardComponent } from './bloodbank-dashboard/bloodbank-dashboard.component';
+import { LeaderboardsComponent } from "./leaderboards/leaderboards.component";
+import { PreloaderComponent } from "../../shared/preloader/preloader.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent],
+  imports: [CommonModule, RouterModule, ModalComponent, FormCreateItemComponent, BloodbankDashboardComponent, LeaderboardsComponent, PreloaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -27,10 +29,9 @@ export class DashboardComponent implements OnInit {
 
   // User data
   roles = UserRole;
-  isLoggedIn: boolean = true;
-  //isLoggedIn: boolean = false;
-  userRole: UserRole | null = this.roles.Bloodbank;
-  //userRole: UserRole | null = null;
+  isLoggedIn: boolean = false;
+  userRole: UserRole | null = null;
+  private userId: string = "";
   
   // Dashboard data
   posts: Campaign[] = [];
@@ -39,13 +40,20 @@ export class DashboardComponent implements OnInit {
   userStats: UserStats = {} as any;
   isOfferModalOpen: boolean = false;
 
+  // Preloaders
+  loadingPosts: boolean = true;
+  loadingOffers: boolean = true;
+  loadingBloodbanks: boolean = true;
+  loadingStatsAndAchievements: boolean = true;
+
   constructor(private dashboardService: DashboardService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    //this.isLoggedIn = this.authService.isAuthenticated();
-    //this.userRole = this.authService.getCurrentUserRole();
+    this.isLoggedIn = this.authService.isAuthenticated();
+    this.userRole = this.authService.getCurrentUserRole();
 
     if (this.isLoggedIn && this.userRole === this.roles.User) {
+      this.userId = this.authService.getCurrentUserId();
       this.loadAllDashboardData();
     } else {
       this.loadDashboardDataForPublicUsers();
@@ -76,6 +84,7 @@ export class DashboardComponent implements OnInit {
   private getPosts(): void {
     this.dashboardService.getCampaigns().subscribe((posts: Campaign[]) => {
       this.posts = posts;
+      this.loadingPosts = false;
     });
   }
 
@@ -85,6 +94,7 @@ export class DashboardComponent implements OnInit {
   private getOffers(): void {
     this.dashboardService.getOffers().subscribe((offers: Offer[]) => {
       this.offers = offers;
+      this.loadingOffers = false;
     });
   }
 
@@ -92,21 +102,31 @@ export class DashboardComponent implements OnInit {
    * Fetches nearby blood banks from the server and stores them in the component.
    */
   private getNearbyBloodbanks(): void {
-    this.dashboardService.getNearbyBloodbanks().subscribe((banks: Bloodbank[]) => {
+    this.dashboardService.getNearbyBloodbanks(this.userId).subscribe((banks: Bloodbank[]) => {
       this.nearbyBloodbanks = banks;
+      this.loadingBloodbanks = false;
     });
+  }
+
+  getReadableBloodbankDistance(distance: number): string {
+    if (distance < 1) {
+      const meters = Math.round(distance * 1000);
+      return `${meters} m`;
+    } else {
+      return `${distance.toFixed(1)} km`;
+    }
   }
 
   /**
    * Fetches user statistics from the server and processes them.
    */
   private getUserStats(): void {
-    const userId = this.authService.getCurrentUserId();
-    this.dashboardService.getUserStats(userId).subscribe((stats: UserStats) => {
+    this.dashboardService.getUserStats(this.userId).subscribe((stats: UserStats) => {
       stats.achievements = this.sortAchievementsByRarity(stats.achievements);
       stats.potentialLivesSaved = this.calculatePotentialLivesSaved(stats.timesDonated);
       stats.timeUntilNextDonation = this.getReadableTimeUntilNextDonation(stats.timeUntilNextDonation);
       this.userStats = stats;
+      this.loadingStatsAndAchievements = false;
     });
   }
 

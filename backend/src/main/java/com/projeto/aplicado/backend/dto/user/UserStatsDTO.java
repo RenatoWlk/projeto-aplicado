@@ -4,7 +4,6 @@ import com.projeto.aplicado.backend.model.achievement.Achievement;
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import lombok.Data;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public class UserStatsDTO {
     private BloodType bloodType;
     private int timesDonated;
-    private Duration timeUntilNextDonation;
+    private int timeUntilNextDonation;
     private LocalDate lastDonationDate;
     private List<Achievement> achievements;
     private int totalPoints;

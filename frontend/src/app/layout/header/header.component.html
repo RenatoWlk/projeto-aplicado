@@ -18,8 +18,12 @@
         </button>
         <div class="dropdown-menu" *ngIf="isMenuOpen">
           <ul>
-            <li><a [routerLink]="'/login'">Login</a></li>
-            <li><a [routerLink]="'/register'">Criar conta</a></li>
+            <li class="list-button" (click)="navigateTo('/login')">
+              <a>Login</a>
+            </li>
+            <li class="list-button" (click)="navigateTo('/register')">
+              <a>Criar conta</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -37,8 +41,12 @@
             <ul>
               <p class="menu-name">{{ userName }}</p>
               <p class="menu-email">{{ userEmail }}</p>
-              <li><a [routerLink]="'/account'">Conta</a></li>
-              <li><a [routerLink]="'/logout'">Sair</a></li>
+              <li class="list-button" (click)="navigateTo('/account')">
+                <a>Conta</a>
+              </li>
+              <li class="list-button" (click)="logout()">
+                <a>Sair</a>
+              </li>
             </ul>
           </div>
         </div>

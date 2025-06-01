@@ -46,7 +46,7 @@ public class OfferService {
      * @return a list of OfferDTO objects containing offer details.
      */
     public List<OfferDTO> getAllOffers() {
-        return partnerRepository.findAll().stream()
+        return partnerRepository.findAllPartners().stream()
                 .flatMap(partner -> partner.getOffers().stream()
                         .map(offer -> toDTO(partner.getName(), offer)))
                 .toList();

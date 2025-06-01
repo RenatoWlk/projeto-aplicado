@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,7 +21,7 @@ public class User extends UserBase {
     private String gender;
     private BloodType bloodType;
     private int timesDonated;
-    private Duration timeUntilNextDonation;
+    private int timeUntilNextDonation;
     private LocalDate lastDonationDate;
     private List<UnlockedAchievement> unlockedAchievements; // IDs and unlocked date of achievements
     private int totalPoints;

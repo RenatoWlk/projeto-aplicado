@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { HeaderService } from './header.service';
 
@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit {
     'Um pequeno ato, um grande impacto!'
   ];
 
-  constructor(private authService: AuthService, private headerService: HeaderService) {}
+  constructor(private authService: AuthService, private headerService: HeaderService, private router: Router) {}
 
   ngOnInit(): void {
     this.setRandomSlogan();
@@ -56,6 +56,11 @@ export class HeaderComponent implements OnInit {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
+  navigateTo(path: string) {
+    this.isMenuOpen = false;
+    this.router.navigate([path]);
+  }
+
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
@@ -68,5 +73,9 @@ export class HeaderComponent implements OnInit {
 
   setRandomSlogan() {
     this.slogan = this.slogans[Math.floor(Math.random() * this.slogans.length)];
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }
