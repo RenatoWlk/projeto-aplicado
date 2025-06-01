@@ -1,6 +1,8 @@
 package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
+import com.projeto.aplicado.backend.dto.bloodbank.BloodBankMapDTO;
+import com.projeto.aplicado.backend.dto.user.UserLocationDTO;
 import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
 import com.projeto.aplicado.backend.dto.user.UserResponseDTO;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +25,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder; 
     private final AchievementService achievementService;
     private final EmailService emailService;
+    private final GeolocationService geolocationService;
 
     /**
      * Creates a new user in the system.
@@ -85,6 +89,41 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
     }
 
+    /**
+     * Retrieves all blood banks and attempts to enrich each one with geolocation data. <br>
+     * If the address is incomplete or an error occurs, coordinates are set to 0.
+     *
+     * @return a list of blood bank DTOs including location information
+     */
+    public UserLocationDTO findLocationById(String id) {
+        return userRepository.findById(id)
+            .map(user -> {
+                UserLocationDTO dto = toLocationDTO(user);
+
+                if (user.getAddress() == null ||
+                        user.getAddress().getStreet() == null ||
+                        user.getAddress().getCity() == null ||
+                        user.getAddress().getState() == null ||
+                        user.getAddress().getZipCode() == null) {
+                    return dto;
+                }
+
+                try {
+                    String address = removeAccents(user.getAddress().getStreet().toLowerCase());
+                    double[] coordinates = geolocationService.getCoordinatesFromAddress(address);
+                    dto.setLatitude(coordinates[0]);
+                    dto.setLongitude(coordinates[1]);
+                } catch (Exception e) {
+                    System.err.println("Error trying to get the coords: " + e.getMessage());
+                    dto.setLatitude(0.0);
+                    dto.setLongitude(0.0);
+                }
+
+                return dto;
+            })
+            .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+    }
+
     private UserResponseDTO toResponseDTO(User user) {
         UserResponseDTO dto = new UserResponseDTO();
         dto.setId(user.getId());
@@ -110,6 +149,14 @@ public class UserService {
         return dto;
     }
 
+    private UserLocationDTO toLocationDTO(User user) {
+        UserLocationDTO dto = new UserLocationDTO();
+        dto.setName(user.getName());
+        dto.setPhone(user.getPhone());
+        dto.setAddress(user.getAddress());
+        return dto;
+    }
+
     public void sendPasswordRecoveryEmail(String email) {
         Optional<User> userOpt = userRepository.findUserByEmail(email);
         if (userOpt.isPresent()) {
@@ -120,5 +167,10 @@ public class UserService {
 
             emailService.sendEmail(user.getEmail(), "Recuperação de Dados de Acesso", message);
         }
+    }
+
+    public String removeAccents(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 }

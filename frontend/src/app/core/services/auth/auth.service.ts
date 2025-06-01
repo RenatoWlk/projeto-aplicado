@@ -61,7 +61,6 @@ export class AuthService {
    * Clears the stored JWT token (logout).
    */
   logout(): void {
-    console.log("logout: " + localStorage.getItem("token"))
     this.tokenService.clearToken();
     this.router.navigate(['/login']);
   }

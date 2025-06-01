@@ -1,5 +1,6 @@
 package com.projeto.aplicado.backend.controller;
 
+import com.projeto.aplicado.backend.dto.user.UserLocationDTO;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
 import com.projeto.aplicado.backend.dto.user.UserResponseDTO;
 import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     /**
-     * Get the statistics of a user.
+     * Gets the statistics of a user.
      * 
      * @param id the ID of the user to get statistics for
      * @return the user statistics DTO
@@ -58,6 +59,17 @@ public class UserController {
     @GetMapping("/{id}/stats")
     public ResponseEntity<UserStatsDTO> getStatsById(@PathVariable String id) {
         return ResponseEntity.ok(userService.findStatsById(id));
+    }
+
+    /**
+     * Gets the location of a user.
+     *
+     * @param id the ID of the user to get the location
+     * @return the user location DTO
+     */
+    @GetMapping("/{id}/location")
+    public ResponseEntity<UserLocationDTO> getLocationById(@PathVariable String id) {
+        return ResponseEntity.ok(userService.findLocationById(id));
     }
 
     @PostMapping("/forgot-password")

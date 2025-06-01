@@ -1,6 +1,6 @@
 # Applied Project I - [![](https://img.shields.io/badge/4vidas-red?style=for-the-badge)](https://github.com/hamzamohdzubair/redant)
 
-Repository for the Applied Project I. A web application developed using Spring Boot and Angular called 4vidas.
+Repository for the Applied Project I. A web application developed using Spring Boot and Angular called 4vidas (four lives).
 
 ## Description
 

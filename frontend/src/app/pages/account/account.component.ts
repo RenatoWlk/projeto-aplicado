@@ -95,7 +95,6 @@ export class AccountComponent implements OnInit{
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        console.log('Imagem carregada:', reader.result);
         this.user = { ...(this.user as User), photoUrl: reader.result as string }; 
       };
       reader.readAsDataURL(file);

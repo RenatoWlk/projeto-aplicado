@@ -2,11 +2,7 @@ package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
 import com.projeto.aplicado.backend.dto.CampaignDTO;
-import com.projeto.aplicado.backend.dto.bloodbank.BloodBankNearbyDTO;
-import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
-import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
-import com.projeto.aplicado.backend.dto.bloodbank.BloodBankStatsDTO;
-import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
+import com.projeto.aplicado.backend.dto.bloodbank.*;
 import com.projeto.aplicado.backend.model.Campaign;
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
@@ -114,9 +110,9 @@ public class BloodBankService {
      *
      * @return a list of blood bank DTOs including location information
      */
-    public List<BloodBankResponseDTO> getAllWithLocation() {
+    public List<BloodBankMapDTO> getAllWithLocation() {
         return bloodBankRepository.findAllBloodBanks().stream().map(bloodBank -> {
-            BloodBankResponseDTO dto = toResponseDTO(bloodBank);
+            BloodBankMapDTO dto = toMapDTO(bloodBank);
 
             if (bloodBank.getAddress() == null ||
                     bloodBank.getAddress().getStreet() == null ||
@@ -127,13 +123,9 @@ public class BloodBankService {
             }
 
             try {
-                String fullAddress = String.format("%s, %s, %s, %s",
-                        bloodBank.getAddress().getStreet(),
-                        bloodBank.getAddress().getCity(),
-                        bloodBank.getAddress().getState(),
-                        bloodBank.getAddress().getZipCode());
+                String address = removeAccents(bloodBank.getAddress().getStreet().toLowerCase());
 
-                double[] coordinates = geolocationService.getCoordinatesFromAddress(fullAddress);
+                double[] coordinates = geolocationService.getCoordinatesFromAddress(address);
                 dto.setLatitude(coordinates[0]);
                 dto.setLongitude(coordinates[1]);
             } catch (Exception e) {
@@ -147,6 +139,12 @@ public class BloodBankService {
         }).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves the nearby blood banks based on the user geolocation.
+     *
+     * @param userId the user ID to calculate the distance of the blood banks from
+     * @return a list of blood bank DTOs including location information
+     */
     public List<BloodBankNearbyDTO> getNearbyBloodbanksFromUser(String userId) {
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
@@ -231,6 +229,14 @@ public class BloodBankService {
         dto.setRole(bloodBank.getRole());
         dto.setCnpj(bloodBank.getCnpj());
         dto.setCampaigns(bloodBank.getCampaigns());
+        return dto;
+    }
+
+    private BloodBankMapDTO toMapDTO(BloodBank bloodBank) {
+        BloodBankMapDTO dto = new BloodBankMapDTO();
+        dto.setName(bloodBank.getName());
+        dto.setAddress(bloodBank.getAddress());
+        dto.setPhone(bloodBank.getPhone());
         return dto;
     }
 
