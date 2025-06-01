@@ -34,7 +34,7 @@ body, html {
 .custom-radio-group {
   display: flex;
   justify-content: center;
-  margin-top: 130px;
+  margin-top: 80px;
   gap:1.5rem;
 }
 
@@ -147,7 +147,9 @@ body, html {
 }
 
 .mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input, .mat-mdc-select-value-text,
-.mat-mdc-option .mdc-list-item__primary-text, .register-title, .register-msg {
+.mat-mdc-option .mdc-list-item__primary-text, .register-title, .register-msg,
+.mat-mdc-form-field.mat-form-field-animations-enabled .mdc-text-field__input,
+.mat-mdc-form-field-error {
   font-family: 'Poppins', sans-serif !important;
 }
 
@@ -157,6 +159,7 @@ body, html {
 
 .register-title {
   font-size: 36px;
+  margin-top: 10px;
 }
 
 .actions-register, .register-msg, .register-title {

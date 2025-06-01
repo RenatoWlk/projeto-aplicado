@@ -1,6 +1,14 @@
 <div class="app-container">
     <app-header></app-header>
-    <app-subheader></app-subheader>
+    @if(userType === UserRole.User) {
+        <app-subheader [userType]=UserRole.User></app-subheader>
+    }
+    @if(userType === UserRole.Bloodbank) {
+        <app-subheader [userType]=UserRole.Bloodbank></app-subheader>
+    }
+    @if(userType === UserRole.Partner) {
+        <app-subheader [userType]=UserRole.Partner></app-subheader>
+    }
     <div class="content-wrapper">
     <main>
         <router-outlet></router-outlet>

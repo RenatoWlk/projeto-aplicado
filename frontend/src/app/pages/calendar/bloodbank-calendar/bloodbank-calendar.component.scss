@@ -1,0 +1,122 @@
+.calendar-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    gap: 20px;
+}
+
+.stats-section {
+  flex: 1;
+  max-width: 600px;
+}
+
+.calendar-wrapper {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+}
+
+.mat-mdc-form-field-flex {
+    font-family: 'Poppins', sans-serif;
+    width: 600px;
+    padding: 60px;
+}
+
+.mat-calendar {
+    font-family: 'Poppins', sans-serif;
+    width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mat-calendar-table-header {
+    margin-top: 5px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.mat-calendar-body-label {
+    font-family: 'Poppins', sans-serif;
+}
+
+.mat-mdc-card {
+    justify-content: space-evenly;
+}
+
+.mat-calendar-body-today {
+    border: none !important;
+    background-color: none !important;
+}
+
+.mat-calendar-body-selected {
+    border-color: #c62828 !important;
+    background-color: #c62828 !important;
+    color:white;
+}
+
+.calendar-layout .app-card .app-card-header {
+    justify-content: center;
+}
+
+.calendar-stats .stats-grid .card {
+    margin: 16px;
+    justify-content: center;
+}
+
+.calendar-stats .calendar-stats-grid .card {
+    justify-items: center;
+    margin: 12px;
+}
+
+.calendar-stat-value {
+    font-weight: 600;
+}
+
+.calendar-layout .app-card {
+    max-height: 800px;
+    max-width: 600px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.date-wrapper {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 1rem;
+}
+
+.mat-calendar-table-header th {
+    padding: 10px 0px 0px 0px !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.mat-calendar-body-cell-content {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600 !important;
+}
+
+.range-start .mat-calendar-body-cell-content {
+  background-color: #4caf50;
+  color: white;
+  border-radius: 100%;
+}
+
+.range-end .mat-calendar-body-cell-content {
+  background-color: #4caf50;
+  color: white;
+  border-radius: 100%;
+}
+
+.range-between .mat-calendar-body-cell-content {
+  background-color: rgba(76, 175, 80, 0.3);
+  color: black;
+}

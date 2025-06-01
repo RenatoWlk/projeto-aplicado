@@ -112,7 +112,7 @@ export class AuthService {
       return role as UserRole;
     }
 
-    return null;
+    return undefined;
   }
 
   /**

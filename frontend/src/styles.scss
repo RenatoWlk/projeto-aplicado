@@ -146,4 +146,15 @@ h1, h2, h3, h4, h5, h6 {
   border: 2px solid #c62828;
 }
 
+/* --------------------- NOTIFICATION BANNER --------------------- */
+.banner {
+  position: fixed;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  max-width: 90%;
+  z-index: 1000;
+}
+
 html, body { height: 100%; }
