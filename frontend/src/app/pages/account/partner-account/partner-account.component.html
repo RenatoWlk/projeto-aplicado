@@ -1,336 +1,311 @@
-<!-- HTML melhorado para partner-account.component.html -->
-<ng-container *ngIf="user?.role === 'PARTNER'">
-  <ng-container *ngIf="partnerUser as partner">
+<div *ngIf="isLoading" class="loading-spinner">
+  <i class="fa-solid fa-spinner fa-spin"></i>
+  Carregando...
+</div>
+
+<div *ngIf="error" class="error-message">
+  <i class="fa-solid fa-exclamation-triangle"></i>
+  {{ error }}
+</div>
+
+<div *ngIf="successMessage" class="success-message">
+  <i class="fa-solid fa-check-circle"></i>
+  {{ successMessage }}
+</div>
+
+<!-- Modo Visualização -->
+<div *ngIf="!editProfileMode">
+  
+  <!-- Card do Perfil -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <i class="fa-solid fa-store app-card-icon"></i>
+      <h2 class="app-card-title">Perfil do Parceiro</h2>
+    </div>
     
-    <!-- Loading e mensagens -->
-    <div *ngIf="isLoading" class="loading-spinner">
-      <i class="fa-solid fa-spinner fa-spin"></i>
-      Carregando...
-    </div>
-
-    <div *ngIf="error" class="error-message">
-      <i class="fa-solid fa-exclamation-triangle"></i>
-      {{ error }}
-    </div>
-
-    <div *ngIf="successMessage" class="success-message">
-      <i class="fa-solid fa-check-circle"></i>
-      {{ successMessage }}
-    </div>
-    
-    <!-- Modo Visualização -->
-    <div *ngIf="!editProfileMode">
-      
-      <!-- Card do Perfil -->
-      <div class="app-card">
-        <div class="app-card-header">
-          <i class="fa-solid fa-store app-card-icon"></i>
-          <h2 class="app-card-title">Perfil do Parceiro</h2>
-        </div>
-        
-        <div class="account-header">
-          <div class="profile-photo-wrapper">
-            <img [src]="partner.photoUrl || 'assets/partner.png'" 
-                 alt="Foto do Parceiro" 
-                 class="profile-photo" />
-            <input #fileInput 
-                   type="file" 
-                   (change)="onPhotoSelected($event)" 
-                   accept="image/*" 
-                   hidden>
-            <button type="button" 
-                    class="profile-photo-edit-btn" 
-                    (click)="fileInput.click()"
-                    [disabled]="isLoading">
-              <i class="fa-solid fa-camera"></i>
-              Trocar Foto
-            </button>
-          </div>
-          
-          <div class="account-info">
-            <p><strong>Nome:</strong> {{ partner.name }}</p>
-            <p><strong>Email:</strong> {{ partner.email }}</p>
-            <p><strong>Endereço:</strong> {{ partner.address }}</p>
-            <p><strong>Telefone:</strong> {{ partner.phone }}</p>
-            <p><strong>CNPJ:</strong> {{ partner.cnpj }}</p>
-            <p *ngIf="partner.description"><strong>Descrição:</strong> {{ partner.description }}</p>
-            <p *ngIf="partner.website"><strong>Website:</strong> 
-              <a [href]="partner.website" target="_blank" rel="noopener">{{ partner.website }}</a>
-            </p>
-            
-            <button type="button" 
-                    (click)="onEditProfile()"
-                    [disabled]="isLoading">
-              <i class="fa-solid fa-edit"></i>
-              Editar Perfil
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card de Estatísticas -->
-      <div class="app-card stats-card">
-        <div class="app-card-header">
-          <i class="fa-solid fa-chart-bar app-card-icon"></i>
-          <h2 class="app-card-title">Estatísticas</h2>
-        </div>
-        
-        <div class="stats-grid">
-          <div class="stat-item">
-            <div class="stat-number">{{ offersCount }}</div>
-            <div class="stat-label">Total de Ofertas</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">{{ activeOffersCount }}</div>
-            <div class="stat-label">Ofertas Ativas</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">{{ offersCount - activeOffersCount }}</div>
-            <div class="stat-label">Ofertas Inativas</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card das Ofertas -->
-      <div class="app-card">
-        <div class="app-card-header">
-          <i class="fa-solid fa-gift app-card-icon"></i>
-          <h2 class="app-card-title">Ofertas para Doadores</h2>
-        </div>
-
-        <!-- Formulário de Oferta usando ReactiveFormsModule -->
-        <form *ngIf="addOfferMode || editOfferMode" 
-              [formGroup]="offerForm" 
-              (ngSubmit)="saveOffer()">
-          
-          <label>
-            <span>Título da Oferta</span>
-            <input type="text" 
-                   formControlName="title"
-                   placeholder="Ex: Desconto em Medicamentos"
-                   [class.invalid]="isFieldInvalid(offerForm, 'title')" />
-            <div *ngIf="getFieldError(offerForm, 'title')" class="error-text">
-              {{ getFieldError(offerForm, 'title') }}
-            </div>
-          </label>
-          
-          <label>
-            <span>Descrição</span>
-            <textarea formControlName="description"
-                      placeholder="Descreva os detalhes da oferta..."
-                      rows="3"
-                      [class.invalid]="isFieldInvalid(offerForm, 'description')"></textarea>
-            <div *ngIf="getFieldError(offerForm, 'description')" class="error-text">
-              {{ getFieldError(offerForm, 'description') }}
-            </div>
-          </label>
-
-          <label>
-            <span>Desconto (%)</span>
-            <input type="number" 
-                   formControlName="discount"
-                   placeholder="Ex: 10"
-                   min="0"
-                   max="100" />
-          </label>
-
-          <label>
-            <span>Válido até</span>
-            <input type="date" formControlName="validUntil" />
-          </label>
-
-          <label>
-            <span>Termos e Condições</span>
-            <textarea formControlName="termsAndConditions"
-                      placeholder="Condições para utilizar a oferta..."
-                      rows="2"></textarea>
-          </label>
-          
-          <label class="checkbox-label">
-            <input type="checkbox" formControlName="active" />
-            <span>Oferta Ativa</span>
-          </label>
-
-          <div class="form-actions">
-            <button type="submit" 
-                    class="primary"
-                    [disabled]="isLoading || offerForm.invalid">
-              <i class="fa-solid fa-save"></i>
-              {{ addOfferMode ? 'Criar Oferta' : 'Salvar Alterações' }}
-            </button>
-            <button type="button" 
-                    class="secondary" 
-                    (click)="cancelOfferForm()"
-                    [disabled]="isLoading">
-              <i class="fa-solid fa-times"></i>
-              Cancelar
-            </button>
-          </div>
-        </form>
-
-        <!-- Lista de Ofertas -->
-        <ul *ngIf="hasOffers; else noOffers">
-          <li *ngFor="let offer of partner.offers; let i = index">
-            <div class="offer-info">
-              <div class="offer-header">
-                <strong>{{ offer.title }}</strong>
-                <span class="offer-status" [ngClass]="getOfferStatusClass(offer)">
-                  <i class="fa-solid" 
-                     [ngClass]="{
-                       'fa-check-circle': offer.active && !isOfferExpired(offer),
-                       'fa-times-circle': !offer.active,
-                       'fa-clock': isOfferExpired(offer)
-                     }"></i>
-                  {{ getOfferStatus(offer) }}
-                </span>
-              </div>
-              
-              <div class="offer-description">{{ offer.body }}</div>
-              
-              <div class="offer-details">
-                <span *ngIf="offer.discountPercentage" class="offer-discount">
-                  <i class="fa-solid fa-percentage"></i>
-                  {{ offer.discountPercentage }}% de desconto
-                </span>
-                <span *ngIf="offer.validUntil" class="offer-validity">
-                  <i class="fa-solid fa-calendar"></i>
-                  Válido até {{ offer.validUntil | date:'dd/MM/yyyy' }}
-                </span>
-              </div>
-
-              <div *ngIf="offer.termsAndConditions" class="offer-terms">
-                <strong>Termos:</strong> {{ offer.termsAndConditions }}
-              </div>
-            </div>
-            
-            <div class="offer-actions">
-              <button class="edit-btn" 
-                      (click)="editOffer(offer, i)"
-                      [disabled]="isLoading">
-                <i class="fa-solid fa-edit"></i>
-                Editar
-              </button>
-              <button class="delete-btn" 
-                      (click)="removeOffer(offer)"
-                      [disabled]="isLoading">
-                <i class="fa-solid fa-trash"></i>
-                Remover
-              </button>
-            </div>
-          </li>
-        </ul>
-
-        <ng-template #noOffers>
-          <div class="empty-state">
-            <i class="fa-solid fa-gift" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
-            <p>Nenhuma oferta criada ainda</p>
-            <p style="color: #666; font-size: 0.9rem;">Crie ofertas atrativas para incentivar mais doações</p>
-          </div>
-        </ng-template>
-
-        <button (click)="addOffer()" 
-                *ngIf="!addOfferMode && !editOfferMode"
+    <div class="account-header">
+      <div class="profile-photo-wrapper">
+        <img [src]="partnerUser?.photoUrl || 'assets/partnerUser.png'" 
+              alt="Foto do Parceiro" 
+              class="profile-photo" />
+        <input #fileInput 
+                type="file" 
+                (change)="onPhotoSelected($event)" 
+                accept="image/*" 
+                hidden>
+        <button type="button" 
+                class="profile-photo-edit-btn" 
+                (click)="fileInput.click()"
                 [disabled]="isLoading">
-          <i class="fa-solid fa-plus"></i>
-          Nova Oferta
+          <i class="fa-solid fa-camera"></i>
+          Trocar Foto
+        </button>
+      </div>
+      
+      <div class="account-info">
+        <p><strong>Nome:</strong> {{ partnerUser?.name }}</p>
+        <p><strong>Email:</strong> {{ partnerUser?.email }}</p>
+        <p><strong>Endereço:</strong> {{ partnerUser?.address }}</p>
+        <p><strong>Telefone:</strong> {{ partnerUser?.phone }}</p>
+        <p><strong>CNPJ:</strong> {{ partnerUser?.cnpj }}</p>
+
+        <button type="button" 
+                (click)="onEditProfile()"
+                [disabled]="isLoading">
+          <i class="fa-solid fa-edit"></i>
+          Editar Perfil
         </button>
       </div>
     </div>
+  </div>
 
-    <!-- Formulário de Edição do Perfil -->
-    <div *ngIf="editProfileMode" class="app-card">
-      <div class="app-card-header">
-        <i class="fa-solid fa-user-edit app-card-icon"></i>
-        <h2 class="app-card-title">Editar Perfil</h2>
+  <!-- Card de Estatísticas -->
+  <div class="app-card stats-card">
+    <div class="app-card-header">
+      <i class="fa-solid fa-chart-bar app-card-icon"></i>
+      <h2 class="app-card-title">Estatísticas</h2>
+    </div>
+    
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">{{ offersCount }}</div>
+        <div class="stat-label">Total de Ofertas</div>
       </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ activeOffersCount }}</div>
+        <div class="stat-label">Ofertas Ativas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ offersCount - activeOffersCount }}</div>
+        <div class="stat-label">Ofertas Inativas</div>
+      </div>
+    </div>
+  </div>
 
-      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-        <label>
-          <span>Nome da Empresa</span>
-          <input type="text" 
-                 formControlName="name"
-                 placeholder="Nome completo da empresa"
-                 [class.invalid]="isFieldInvalid(profileForm, 'name')" />
-          <div *ngIf="getFieldError(profileForm, 'name')" class="error-text">
-            {{ getFieldError(profileForm, 'name') }}
-          </div>
-        </label>
-        
-        <label>
-          <span>Email</span>
-          <input type="email" 
-                 formControlName="email"
-                 placeholder="contato@empresa.com"
-                 [class.invalid]="isFieldInvalid(profileForm, 'email')" />
-          <div *ngIf="getFieldError(profileForm, 'email')" class="error-text">
-            {{ getFieldError(profileForm, 'email') }}
-          </div>
-        </label>
-        
-        <label>
-          <span>Endereço</span>
-          <input type="text" 
-                 formControlName="address"
-                 placeholder="Endereço completo da empresa"
-                 [class.invalid]="isFieldInvalid(profileForm, 'address')" />
-          <div *ngIf="getFieldError(profileForm, 'address')" class="error-text">
-            {{ getFieldError(profileForm, 'address') }}
-          </div>
-        </label>
-        
-        <label>
-          <span>Telefone</span>
-          <input type="tel" 
-                 formControlName="phone"
-                 placeholder="(11) 99999-9999"
-                 [class.invalid]="isFieldInvalid(profileForm, 'phone')" />
-          <div *ngIf="getFieldError(profileForm, 'phone')" class="error-text">
-            {{ getFieldError(profileForm, 'phone') }}
-          </div>
-        </label>
-        
-        <label>
-          <span>CNPJ</span>
-          <input type="text" 
-                 formControlName="cnpj"
-                 placeholder="00.000.000/0000-00"
-                 [class.invalid]="isFieldInvalid(profileForm, 'cnpj')" />
-          <div *ngIf="getFieldError(profileForm, 'cnpj')" class="error-text">
-            {{ getFieldError(profileForm, 'cnpj') }}
-          </div>
-        </label>
-
-        <label>
-          <span>Descrição da Empresa (Opcional)</span>
-          <textarea formControlName="description"
-                    placeholder="Descreva sua empresa e seus valores..."
-                    rows="3"></textarea>
-        </label>
-
-        <label>
-          <span>Website (Opcional)</span>
-          <input type="url" 
-                 formControlName="website"
-                 placeholder="https://suaempresa.com" />
-        </label>
-
-        <div class="form-actions">
-          <button type="submit" 
-                  class="primary"
-                  [disabled]="isLoading || profileForm.invalid">
-            <i class="fa-solid fa-save"></i>
-            Salvar Alterações
-          </button>
-          <button type="button" 
-                  class="secondary" 
-                  (click)="cancelEdit()"
-                  [disabled]="isLoading">
-            <i class="fa-solid fa-times"></i>
-            Cancelar
-          </button>
-        </div>
-      </form>
+  <!-- Card das Ofertas -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <i class="fa-solid fa-gift app-card-icon"></i>
+      <h2 class="app-card-title">Ofertas para Doadores</h2>
     </div>
 
-  </ng-container>
-</ng-container>
+    <!-- Formulário de Oferta usando ReactiveFormsModule -->
+    <form *ngIf="addOfferMode || editOfferMode" 
+          [formGroup]="offerForm" 
+          (ngSubmit)="saveOffer()">
+      
+      <label>
+        <span>Título da Oferta</span>
+        <input type="text" 
+                formControlName="title"
+                placeholder="Ex: Desconto em Medicamentos"
+                [class.invalid]="isFieldInvalid(offerForm, 'title')" />
+        <div *ngIf="getFieldError(offerForm, 'title')" class="error-text">
+          {{ getFieldError(offerForm, 'title') }}
+        </div>
+      </label>
+      
+      <label>
+        <span>Descrição</span>
+        <textarea formControlName="description"
+                  placeholder="Descreva os detalhes da oferta..."
+                  rows="3"
+                  [class.invalid]="isFieldInvalid(offerForm, 'description')"></textarea>
+        <div *ngIf="getFieldError(offerForm, 'description')" class="error-text">
+          {{ getFieldError(offerForm, 'description') }}
+        </div>
+      </label>
+
+      <label>
+        <span>Desconto (%)</span>
+        <input type="number" 
+                formControlName="discount"
+                placeholder="Ex: 10"
+                min="0"
+                max="100" />
+      </label>
+
+      <label>
+        <span>Válido até</span>
+        <input type="date" formControlName="validUntil" />
+      </label>
+
+      <label>
+        <span>Termos e Condições</span>
+        <textarea formControlName="termsAndConditions"
+                  placeholder="Condições para utilizar a oferta..."
+                  rows="2"></textarea>
+      </label>
+      
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="active" />
+        <span>Oferta Ativa</span>
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" 
+                class="primary"
+                [disabled]="isLoading || offerForm.invalid">
+          <i class="fa-solid fa-save"></i>
+          {{ addOfferMode ? 'Criar Oferta' : 'Salvar Alterações' }}
+        </button>
+        <button type="button" 
+                class="secondary" 
+                (click)="cancelOfferForm()"
+                [disabled]="isLoading">
+          <i class="fa-solid fa-times"></i>
+          Cancelar
+        </button>
+      </div>
+    </form>
+
+    <!-- Lista de Ofertas -->
+    <ul *ngIf="hasOffers; else noOffers">
+      <li *ngFor="let offer of partnerUser?.offers; let i = index">
+        <div class="offer-info">
+          <div class="offer-header">
+            <strong>{{ offer?.title }}</strong>
+          </div>
+          
+          <div class="offer-description">{{ offer.body }}</div>
+          
+          <div class="offer-details">
+            <span *ngIf="offer.discountPercentage" class="offer-discount">
+              <i class="fa-solid fa-percentage"></i>
+              {{ offer.discountPercentage }}% de desconto
+            </span>
+            <span *ngIf="offer.validUntil" class="offer-validity">
+              <i class="fa-solid fa-calendar"></i>
+              Válido até {{ offer.validUntil | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="offer-actions">
+          <button class="edit-btn" 
+                  (click)="editOffer(offer, i)"
+                  [disabled]="isLoading">
+            <i class="fa-solid fa-edit"></i>
+            Editar
+          </button>
+          <button class="delete-btn" 
+                  (click)="removeOffer(offer)"
+                  [disabled]="isLoading">
+            <i class="fa-solid fa-trash"></i>
+            Remover
+          </button>
+        </div>
+      </li>
+    </ul>
+
+    <ng-template #noOffers>
+      <div class="empty-state">
+        <i class="fa-solid fa-gift" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+        <p>Nenhuma oferta criada ainda</p>
+        <p style="color: #666; font-size: 0.9rem;">Crie ofertas atrativas para incentivar mais doações</p>
+      </div>
+    </ng-template>
+
+    <button (click)="addOffer()" 
+            *ngIf="!addOfferMode && !editOfferMode"
+            [disabled]="isLoading">
+      <i class="fa-solid fa-plus"></i>
+      Nova Oferta
+    </button>
+  </div>
+</div>
+
+<!-- Formulário de Edição do Perfil -->
+<div *ngIf="editProfileMode" class="app-card">
+  <div class="app-card-header">
+    <i class="fa-solid fa-user-edit app-card-icon"></i>
+    <h2 class="app-card-title">Editar Perfil</h2>
+  </div>
+
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+    <label>
+      <span>Nome da Empresa</span>
+      <input type="text" 
+              formControlName="name"
+              placeholder="Nome completo da empresa"
+              [class.invalid]="isFieldInvalid(profileForm, 'name')" />
+      <div *ngIf="getFieldError(profileForm, 'name')" class="error-text">
+        {{ getFieldError(profileForm, 'name') }}
+      </div>
+    </label>
+    
+    <label>
+      <span>Email</span>
+      <input type="email" 
+              formControlName="email"
+              placeholder="contato@empresa.com"
+              [class.invalid]="isFieldInvalid(profileForm, 'email')" />
+      <div *ngIf="getFieldError(profileForm, 'email')" class="error-text">
+        {{ getFieldError(profileForm, 'email') }}
+      </div>
+    </label>
+    
+    <label>
+      <span>Endereço</span>
+      <input type="text" 
+              formControlName="address"
+              placeholder="Endereço completo da empresa"
+              [class.invalid]="isFieldInvalid(profileForm, 'address')" />
+      <div *ngIf="getFieldError(profileForm, 'address')" class="error-text">
+        {{ getFieldError(profileForm, 'address') }}
+      </div>
+    </label>
+    
+    <label>
+      <span>Telefone</span>
+      <input type="tel" 
+              formControlName="phone"
+              placeholder="(11) 99999-9999"
+              [class.invalid]="isFieldInvalid(profileForm, 'phone')" />
+      <div *ngIf="getFieldError(profileForm, 'phone')" class="error-text">
+        {{ getFieldError(profileForm, 'phone') }}
+      </div>
+    </label>
+    
+    <label>
+      <span>CNPJ</span>
+      <input type="text" 
+              formControlName="cnpj"
+              placeholder="00.000.000/0000-00"
+              [class.invalid]="isFieldInvalid(profileForm, 'cnpj')" />
+      <div *ngIf="getFieldError(profileForm, 'cnpj')" class="error-text">
+        {{ getFieldError(profileForm, 'cnpj') }}
+      </div>
+    </label>
+
+    <label>
+      <span>Descrição da Empresa (Opcional)</span>
+      <textarea formControlName="description"
+                placeholder="Descreva sua empresa e seus valores..."
+                rows="3"></textarea>
+    </label>
+
+    <label>
+      <span>Website (Opcional)</span>
+      <input type="url" 
+              formControlName="website"
+              placeholder="https://suaempresa.com" />
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" 
+              class="primary"
+              [disabled]="isLoading || profileForm.invalid">
+        <i class="fa-solid fa-save"></i>
+        Salvar Alterações
+      </button>
+      <button type="button" 
+              class="secondary" 
+              (click)="cancelEdit()"
+              [disabled]="isLoading">
+        <i class="fa-solid fa-times"></i>
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
