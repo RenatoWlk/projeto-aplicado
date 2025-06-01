@@ -10,6 +10,7 @@ import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import com.projeto.aplicado.backend.service.EmailService;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final AchievementService achievementService;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
 
     /**
@@ -35,7 +37,7 @@ public class UserService {
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setAddress(dto.getAddress());
         user.setPhone(dto.getPhone());
         user.setRole(Role.USER);

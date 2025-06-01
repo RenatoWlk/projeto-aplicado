@@ -7,6 +7,8 @@ import com.projeto.aplicado.backend.model.users.Partner;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.PartnerRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PartnerService {
     private final PartnerRepository partnerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Creates a new partner.
@@ -27,7 +30,7 @@ public class PartnerService {
         Partner partner = new Partner();
         partner.setName(dto.getName());
         partner.setEmail(dto.getEmail());
-        partner.setPassword(dto.getPassword());
+        partner.setPassword(passwordEncoder.encode(dto.getPassword()));
         partner.setAddress(dto.getAddress());
         partner.setPhone(dto.getPhone());
         partner.setRole(Role.PARTNER);

@@ -7,6 +7,8 @@ import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.model.users.BloodBank;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,7 @@ public class BloodBankService {
 
     private final BloodBankRepository bloodBankRepository; // Acesso ao banco de dados
     private final GeolocationService geolocationService; // Serviço de geolocalização
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Cria um novo banco de sangue a partir do DTO de requisição.
@@ -26,7 +29,7 @@ public class BloodBankService {
         BloodBank bloodBank = new BloodBank();
         bloodBank.setName(dto.getName());
         bloodBank.setEmail(dto.getEmail());
-        bloodBank.setPassword(dto.getPassword());
+        bloodBank.setPassword(passwordEncoder.encode(dto.getPassword()));
         bloodBank.setAddress(dto.getAddress());
         bloodBank.setPhone(dto.getPhone());
         bloodBank.setRole(Role.BLOODBANK);
