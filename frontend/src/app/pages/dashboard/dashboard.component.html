@@ -116,6 +116,7 @@
           <div class="stat-card" *ngFor="let stat of [
             { icon: 'fa-hand-holding-heart', label: 'Doações', value: userStats.timesDonated },
             { icon: 'fa-heartbeat', label: 'Vidas salvas', value: userStats.potentialLivesSaved },
+            { icon: 'fa-heart', label: 'Você doou', value: totalLitersDonated},
             { icon: 'fa-tint', label: 'Tipo sanguíneo', value: userStats.bloodType },
             { icon: 'fa-clock', label: 'Próxima doação', value: userStats.timeUntilNextDonation },
             { icon: 'fa-calendar-check', label: 'Última doação', value: (userStats.lastDonationDate | date: 'dd/MM/yyyy') },
