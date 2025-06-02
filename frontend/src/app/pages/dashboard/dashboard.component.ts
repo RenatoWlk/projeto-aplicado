@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
   /**
    * Fetches user statistics from the server and processes them.
    */
-  private getUserStats(): void {
+  public getUserStats(): void {
     this.dashboardService.getUserStats(this.userId).subscribe((stats: UserStats) => {
       stats.achievements = this.sortAchievementsByRarity(stats.achievements);
       stats.potentialLivesSaved = this.calculatePotentialLivesSaved(stats.timesDonated);

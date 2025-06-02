@@ -7,6 +7,7 @@ import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
 import com.projeto.aplicado.backend.dto.user.UserResponseDTO;
 import com.projeto.aplicado.backend.model.users.User;
+import com.projeto.aplicado.backend.model.Address;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,9 +27,6 @@ public class UserService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final GeolocationService geolocationService;
-
-    // Diretório para upload de fotos
-    private static final String UPLOAD_DIR = "uploads/users/";
 
     /**
      * Creates a new user in the system.
@@ -142,6 +139,19 @@ public class UserService {
         return dto;
     }
 
+    private void mapDtoToEntity(UserRequestDTO dto, User user) {
+    if (dto.getName() != null) user.setName(dto.getName());
+    if (dto.getEmail() != null) user.setEmail(dto.getEmail());
+    if (dto.getPhone() != null) user.setPhone(dto.getPhone());
+    if (dto.getGender() != null) user.setGender(dto.getGender());
+
+    if (dto.getAddress() != null) {
+        if (user.getAddress() == null) user.setAddress(new Address());
+        Address address = user.getAddress();
+        if (dto.getAddress().getStreet() != null) address.setStreet(dto.getAddress().getStreet());
+    }
+}
+
     private UserStatsDTO toStatsDTO(User user) {
         UserStatsDTO dto = new UserStatsDTO();
         dto.setTimesDonated(user.getTimesDonated());
@@ -178,21 +188,16 @@ public class UserService {
         return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 
-    /*
-     * Account
-     */
-
-     public UserResponseDTO update(String id, UserRequestDTO dto) {
+    public UserResponseDTO update(String id, UserRequestDTO dto) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            .orElseThrow(() -> new RuntimeException("User not found"));
         
-        // Verificar se email mudou e já existe
-        if (!user.getEmail().equals(dto.getEmail()) && 
+        if (!user.getEmail().equals(dto.getEmail()) &&
             userRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("Email já cadastrado");
+            throw new RuntimeException("Email already exists");
         }
         
-        toResponseDTO(user);
+        mapDtoToEntity(dto,user);
         
         User updatedUser = userRepository.save(user);
         return toResponseDTO(updatedUser);
@@ -200,23 +205,20 @@ public class UserService {
 
     public void delete(String id) {
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("Usuário não encontrado");
+            throw new RuntimeException("User not found");
         }
         userRepository.deleteById(id);
     }
 
     public void changePassword(String id, ChangePasswordDTO dto) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            .orElseThrow(() -> new RuntimeException("User not found"));
         
-        // Verificar senha atual
         if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
-            throw new RuntimeException("Senha atual incorreta");
+            throw new RuntimeException("Incorrect password");
         }
         
-        // Atualizar senha
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
     }
-
 }

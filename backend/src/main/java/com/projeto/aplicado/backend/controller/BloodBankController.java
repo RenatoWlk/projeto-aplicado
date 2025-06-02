@@ -1,6 +1,7 @@
 package com.projeto.aplicado.backend.controller;
 
 import com.projeto.aplicado.backend.dto.CampaignDTO;
+import com.projeto.aplicado.backend.dto.DonationScheduleDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankMapDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankRequestDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.BloodBankResponseDTO;
@@ -131,5 +132,11 @@ public class BloodBankController {
             }
         }
         return slots;
+    }
+
+    @PostMapping("/schedule")
+    public ResponseEntity<Void> scheduleDonation(@RequestBody DonationScheduleDTO scheduleDTO) {
+        bloodBankService.scheduleDonation(scheduleDTO);
+        return ResponseEntity.ok().build();
     }
 }

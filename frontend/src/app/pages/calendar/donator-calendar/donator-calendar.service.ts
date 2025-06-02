@@ -11,6 +11,11 @@ export interface BloodBank {
     availabilitySlots: any;
 }
 
+export interface DonationDate {
+    id: string;
+    date: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -24,8 +29,8 @@ export class DonationService {
         return this.http.get<BloodBank[]>(`${this.API}/available-slots`);
     }
 
-    scheduleDonation(date: Date): Observable<any> {
-        return this.http.post(`${this.API}/donate`, date);
+    scheduleDonation(appointment: DonationDate): Observable<any> {
+        return this.http.post(`${this.API}/schedule`, appointment);
     }
 
     getSlotsByBloodBankId(): Observable<DonationSlots[]> {

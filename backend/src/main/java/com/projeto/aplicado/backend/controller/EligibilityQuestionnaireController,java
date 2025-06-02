@@ -1,0 +1,29 @@
+package com.projeto.aplicado.backend.controller;
+
+import com.projeto.aplicado.backend.dto.EligibilityQuestionnaireDTO;
+import com.projeto.aplicado.backend.model.EligibilityQuestionnaire;
+import com.projeto.aplicado.backend.service.EligibilityQuestionnaireService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/questionnaire")
+@CrossOrigin(origins = "*")
+public class EligibilityQuestionnaireController {
+
+    @Autowired
+    private EligibilityQuestionnaireService service;
+
+    @PostMapping
+    public EligibilityQuestionnaire submitQuestionnaire(
+        @RequestBody EligibilityQuestionnaireDTO dto) {
+        return service.saveQuestionnaire(userId, dto);
+    }
+
+    @GetMapping("/{userId}")
+    public List<EligibilityQuestionnaire> getUserQuestionnaires(@PathVariable String userId) {
+        return service.getAllByUser(userId);
+    }
+}

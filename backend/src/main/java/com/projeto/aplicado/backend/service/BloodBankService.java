@@ -2,21 +2,22 @@ package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
 import com.projeto.aplicado.backend.dto.CampaignDTO;
+import com.projeto.aplicado.backend.dto.DonationScheduleDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.*;
 import com.projeto.aplicado.backend.model.Campaign;
+import com.projeto.aplicado.backend.model.DonationAppointment;
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.model.users.BloodBank;
 import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.model.AvailabilitySlot;
-import com.projeto.aplicado.backend.model.users.UserBase;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
+import com.projeto.aplicado.backend.repository.DonationAppointmentRepository;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Normalizer;
 import java.util.*;
@@ -29,13 +30,13 @@ public class BloodBankService {
     private final UserRepository userRepository;
     private final GeolocationService geolocationService;
     private final PasswordEncoder passwordEncoder;
+    private final DonationAppointmentRepository donationAppointmentRepository;
 
     /**
-     * Creates a new blood bank based on the provided request data. <br>
-     * Initializes default values for campaigns, total donations, blood bags, and donation history.
+     * Creates a new blood bank with default values and saves it to the database.
      *
-     * @param dto the data transfer object containing blood bank creation data
-     * @return the created blood bank as a response DTO
+     * @param dto the blood bank request data
+     * @return a DTO with the created blood bank information
      */
     public BloodBankResponseDTO create(BloodBankRequestDTO dto) {
         BloodBank bloodBank = new BloodBank();
@@ -171,7 +172,7 @@ public class BloodBankService {
         final double MAX_DISTANCE_KM = 80.0;
 
         return bloodBankRepository.findAllBloodBanks().stream().map(bloodBank -> {
-            BloodBankNearbyDTO dto = toNearbyDTO(bloodBank, 0.0);
+            BloodBankNearbyDTO dto = toNearbyDTO(bloodBank);
 
             try {
                 if (bloodBank.getAddress() != null) {
@@ -200,6 +201,15 @@ public class BloodBankService {
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
+    /**
+     * Calculates the distance between two geographic coordinates using the Haversine formula.
+     *
+     * @param lat1 latitude of the first point
+     * @param lon1 longitude of the first point
+     * @param lat2 latitude of the second point
+     * @param lon2 longitude of the second point
+     * @return the distance in kilometers
+     */
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int EARTH_RADIUS_KM = 6371;
 
@@ -238,6 +248,12 @@ public class BloodBankService {
         return dto;
     }
 
+    /**
+     * Converts a BloodBank entity to a map-specific DTO (with geolocation info).
+     *
+     * @param bloodBank the blood bank entity
+     * @return the map DTO
+     */
     private BloodBankMapDTO toMapDTO(BloodBank bloodBank) {
         BloodBankMapDTO dto = new BloodBankMapDTO();
         dto.setName(bloodBank.getName());
@@ -284,14 +300,26 @@ public class BloodBankService {
         return dtoList;
     }
 
-    private BloodBankNearbyDTO toNearbyDTO(BloodBank bloodBank, Double distance) {
+    /**
+     * Converts a BloodBank entity to a DTO with distance field.
+     *
+     * @param bloodBank the blood bank entity
+     * @return the nearby DTO
+     */
+    private BloodBankNearbyDTO toNearbyDTO(BloodBank bloodBank) {
         BloodBankNearbyDTO dto = new BloodBankNearbyDTO();
         dto.setName(bloodBank.getName());
         dto.setAddress(bloodBank.getAddress());
         dto.setPhone(bloodBank.getPhone());
-        dto.setDistance(distance);
         return dto;
     }
+
+    /**
+     * Adds an availability slot to a blood bank.
+     *
+     * @param dto the DTO with the availability slot data
+     * @throws RuntimeException if the blood bank is not found
+     */
     public void addAvailabilitySlots(BloodBankAvailabilityDTO dto) {
         BloodBank bloodBank = bloodBankRepository.findBloodBankById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("Banco de sangue não encontrado"));
@@ -306,14 +334,65 @@ public class BloodBankService {
         bloodBankRepository.save(bloodBank);
     }
 
+    /**
+     * Schedules a donation appointment for a user at a blood bank.
+     *
+     * @param dto the donation scheduling request DTO
+     * @throws RuntimeException if user or blood bank is not found
+     */
+    @Transactional
+    public void scheduleDonation(DonationScheduleDTO dto) {
+        DonationAppointment appointment = new DonationAppointment();
+        appointment.setUserId(dto.getUserId());
+        appointment.setBloodBankId(dto.getBloodBankId());
+        appointment.setDateTime(dto.getDateTime());
+        donationAppointmentRepository.save(appointment);
+
+        Optional<User> optionalUser = userRepository.findById(dto.getUserId());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setLastDonationDate(dto.getDateTime().toLocalDate());
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Usuário não encotnrado");
+        }
+
+        Optional<BloodBank> optionalBloodBank = bloodBankRepository.findById(dto.getBloodBankId());
+        if (optionalBloodBank.isPresent()) {
+            BloodBank bank = optionalBloodBank.get();
+
+            bank.setScheduledDonations(bank.getScheduledDonations() + 1);
+
+            bloodBankRepository.save(bank);
+        } else {
+            throw new RuntimeException("Banco de sangue não encotrnado");
+        }
+
+    }
+
+    /**
+     * Finds all blood banks with availability slots.
+     *
+     * @return list of blood banks with available slots
+     */
     public List<BloodBank> findBloodBanksWithAvailableSlots() {
         return bloodBankRepository.findByAvailabilitySlotsNotNull();
     }
 
+    /**
+     * Finds all blood banks with available dates only.
+     *
+     * @return list of blood banks with available dates
+     */
     public List<BloodBank> findAvailableDates() {
         return bloodBankRepository.findAvailableDatesOnly();
     }
 
+    /**
+     * Finds all blood banks with available hours only.
+     *
+     * @return list of blood banks with available time slots
+     */
     public List<BloodBank> findAvailableHours() {
         return bloodBankRepository.findAvailableHoursOnly();
     }
