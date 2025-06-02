@@ -7,6 +7,7 @@ import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
 import com.projeto.aplicado.backend.dto.user.UserResponseDTO;
 import com.projeto.aplicado.backend.model.users.User;
+import com.projeto.aplicado.backend.model.Address;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -141,6 +142,19 @@ public class UserService {
         return dto;
     }
 
+    private void mapDtoToEntity(UserRequestDTO dto, User user) {
+    if (dto.getName() != null) user.setName(dto.getName());
+    if (dto.getEmail() != null) user.setEmail(dto.getEmail());
+    if (dto.getPhone() != null) user.setPhone(dto.getPhone());
+    if (dto.getGender() != null) user.setGender(dto.getGender());
+
+    if (dto.getAddress() != null) {
+        if (user.getAddress() == null) user.setAddress(new Address());
+        Address address = user.getAddress();
+        if (dto.getAddress().getStreet() != null) address.setStreet(dto.getAddress().getStreet());
+    }
+}
+
     private UserStatsDTO toStatsDTO(User user) {
         UserStatsDTO dto = new UserStatsDTO();
         dto.setTimesDonated(user.getTimesDonated());
@@ -182,6 +196,7 @@ public class UserService {
      */
 
      public UserResponseDTO update(String id, UserRequestDTO dto) {
+        System.out.println("Recebido no update: " + dto);
         User user = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         
@@ -191,7 +206,7 @@ public class UserService {
             throw new RuntimeException("Email já cadastrado");
         }
         
-        toResponseDTO(user);
+        mapDtoToEntity(dto,user);
         
         User updatedUser = userRepository.save(user);
         return toResponseDTO(updatedUser);

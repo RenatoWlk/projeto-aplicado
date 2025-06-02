@@ -4,7 +4,9 @@ import { CommonModule } from '@angular/common';
 import { User, UserAccountService } from './user-account.service';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Achievement } from '../../dashboard/dashboard.service';
+import { Achievement, DashboardService, UserStats } from '../../dashboard/dashboard.service';
+import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-user-account',
@@ -22,14 +24,18 @@ export class UserAccountComponent implements OnInit {
   error: string | null = null;
   successMessage: string | null = null;
 
+  userStats: UserStats = {} as any;
+  private userId: string = '';
   editProfileMode = false;
   changePasswordMode = false;
   showAchievements = false;
   showQuestionnaires = false;
+  loadingStatsAndAchievements: boolean = false;
+
 
   genderOptions = [
-    { value: 'male', label: 'Masculino' },
-    { value: 'female', label: 'Feminino' },
+    { value: 'Masculino', label: 'Masculino' },
+    { value: 'Feminino', label: 'Feminino' },
     { value: 'other', label: 'Outro' },
   ];
 
@@ -41,13 +47,18 @@ export class UserAccountComponent implements OnInit {
 
   constructor(
     private userService: UserAccountService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private dashboardService: DashboardService  
   ) {}
 
   ngOnInit(): void {
+    this.userId = this.authService.getCurrentUserId();
     this.loadUser();
     this.initForms();
+    this.getUserStats();
   }
+
 
   private loadUser(): void {
     this.isLoading = true;
@@ -69,9 +80,9 @@ export class UserAccountComponent implements OnInit {
       name: ['', Validators.required],
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       address: [''],
-      phone: [''],
-      cpf: [''],
-      gender: [''],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{11,}$/)]],
+      cpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+      gender: ['', Validators.required],
     });
 
     this.passwordForm = this.fb.group({
@@ -87,7 +98,7 @@ export class UserAccountComponent implements OnInit {
     this.profileForm.patchValue({
       name: this.user.name,
       email: this.user.email,
-      address: this.user.address?.street || '',
+      address: this.user.address?.street ||'',
       phone: this.user.phone,
       cpf: this.user.cpf,
       gender: this.user.gender,
@@ -243,14 +254,59 @@ export class UserAccountComponent implements OnInit {
   }
 
   getFieldError(form: FormGroup, field: string): string | null {
-    const control = form.get(field);
-    if (!control || !control.errors) return null;
+      const control = form.get(field);
+      if (!control || !control.touched || !control.errors) return null;
 
-    if (control.errors['required']) return 'This field is required';
-    if (control.errors['email']) return 'Invalid email format';
-    if (control.errors['minlength']) return `Minimum length is ${control.errors['minlength'].requiredLength}`;
-    if (field === 'confirmPassword' && this.passwordForm.errors?.['mismatch']) return 'Passwords do not match';
+      if (control.errors['required']) return 'Campo obrigatório';
+      if (control.errors['minlength']) return `Mínimo de ${control.errors['minlength'].requiredLength} caracteres`;
+      if (control.errors['email']) return 'Email inválido';
+      if (control.errors['pattern']) {
+      if (field === 'cpf') return 'CPF deve conter exatamente 11 números';
+      if (field === 'phone') return 'Celular deve conter ao menos 11 números';
+    }
 
-    return null;
+  return 'Campo inválido';
   }
+
+   public getUserStats(): void {
+    this.dashboardService.getUserStats(this.userId).subscribe((stats: UserStats) => {
+      stats.achievements = this.sortAchievementsByRarity(stats.achievements);
+      stats.timeUntilNextDonation = this.getReadableTimeUntilNextDonation(stats.timeUntilNextDonation);
+      this.userStats = stats;
+      this.loadingStatsAndAchievements = false;
+    });
+  }
+
+   private sortAchievementsByRarity(achievements: any[]): any[] {
+    const order: { [key: string]: number } = {
+      comum: 1,
+      raro: 2,
+      épico: 3,
+      lendário: 4,
+      mítico: 5
+    };
+
+    return achievements.sort((a, b) => order[a.rarity.toLowerCase()] - order[b.rarity.toLowerCase()]);
+  }
+
+  /**
+   * Returns a human-readable string for the time until the next donation.
+   * 
+   * @param secondsString - The time in seconds until the next donation.
+   * @returns A string representing the time in a human-readable format.
+   */
+  getReadableTimeUntilNextDonation(secondsString: string): string {
+    const seconds = parseInt(secondsString);
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    const parts: string[] = [];
+    if (days > 0) parts.push(`${days}d`);
+    if (hours > 0) parts.push(`${hours}h`);
+    if (minutes > 0) parts.push(`${minutes}min`);
+
+    return parts.length > 0 ? parts.join(' ') : 'Já pode doar';
+  }
+
 }

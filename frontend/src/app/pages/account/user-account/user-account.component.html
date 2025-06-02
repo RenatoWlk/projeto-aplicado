@@ -308,13 +308,20 @@
     <h2 class="app-card-title">Minhas Conquistas</h2>
   </div>
   
-  <div *ngIf="hasAchievements; else noAchievements" class="badges-list">
-    <div class="badge" *ngFor="let badge of userAchievements">
-      <img [src]="badge.imageUrl" [alt]="badge.title" />
-      <span class="badge-title">{{ badge.title }}</span>
-      <span class="badge-desc">{{ badge.description }}</span>
-      <span class="badge-points">{{ badge.points }} pontos</span>
-      <span class="badge-rarity" [ngClass]="'rarity-' + badge.rarity">{{ badge.rarity }}</span>
+  <div class="badges-list">
+    <div class="achievements-grid" *ngIf="!loadingStatsAndAchievements">
+      <div
+        *ngFor="let achievement of userStats.achievements"
+        class="achievement-square-card tooltip-container"
+        [ngClass]="achievement.rarity.toLowerCase()"
+      >
+        <i class="fas achievement-icon" [ngClass]="achievement.imageUrl"></i>
+        <div class="achievement-info">
+          <span class="achievement-title">{{ achievement.title }}</span>
+          <span class="achievement-points">+{{ achievement.points }} pts</span>
+        </div>
+        <div class="tooltip">{{ achievement.description }}</div>
+      </div>
     </div>
   </div>
 

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
-import { CommonModule } from '@angular/common'; 
+import { QuestionnaireService, QuestionnaireData } from './questionnaire.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-questionnaire',
@@ -13,6 +15,9 @@ export class QuestionnaireComponent {
   form: FormGroup;
   resultado: string = '';
   perguntasInvalidas: string[] = [];
+  submitted = false;
+  sucessoPreenchimento = false;
+
   perguntasLabels: { [key: string]: string } = {
     idade: 'Idade entre 16 e 69 anos',
     sexo: 'Sexo',
@@ -34,32 +39,60 @@ export class QuestionnaireComponent {
     vacinaFebre: 'Tomou vacina febre amarela nos últimos 30 dias',
     viagemRisco: 'Viajou para área de risco de malária'
   };
-  submitted = false;
-  sucessoPreenchimento = false;
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      sexo: ['', Validators.required],
-      idade: ['', Validators.required],
-      doacaoAntesDos60: ['', Validators.required],
-      peso: ['', Validators.required],
-      saudavel: ['', Validators.required],
-      gravida: ['', Validators.required],
-      partoRecente: ['', Validators.required],
-      sintomas: ['', Validators.required],
-      doencas: ['', Validators.required],
-      medicamentos: ['', Validators.required],
-      procedimentos: ['', Validators.required],
-      drogas: ['', Validators.required],
-      parceiros: ['', Validators.required],
-      tatuagem: ['', Validators.required],
-      homemUltimaDoacao: ['', Validators.required],
-      mulherUltimaDoacao: ['', Validators.required],
-      vacinaCovid: ['', Validators.required],
-      vacinaFebre: ['', Validators.required],
-      viagemRisco: ['', Validators.required]
-    });
-  }
+constructor(
+  private fb: FormBuilder,
+  private questionnaireService: QuestionnaireService,
+  private authService: AuthService
+) {
+  this.form = this.fb.group({
+    sexo: ['', Validators.required],
+    idade: ['', Validators.required],
+    doacaoAntesDos60: ['', Validators.required],
+    peso: ['', Validators.required],
+    saudavel: ['', Validators.required],
+    gravida: [''],
+    partoRecente: [''],
+    sintomas: ['', Validators.required],
+    doencas: ['', Validators.required],
+    medicamentos: ['', Validators.required],
+    procedimentos: ['', Validators.required],
+    drogas: ['', Validators.required],
+    parceiros: ['', Validators.required],
+    tatuagem: ['', Validators.required],
+    homemUltimaDoacao: [''],
+    mulherUltimaDoacao: [''],
+    vacinaCovid: ['', Validators.required],
+    vacinaFebre: ['', Validators.required],
+    viagemRisco: ['', Validators.required]
+  });
+
+  this.form.get('sexo')?.valueChanges.subscribe(sexo => {
+    if (sexo === 'masculino') {
+      this.form.get('homemUltimaDoacao')?.setValidators(Validators.required);
+      this.form.get('mulherUltimaDoacao')?.clearValidators();
+      this.form.get('gravida')?.clearValidators();
+      this.form.get('partoRecente')?.clearValidators();
+    } else if (sexo === 'feminino') {
+      this.form.get('mulherUltimaDoacao')?.setValidators(Validators.required);
+      this.form.get('gravida')?.setValidators(Validators.required);
+      this.form.get('partoRecente')?.setValidators(Validators.required);
+      this.form.get('homemUltimaDoacao')?.clearValidators();
+    } else {
+      this.form.get('homemUltimaDoacao')?.clearValidators();
+      this.form.get('mulherUltimaDoacao')?.clearValidators();
+      this.form.get('gravida')?.clearValidators();
+      this.form.get('partoRecente')?.clearValidators();
+    }
+
+    // Atualiza os estados dos campos para refletir mudanças nos validadores
+    this.form.get('homemUltimaDoacao')?.updateValueAndValidity();
+    this.form.get('mulherUltimaDoacao')?.updateValueAndValidity();
+    this.form.get('gravida')?.updateValueAndValidity();
+    this.form.get('partoRecente')?.updateValueAndValidity();
+  });
+}
+
 
   onSubmit() {
     this.submitted = true;
@@ -70,7 +103,7 @@ export class QuestionnaireComponent {
     const simInvalida = [
       'gravida', 'partoRecente', 'sintomas', 'doencas',
       'medicamentos', 'procedimentos', 'drogas', 'parceiros', 'tatuagem',
-      'vacinaCovid', 'vacinaFebre', 'viagemRisco', 'homemUltimaDoacao', 
+      'vacinaCovid', 'vacinaFebre', 'viagemRisco', 'homemUltimaDoacao',
       'mulherUltimaDoacao'
     ];
 
@@ -93,7 +126,7 @@ export class QuestionnaireComponent {
     }
 
     const naoRespondidas = camposRelevantes.filter(
-      key => !this.form.get(key)?.value
+      key => this.form.get(key)?.value === '' || this.form.get(key)?.value === null
     );
 
     if (naoRespondidas.length > 0) {
@@ -114,10 +147,17 @@ export class QuestionnaireComponent {
       }
     }
 
-    if (this.perguntasInvalidas.length === 0) {
-      this.resultado = 'Parabéns! Você está apto(a) para doar sangue. Procure o hemocentro mais próximo.';
-    } else {
-      this.resultado = 'Você está temporariamente ou definitivamente inapto(a) para doar sangue devido às seguintes respostas:';
+    const isEligible = this.perguntasInvalidas.length === 0;
+    this.resultado = isEligible
+      ? 'Parabéns! Você está apto(a) para doar sangue. Procure o hemocentro mais próximo.'
+      : 'Você não está elegível para doar sangue neste momento. Veja abaixo os critérios não atendidos:';
+
+    if (this.sucessoPreenchimento) {
+      const data: QuestionnaireData = this.form.value;
+      this.questionnaireService.submitQuestionnaire(data).subscribe({
+        next: () => console.log('Respostas enviadas com sucesso.'),
+        error: (err) => console.error('Erro ao enviar respostas:', err)
+      });
     }
   }
 
@@ -125,7 +165,7 @@ export class QuestionnaireComponent {
     this.form.reset();
     this.submitted = false;
     this.sucessoPreenchimento = false;
-    this.resultado = '';
     this.perguntasInvalidas = [];
+    this.resultado = '';
   }
 }
