@@ -29,6 +29,13 @@ public class UserController {
         return ResponseEntity.ok(userService.create(dto));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> updateUser(
+            @PathVariable String id,
+            @RequestBody UserRequestDTO dto) {
+        return ResponseEntity.ok(userService.update(id, dto));
+    }
+
     /**
      * Gets all users.
      * 
