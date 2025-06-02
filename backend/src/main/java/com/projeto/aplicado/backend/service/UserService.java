@@ -26,6 +26,7 @@ public class UserService {
     private final AchievementService achievementService;
     private final EmailService emailService;
     private final GeolocationService geolocationService;
+    private final PasswordEncoder passwordEncoder;
 
     // Diretório para upload de fotos
     private static final String UPLOAD_DIR = "uploads/users/";

@@ -5,7 +5,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { CustomHeaderComponent } from '../custom-header/custom-header.component';
 import { CommonModule } from '@angular/common';
 import { CalendarStats } from '../calendar.service';
-import { BloodBank, DonationService } from './donator-calendar.service';
+import { BloodBank, DonationDate, DonationService } from './donator-calendar.service';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -14,8 +14,6 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatInputModule } from '@angular/material/input';
 import { DonationSlots } from '../bloodbank-calendar/bloodbank-calendar.service';
 import { DatasetController } from 'chart.js';
-
-
 
 @Component({
   selector: 'app-donator-calendar',
@@ -45,6 +43,7 @@ export class DonatorCalendarComponent implements OnInit{
   form = new FormGroup({
     availableBloodBanks: new FormControl('', Validators.required),
     donationTime: new FormControl('', Validators.required),
+    selectedDate: new FormControl('', Validators.required),
   })
 
   availableDonationHours: string[] = [];
@@ -57,6 +56,9 @@ export class DonatorCalendarComponent implements OnInit{
   ) {}
 
   setSelectedDate(date: Date) {
+    if (!date) {
+      this.availableDonationHours = [];
+    }
     this.selected = date;
     this.calendarStats.nextDonationDate = date;
     this.calendarStats.daysUntilNextDonation = this.timeUntinNextDonationCalculator(date);
@@ -111,7 +113,6 @@ export class DonatorCalendarComponent implements OnInit{
     return slots;
   }
 
-
   loadAvailableHoursForDate(date: Date): void {
     this.donationService.getAvailableDonationHours().subscribe({
       next: (ranges) => {
@@ -120,46 +121,41 @@ export class DonatorCalendarComponent implements OnInit{
           return;
         }
 
-        let allSlots: string[] = [];
-
         for (const range of ranges) {
-          const slots = this.generateTimeSlots(range.startTime, range.endTime);
-          allSlots = allSlots.concat(slots);
-          console.log(allSlots);
+          this.availableDonationHours = this.generateTimeSlots(range.startTime, range.endTime);
         }
-
-        this.availableDonationHours = allSlots;
-        console.log('availableDonationHoiurs', this.availableDonationHours);
       },
       error: () => {
-        // Exibir erro, se necessário
         this.availableDonationHours = [];
       }
     });
-    console.log(this.availableDonationHours);
   }
 
-
   scheduleDonation() {
-    if (!this.selected) return;
+    const selectedDate = this.form.get('selectedDate')?.value;
+    const selectedHour = this.form.get('donationTime')?.value;
 
-    const userId = this.authService.getCurrentUserId();
-    if (!userId) {
-      //Banner de erro
+    if (!selectedDate || !selectedHour)  {
+      console.log("primerio if");
+      console.log("data", selectedDate);
+      console.log("hora", selectedHour);
       return;
     }
 
-    this.donationService.scheduleDonation(this.selected)
-    .subscribe({
-      next: () => {
-        this.calendarStats.nextDonationDate = this.selected!;
-        this.calendarStats.daysUntilNextDonation = this.timeUntinNextDonationCalculator(this.selected!);
-        // Exibir banner de sucesso aqui
-      },
-      error: () => {
-        // Exibir banner de erro aqui
-      }
-    })
+    const [hour, minute] = selectedHour.split(':').map(Number);
+    const appointmentDate = new Date(selectedDate);
+    appointmentDate.setHours(hour, minute, 0, 0);
+
+    const appointment: DonationDate = {
+      id: this.authService.getCurrentUserId(),
+      date: appointmentDate.toISOString(),
+    };
+
+    this.donationService.scheduleDonation(appointment).subscribe({
+      next: () => console.log(appointment),
+      error: (err) => {console.error(err);}
+    });
+    console.log(appointment);
   }
 
   timeUntinNextDonationCalculator(next: Date): any {

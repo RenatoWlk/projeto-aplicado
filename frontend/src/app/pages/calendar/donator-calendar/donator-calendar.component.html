@@ -28,7 +28,7 @@
             </mat-form-field>
             <br>
             <label>Selecione um horário disponível: </label>
-            <mat-form-field *ngIf="availableDonationHours.length > 0">
+            <mat-form-field *ngIf="availableDonationHours">
             <mat-select formControlName="donationTime" placeholder="Selecione o horário">
                 <mat-option *ngFor="let hour of availableDonationHours" [value]="hour">
                 {{ hour }}
