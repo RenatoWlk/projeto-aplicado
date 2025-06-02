@@ -25,8 +25,11 @@ export class CalendarComponent {
 
   readonly roles = UserRole;
   userRole: UserRole | null = null;
+  id: string | null = null;
 
-  constructor(private authService : AuthService) {}
+  constructor(
+    private authService : AuthService,
+  ) {}
 
   ngOnInit() {
     this.userRole = this.authService.getCurrentUserRole();

@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder; 
     private final AchievementService achievementService;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;

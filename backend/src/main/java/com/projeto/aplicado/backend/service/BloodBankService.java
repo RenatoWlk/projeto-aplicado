@@ -8,10 +8,13 @@ import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.model.users.BloodBank;
 import com.projeto.aplicado.backend.model.users.User;
+import com.projeto.aplicado.backend.model.AvailabilitySlot;
+import com.projeto.aplicado.backend.model.users.UserBase;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -288,5 +291,30 @@ public class BloodBankService {
         dto.setPhone(bloodBank.getPhone());
         dto.setDistance(distance);
         return dto;
+    }
+    public void addAvailabilitySlots(BloodBankAvailabilityDTO dto) {
+        BloodBank bloodBank = bloodBankRepository.findBloodBankById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("Banco de sangue não encontrado"));
+
+        AvailabilitySlot slot = new AvailabilitySlot();
+        slot.setStartDate(dto.getStartDate());
+        slot.setEndDate(dto.getEndDate());
+        slot.setStartTime(dto.getStartTime());
+        slot.setEndTime(dto.getEndTime());
+
+        bloodBank.getAvailabilitySlots().add(slot);
+        bloodBankRepository.save(bloodBank);
+    }
+
+    public List<BloodBank> findBloodBanksWithAvailableSlots() {
+        return bloodBankRepository.findByAvailabilitySlotsNotNull();
+    }
+
+    public List<BloodBank> findAvailableDates() {
+        return bloodBankRepository.findAvailableDatesOnly();
+    }
+
+    public List<BloodBank> findAvailableHours() {
+        return bloodBankRepository.findAvailableHoursOnly();
     }
 }
