@@ -28,9 +28,9 @@ export class UserAccountComponent implements OnInit {
   showQuestionnaires = false;
 
   genderOptions = [
-    { value: 'male', label: 'Masculino' },
-    { value: 'female', label: 'Feminino' },
-    { value: 'other', label: 'Outro' },
+    { value: 'Masculino', label: 'Masculino' },
+    { value: 'Feminino', label: 'Feminino' },
+    { value: 'Outro', label: 'Outro' },
   ];
 
   userAchievements: Achievement[] = [];

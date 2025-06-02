@@ -12,8 +12,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { RegisterService } from '../../pages/register/register.service';
 
-
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -30,38 +28,47 @@ export class RegisterComponent {
 
   selectedOption: string = '';
 
-
   ngOnInit(): void {
     this.userForm = this.fb.group({
       userType: ['', Validators.required],
+
       credentials: this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmed_password: ['', [Validators.required, Validators.minLength(6)]],
       }),
+
+      /** USER */
       personalInfo: this.fb.group({
         name: ['', Validators.required],
         cpf: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
         gender: ['', Validators.required],
         bloodtype: ['', Validators.required],
+        telephone: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required],
+        street: ['', Validators.required],
+        zipcode: ['', Validators.required],
       }),
+
+      /** BLOOD BANK */
       bloodbankInfo: this.fb.group({ 
         instituitonName: ['', Validators.required],
         cnpj: ['', Validators.required],
         city: ['', Validators.required],
         state: ['', Validators.required],
         street: ['', Validators.required],
-        neighborhood: ['', Validators.required],
         zipcode: ['', Validators.required],
         telephone: ['', Validators.required],
       }),
+
+      /** PARTNER */
       partnerInfo: this.fb.group({ 
         partnerName: ['', Validators.required],
         cnpj: ['', Validators.required],
         city: ['', Validators.required],
         state: ['', Validators.required],
         street: ['', Validators.required],
-        neighborhood: ['', Validators.required],
         zipcode: ['', Validators.required],
         telephone: ['', Validators.required],
       }),
@@ -72,14 +79,17 @@ export class RegisterComponent {
     return this.userForm.get('credentials') as FormGroup;
   }
 
+  /** USER */
   get personalInfoGroup() {
     return this.userForm.get('personalInfo') as FormGroup;
   }
 
+  /** BLOOD BANK */
   get bloodbankInfoFormGroup() {
     return this.userForm.get('bloodbankInfo') as FormGroup;
   }
   
+  /** PARTNER */
   get partnerInfoFormGroup() {
     return this.userForm.get('partnerInfo') as FormGroup;
   }
@@ -89,7 +99,7 @@ export class RegisterComponent {
     const password = this.credentialsGroup.get('password')?.value;
 
     /**
-     * DONATOR 
+     * USER
      */
     if (this.selectedOption === 'donator') {
       const payload = {
@@ -100,6 +110,12 @@ export class RegisterComponent {
         gender: this.personalInfoGroup.get('gender')?.value,
         bloodType: this.personalInfoGroup.get('bloodtype')?.value,
         phone: this.personalInfoGroup.get('telephone')?.value,
+        address: {
+          city: this.personalInfoGroup.get('city')?.value,
+          state: this.personalInfoGroup.get('state')?.value,
+          street: this.personalInfoGroup.get('street')?.value,
+          zipCode: this.personalInfoGroup.get('zipcode')?.value,
+        },
       };
 
       this.registerService.registerDonator(payload).subscribe({
@@ -126,7 +142,6 @@ export class RegisterComponent {
           city: this.bloodbankInfoFormGroup.get('city')?.value,
           state: this.bloodbankInfoFormGroup.get('state')?.value,
           street: this.bloodbankInfoFormGroup.get('street')?.value,
-          neighborhood: this.bloodbankInfoFormGroup.get('neighborhood')?.value,
           zipCode: this.bloodbankInfoFormGroup.get('zipcode')?.value,
         },
         campaigns: [],
@@ -157,7 +172,6 @@ export class RegisterComponent {
           city: this.partnerInfoFormGroup.get('city')?.value,
           state: this.partnerInfoFormGroup.get('state')?.value,
           street: this.partnerInfoFormGroup.get('street')?.value,
-          neighborhood: this.partnerInfoFormGroup.get('neighborhood')?.value,
           zipCode: this.partnerInfoFormGroup.get('zipcode')?.value
         },
         offers: [],
