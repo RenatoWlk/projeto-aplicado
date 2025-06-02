@@ -45,7 +45,7 @@
       <div class="account-info">
         <p><strong>Nome:</strong> {{ partnerUser?.name }}</p>
         <p><strong>Email:</strong> {{ partnerUser?.email }}</p>
-        <p><strong>Endereço:</strong> {{ partnerUser?.address }}</p>
+        <p><strong>Endereço:</strong> {{ partnerUser?.address?.street }} - {{ partnerUser?.address?.city }}-{{ partnerUser?.address?.state}}</p>
         <p><strong>Telefone:</strong> {{ partnerUser?.phone }}</p>
         <p><strong>CNPJ:</strong> {{ partnerUser?.cnpj }}</p>
 
@@ -250,7 +250,7 @@
       <input type="text" 
               formControlName="address"
               placeholder="Endereço completo da empresa"
-              [class.invalid]="isFieldInvalid(profileForm, 'address')" />
+              [class.invalid]="isFieldInvalid(profileForm, 'address.street')" />
       <div *ngIf="getFieldError(profileForm, 'address')" class="error-text">
         {{ getFieldError(profileForm, 'address') }}
       </div>

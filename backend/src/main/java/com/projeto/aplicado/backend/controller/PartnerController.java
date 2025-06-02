@@ -46,4 +46,11 @@ public class PartnerController {
     public ResponseEntity<PartnerResponseDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(partnerService.findById(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PartnerResponseDTO> updatePartner(
+            @PathVariable String id,
+            @RequestBody PartnerRequestDTO dto) {
+        return ResponseEntity.ok(partnerService.update(id, dto));
+    }
 }
