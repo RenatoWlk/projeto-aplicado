@@ -397,7 +397,31 @@ public class BloodBankService {
         return bloodBankRepository.findAvailableHoursOnly();
     }
 
+<<<<<<< HEAD
     public BloodBank findEntityById(String id) {
         return bloodBankRepository.findById(id).orElse(null);
     }
 }
+=======
+    /**
+     * Updates an existing blood bank's information.
+     *
+     * @param id  the ID of the blood bank to update
+     * @param dto the DTO containing the updated information
+     * @return the updated blood bank response DTO
+     */
+    public BloodBankResponseDTO update(String id, BloodBankRequestDTO dto) {
+        BloodBank bloodBank = bloodBankRepository.findBloodBankById(id)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+
+        bloodBank.setName(dto.getName());
+        bloodBank.setEmail(dto.getEmail());
+        bloodBank.setAddress(dto.getAddress());
+        bloodBank.setPhone(dto.getPhone());
+        bloodBank.setCnpj(dto.getCnpj());
+
+        bloodBank = bloodBankRepository.save(bloodBank);
+        return toResponseDTO(bloodBank);
+        }
+    }
+>>>>>>> 507bdf98e37c234fc7b25dc02ecb99242960368b

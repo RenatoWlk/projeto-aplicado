@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
   nearbyBloodbanks: Bloodbank[] = [];
   userStats: UserStats = {} as any;
   isOfferModalOpen: boolean = false;
+  totalLitersDonated: string = "";
 
   // Preloaders
   loadingPosts: boolean = true;
@@ -125,6 +126,7 @@ export class DashboardComponent implements OnInit {
       stats.achievements = this.sortAchievementsByRarity(stats.achievements);
       stats.potentialLivesSaved = this.calculatePotentialLivesSaved(stats.timesDonated);
       stats.timeUntilNextDonation = this.getReadableTimeUntilNextDonation(stats.timeUntilNextDonation);
+      this.totalLitersDonated = this.calculateLitersDonated(stats.timesDonated);
       this.userStats = stats;
       this.loadingStatsAndAchievements = false;
     });
@@ -177,6 +179,12 @@ export class DashboardComponent implements OnInit {
 
     return achievements.sort((a, b) => order[a.rarity.toLowerCase()] - order[b.rarity.toLowerCase()]);
   }
+
+  calculateLitersDonated(donations: number): string {
+    const LITERS_PER_DONATION = 0.45;
+    return +(donations * LITERS_PER_DONATION).toFixed(2).toString() + " Litros";
+  }
+
 
   createNewOffer(data: any): void {
     this.isOfferModalOpen = false;

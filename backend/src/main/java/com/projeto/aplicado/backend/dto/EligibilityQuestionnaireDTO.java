@@ -2,8 +2,9 @@ package com.projeto.aplicado.backend.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-@Getter @Setter
+@Getter @Setter @ToString
 public class EligibilityQuestionnaireDTO {
     private String userId;
     private String gender;
@@ -18,13 +19,13 @@ public class EligibilityQuestionnaireDTO {
     private String medications;
     private String procedures;
     private String drugs;
-    private String sexualPartners;
-    private String tattoo;
+    private String Partners;
+    private String tattooOrPiercing;
     private String lastDonationMale;
     private String lastDonationFemale;
     private String covidVaccine;
     private String yellowFeverVaccine;
-    private String riskTravel;
+    private String travelRiskArea;
     private boolean isEligible;
     private String resultMessage;
 }

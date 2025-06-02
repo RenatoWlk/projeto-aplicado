@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { Address } from '../../dashboard/dashboard.service';
 
 export interface Campaign {
   id?: string;
@@ -17,7 +18,7 @@ export interface BloodBank {
   email: string;
   phone: string;
   cnpj: string;
-  address?: string;
+  address?: Address;
   description?: string;
   website?: string;
   photoUrl?: string;

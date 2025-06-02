@@ -46,51 +46,52 @@ constructor(
   private authService: AuthService
 ) {
   this.form = this.fb.group({
-    sexo: ['', Validators.required],
-    idade: ['', Validators.required],
-    doacaoAntesDos60: ['', Validators.required],
-    peso: ['', Validators.required],
-    saudavel: ['', Validators.required],
-    gravida: [''],
-    partoRecente: [''],
-    sintomas: ['', Validators.required],
-    doencas: ['', Validators.required],
-    medicamentos: ['', Validators.required],
-    procedimentos: ['', Validators.required],
-    drogas: ['', Validators.required],
-    parceiros: ['', Validators.required],
-    tatuagem: ['', Validators.required],
-    homemUltimaDoacao: [''],
-    mulherUltimaDoacao: [''],
-    vacinaCovid: ['', Validators.required],
-    vacinaFebre: ['', Validators.required],
-    viagemRisco: ['', Validators.required]
-  });
+  age: [null, [Validators.required]],
+  gender: [null, Validators.required],
+  donationBefore60: [null, Validators.required],
+  weight: [null, [Validators.required]],
+  healthy: [null, Validators.required],
+  pregnant: [null],
+  recentChildbirth: [null],
+  symptoms: [null, Validators.required],
+  diseases: [null, Validators.required],
+  medications: [null, Validators.required],
+  procedures: [null, Validators.required],
+  drugs: [null, Validators.required],
+  partners: [null, Validators.required],
+  tattooOrPiercing: [null, Validators.required],
+  lastDonationMale: [null],
+  lastDonationFemale: [null],
+  covidVaccine: [null, Validators.required],
+  yellowFeverVaccine: [null, Validators.required],
+  travelRiskArea: [null, Validators.required]
+});
 
-  this.form.get('sexo')?.valueChanges.subscribe(sexo => {
-    if (sexo === 'masculino') {
-      this.form.get('homemUltimaDoacao')?.setValidators(Validators.required);
-      this.form.get('mulherUltimaDoacao')?.clearValidators();
-      this.form.get('gravida')?.clearValidators();
-      this.form.get('partoRecente')?.clearValidators();
-    } else if (sexo === 'feminino') {
-      this.form.get('mulherUltimaDoacao')?.setValidators(Validators.required);
-      this.form.get('gravida')?.setValidators(Validators.required);
-      this.form.get('partoRecente')?.setValidators(Validators.required);
-      this.form.get('homemUltimaDoacao')?.clearValidators();
+
+  this.form.get('gender')?.valueChanges.subscribe(gender => {
+    if (gender === 'masculino') {
+      this.form.get('lastDonationMale')?.setValidators(Validators.required);
+      this.form.get('lastDonationFemale')?.clearValidators();
+      this.form.get('pregnant')?.clearValidators();
+      this.form.get('recentChildbirth')?.clearValidators();
+    } else if (gender === 'feminino') {
+      this.form.get('lastDonationFemale')?.setValidators(Validators.required);
+      this.form.get('pregnant')?.setValidators(Validators.required);
+      this.form.get('recentChildbirth')?.setValidators(Validators.required);
+      this.form.get('lastDonationMale')?.clearValidators();
     } else {
-      this.form.get('homemUltimaDoacao')?.clearValidators();
-      this.form.get('mulherUltimaDoacao')?.clearValidators();
-      this.form.get('gravida')?.clearValidators();
-      this.form.get('partoRecente')?.clearValidators();
+      this.form.get('lastDonationMale')?.clearValidators();
+      this.form.get('lastDonationFemale')?.clearValidators();
+      this.form.get('pregnant')?.clearValidators();
+      this.form.get('recentChildbirth')?.clearValidators();
     }
 
-    // Atualiza os estados dos campos para refletir mudanças nos validadores
-    this.form.get('homemUltimaDoacao')?.updateValueAndValidity();
-    this.form.get('mulherUltimaDoacao')?.updateValueAndValidity();
-    this.form.get('gravida')?.updateValueAndValidity();
-    this.form.get('partoRecente')?.updateValueAndValidity();
+    this.form.get('lastDonationMale')?.updateValueAndValidity();
+    this.form.get('lastDonationFemale')?.updateValueAndValidity();
+    this.form.get('pregnant')?.updateValueAndValidity();
+    this.form.get('recentChildbirth')?.updateValueAndValidity();
   });
+
 }
 
 
@@ -101,29 +102,31 @@ constructor(
     this.resultado = '';
 
     const simInvalida = [
-      'gravida', 'partoRecente', 'sintomas', 'doencas',
-      'medicamentos', 'procedimentos', 'drogas', 'parceiros', 'tatuagem',
-      'vacinaCovid', 'vacinaFebre', 'viagemRisco', 'homemUltimaDoacao',
-      'mulherUltimaDoacao'
+      'pregnant', 'recentChildbirth', 'symptoms', 'diseases',
+      'medications', 'procedures', 'drugs', 'partners', 'tattooOrPiercing',
+      'covidVaccine', 'yellowFeverVaccine', 'travelRiskArea',
+      'lastDonationMale', 'lastDonationFemale'
     ];
 
     const naoInvalida = [
-      'idade', 'doacaoAntesDos60', 'peso', 'saudavel'
+      'age', 'donationBefore60', 'weight', 'healthy'
     ];
 
-    const sexo = this.form.get('sexo')?.value;
+    const gender = this.form.get('gender')?.value;
     let camposRelevantes = [
-      'idade', 'sexo', 'doacaoAntesDos60', 'peso', 'saudavel',
-      'sintomas', 'doencas', 'medicamentos', 'procedimentos', 'drogas',
-      'parceiros', 'tatuagem', 'vacinaCovid', 'vacinaFebre', 'viagemRisco'
+      'age', 'gender', 'donationBefore60', 'weight', 'healthy',
+      'symptoms', 'diseases', 'medications', 'procedures', 'drugs',
+      'partners', 'tattooOrPiercing', 'covidVaccine',
+      'yellowFeverVaccine', 'travelRiskArea'
     ];
 
-    if (sexo === 'masculino') {
-      camposRelevantes.push('homemUltimaDoacao');
+    if (gender === 'masculino') {
+      camposRelevantes.push('lastDonationMale');
     }
-    if (sexo === 'feminino') {
-      camposRelevantes.push('gravida', 'partoRecente', 'mulherUltimaDoacao');
+    if (gender === 'feminino') {
+      camposRelevantes.push('pregnant', 'recentChildbirth', 'lastDonationFemale');
     }
+
 
     const naoRespondidas = camposRelevantes.filter(
       key => this.form.get(key)?.value === '' || this.form.get(key)?.value === null
@@ -154,6 +157,8 @@ constructor(
 
     if (this.sucessoPreenchimento) {
       const data: QuestionnaireData = this.form.value;
+      console.log('Dados do questionário:', data);
+      console.log('É elegible: ',isEligible);
       this.questionnaireService.submitQuestionnaire(data).subscribe({
         next: () => console.log('Respostas enviadas com sucesso.'),
         error: (err) => console.error('Erro ao enviar respostas:', err)

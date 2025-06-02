@@ -47,7 +47,7 @@
       <div class="account-info">
         <p><strong>Nome:</strong> {{ bloodBank?.name }}</p>
         <p><strong>Email:</strong> {{ bloodBank?.email }}</p>
-        <p><strong>Endereço:</strong> {{ bloodBank?.address }}</p>
+        <p><strong>Endereço:</strong> {{ bloodBank?.address?.street }} - {{ bloodBank?.address?.city }}-{{ bloodBank?.address?.state}}</p>
         <p><strong>Telefone:</strong> {{ bloodBank?.phone }}</p>
         <p><strong>CNPJ:</strong> {{ bloodBank?.cnpj }}</p>
         <p *ngIf="bloodBank?.description"><strong>Descrição:</strong> {{ bloodBank?.description }}</p>

@@ -5,28 +5,29 @@ import { AuthService } from '../../core/services/auth/auth.service';
 
 export interface QuestionnaireData {
   userId: string;
-  sexo: string;
-  idade: string;
-  doacaoAntesDos60: string;
-  peso: string;
-  saudavel: string;
-  gravida: string;
-  partoRecente: string;
-  sintomas: string;
-  doencas: string;
-  medicamentos: string;
-  procedimentos: string;
-  drogas: string;
-  parceiros: string;
-  tatuagem: string;
-  homemUltimaDoacao: string;
-  mulherUltimaDoacao: string;
-  vacinaCovid: string;
-  vacinaFebre: string;
-  viagemRisco: string;
+  gender: string;
+  age: string;
+  donationBefore60: string;
+  weight: string;
+  healthy: string;
+  pregnant?: string;
+  recentChildbirth?: string;
+  symptoms: string;
+  diseases: string;
+  medications: string;
+  procedures: string;
+  drugs: string;
+  partners: string;
+  tattooOrPiercing: string;
+  lastDonationMale?: string;
+  lastDonationFemale?: string;
+  covidVaccine: string;
+  yellowFeverVaccine: string;
+  travelRiskArea: string;
   isEligible: boolean;
   resultMessage: string;
 }
+
 
 
 @Injectable({
