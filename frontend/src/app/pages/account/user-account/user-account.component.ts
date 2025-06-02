@@ -36,7 +36,7 @@ export class UserAccountComponent implements OnInit {
   genderOptions = [
     { value: 'Masculino', label: 'Masculino' },
     { value: 'Feminino', label: 'Feminino' },
-    { value: 'other', label: 'Outro' },
+    { value: 'Outro', label: 'Outro' },
   ];
 
   userAchievements: Achievement[] = [];

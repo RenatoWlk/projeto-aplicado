@@ -3,20 +3,42 @@
     <div class="app-card">
         <div class="app-card-header">
             <i class="fa-solid fa-calendar-days app-card-icon"></i>
-            <h2 class="app-card-title">Agende sua doação!</h2>
+            <h2 class="app-card-title">Disponibilize datas para doação!</h2>
         </div>
       <div>
-        <mat-calendar 
-        [headerComponent]="customHeader"
-        [selected]="startDate"
-        (selectedChange)="selectDate($event)"
-        [dateClass]="dateClass"
-        ></mat-calendar>
-        <div class="date-wrapper">
-            <p>Início: {{ startDate | date: 'longDate' }}</p>
-            <p>Fim: {{ endDate | date: 'longDate'}}</p>
-          <button class="app-button" (click)="addAvailableSlots()">Disponibilizar datas para doação</button>
+        <label>Insira um intervalo de datas: </label>
+        <form [formGroup]="rangeForm">
+            <mat-form-field>
+            <mat-label>Insira um intervalo</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate formControlName="startDate" placeholder="Start date">
+                <input matEndDate formControlName="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker [calendarHeaderComponent]="customHeader"></mat-date-range-picker>
+            </mat-form-field>
+        <div class="time-selection">
+            <label>Insira o primeiro horário: </label>
+            <mat-form-field>
+                <mat-label>Pick a time</mat-label>
+                <input matInput [matTimepicker]="startTime" formControlName="startTime">
+                <mat-timepicker-toggle matIconSuffix [for]="startTime"/>
+                <mat-timepicker #startTime/>
+            </mat-form-field>
+            <br>
+            <label>Insira o ultimo horário: </label>
+            <mat-form-field>
+                <mat-label>Pick a time</mat-label>
+                <input matInput [matTimepicker]="endTime" formControlName="endTime">
+                <mat-timepicker-toggle matIconSuffix [for]="endTime"/>
+                <mat-timepicker #endTime/>
+            </mat-form-field>
         </div>
+        <div class="button-wrapper">
+            <button class="app-button" (click)="addAvailableSlots()">Disponibilizar</button>
+        </div>
+        </form>
+        
       </div>
     </div>
 

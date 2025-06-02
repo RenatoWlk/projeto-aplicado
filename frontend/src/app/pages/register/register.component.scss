@@ -15,13 +15,13 @@ body, html {
 
 .mat-stepper-horizontal {
     width: 100%;
-    height: 100%;
+    height: 100%; 
 }
 
 .stepper.app-card {
     display: flex;
     flex-direction: column;
-    height: 600px;
+    height: 700px;
     width: 1000px;
     max-height: 100%;
     max-width: 100%;
@@ -34,7 +34,7 @@ body, html {
 .custom-radio-group {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 80px;
   gap:1.5rem;
 }
 

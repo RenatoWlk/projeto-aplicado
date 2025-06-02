@@ -68,47 +68,72 @@
       <form [formGroup]="personalInfoGroup">
         <ng-template matStepLabel>Dados Pessoais</ng-template>
 
-        <mat-form-field appearance="outline" class="custom-form-field">
-          <mat-label class="input-label">Nome</mat-label>
-          <input matInput formControlName="name" required />
-        </mat-form-field>
+        <div class="form-grid">
+          <div class="column">
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Nome</mat-label>
+              <input matInput formControlName="name" required />
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="custom-form-field">
-          <mat-label class="input-label">CPF</mat-label>
-          <input matInput formControlName="cpf" required />
-          <mat-error *ngIf="personalInfoGroup.get('cpf')?.hasError('pattern')">
-            CPF deve conter 11 dígitos
-          </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">CPF</mat-label>
+              <input matInput formControlName="cpf" required />
+              <mat-error *ngIf="personalInfoGroup.get('cpf')?.hasError('pattern')">
+                CPF deve conter 11 dígitos
+              </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="custom-form-field">
-          <mat-label class="input-label">Gênero</mat-label>
-          <mat-select formControlName="gender" required>
-            <mat-option value="male">Masculino</mat-option>
-            <mat-option value="female">Feminino</mat-option>
-            <mat-option value="notInformed">Não informar</mat-option>
-          </mat-select>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Gênero</mat-label>
+              <mat-select formControlName="gender" required>
+                <mat-option value="Masculino">Masculino</mat-option>
+                <mat-option value="Feminino">Feminino</mat-option>
+                <mat-option value="Other">Não informar</mat-option>
+              </mat-select>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="custom-form-field select">
-          <mat-label class="input-label">Tipo sanguíneo</mat-label>
-          <mat-select formControlName="bloodtype" required>
-            <mat-option value="A+">A+</mat-option>
-            <mat-option value="A-">A-</mat-option>
-            <mat-option value="B+">B+</mat-option>
-            <mat-option value="B-">B-</mat-option>
-            <mat-option value="AB+">AB+</mat-option>
-            <mat-option value="AB-">AB-</mat-option>
-            <mat-option value="O+">O+</mat-option>
-            <mat-option value="O-">O-</mat-option>
-            <mat-option value="unknown">Não sei informar</mat-option>
-          </mat-select>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field select">
+              <mat-label class="input-label">Tipo sanguíneo</mat-label>
+              <mat-select formControlName="bloodtype" required>
+                <mat-option value="A+">A+</mat-option>
+                <mat-option value="A-">A-</mat-option>
+                <mat-option value="B+">B+</mat-option>
+                <mat-option value="B-">B-</mat-option>
+                <mat-option value="AB+">AB+</mat-option>
+                <mat-option value="AB-">AB-</mat-option>
+                <mat-option value="O+">O+</mat-option>
+                <mat-option value="O-">O-</mat-option>
+                <mat-option value="unknown">Não sei informar</mat-option>
+              </mat-select>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="custom-form-field">
-          <mat-label class="input-label">Telefone</mat-label>
-          <input matInput formControlName="telephone" required />
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Telefone</mat-label>
+              <input matInput formControlName="telephone" required />
+            </mat-form-field>
+          </div>
+          <div class="column">
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Cidade</mat-label>
+              <input matInput formControlName="city" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Estado</mat-label>
+              <input matInput formControlName="state" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">Rua</mat-label>
+              <input matInput formControlName="street" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-form-field">
+              <mat-label class="input-label">CEP</mat-label>
+              <input matInput formControlName="zipcode" required />
+            </mat-form-field>
+          </div>
+        </div>
 
         <div class="actions">
           <button mat-button matStepperPrevious class="app-button">Voltar</button>

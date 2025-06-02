@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,10 +24,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder; 
     private final AchievementService achievementService;
     private final EmailService emailService;
     private final GeolocationService geolocationService;
+    private final PasswordEncoder passwordEncoder;
 
     // Diretório para upload de fotos
     private static final String UPLOAD_DIR = "uploads/users/";
@@ -50,7 +51,7 @@ public class UserService {
         user.setBloodType(dto.getBloodType());
         user.setTimesDonated(0);
         user.setTimeUntilNextDonation(0);
-        user.setLastDonationDate(dto.getLastDonationDate());
+        user.setLastDonationDate(null);
         user.setUnlockedAchievements(List.of());
         user.setTotalPoints(0);
 

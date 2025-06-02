@@ -1,17 +1,27 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CustomHeaderComponent } from '../custom-header/custom-header.component';
 import { CalendarStats } from '../calendar.service';
-import { BloodbankService } from './bloodbank-calendar.service';
+import { BloodbankService, DonationSlots } from './bloodbank-calendar.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDateRangeInput } from '@angular/material/datepicker';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { provideNativeDateAdapter } from '@angular/material/core'; 
+import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-bloodbank-calendar',
-  imports: [MatDatepickerModule, MatCardModule, CommonModule, MatFormFieldModule],
+  imports: [MatDatepickerModule, MatCardModule, CommonModule, MatFormFieldModule, MatDateRangeInput, MatTimepickerModule, ReactiveFormsModule, MatInputModule,
+    MatFormFieldModule,
+  ],
   templateUrl: './bloodbank-calendar.component.html',
-  styleUrl: './bloodbank-calendar.component.scss'
+  styleUrl: './bloodbank-calendar.component.scss',
+  providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BloodbankCalendarComponent {
 
@@ -25,66 +35,42 @@ export class BloodbankCalendarComponent {
 
   }
 
-  startDate: Date | null = null;
-  endDate: Date | null = null;
+  rangeForm = new FormGroup({
+    startDate: new FormControl<Date>(new Date(), {nonNullable: true}),
+    endDate: new FormControl<Date>(new Date(), {nonNullable: true}),
+    startTime: new FormControl<string>('08:00', {nonNullable: true}),
+    endTime: new FormControl<string>('17:00', {nonNullable: true}),
+  });
+
 
   constructor(
     private bloodbankService: BloodbankService,
+    private authService: AuthService
   ) {}
-
-  dateClass = (date: Date) => {
-    if (this.isRangeStart(date)) return 'range-start';
-    if (this.isRangeEnd(date)) return 'range-end';
-    if (this.isInRange(date)) return 'range-between';
-    return '';
-  };
-
-
-  selectDate(date: Date | null) {
-    if (date == null) {
-      return
-    }
-    if (!this.startDate || (this.startDate && this.endDate)) {
-      this.startDate = date;
-      this.endDate = null;
-    } else if (date < this.startDate) {
-      this.endDate = this.startDate;
-      this.startDate = date;
-    } else {
-      this.endDate = date;
-    }
-  }
-
-  isInRange(date: Date):boolean {
-    if (!this.startDate || !this.endDate) return false;
-    return date > this.startDate && date < this.endDate;
-  }
-
-  isRangeStart(date: Date) {
-    return this.startDate?.toDateString() === date.toDateString();
-  }
-
-  isRangeEnd(date: Date) {
-    return this.endDate?.toDateString() === date.toDateString();
-  }
 
 
   addAvailableSlots() {
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setDate(startDate.getDate() + 7)
-  
-    const startHour = 8;
-    const endHour = 17;
+    const id = this.authService.getCurrentUserId();
+    console.log(`id: ${id}`);
 
-    this.bloodbankService.addAvailableSlots(startDate, endDate, startHour, endHour)
-    .subscribe({
-      next: () => {
-        // Sucesso
-      },
-      error: () => {
-        // Erro
-      },
-    });
+    if (!this.rangeForm.value.startDate || !this.rangeForm.value.endDate ||
+      !this.rangeForm.value.startTime || !this.rangeForm.value.endTime) {
+      //banner de erro
+      return;
+    }
+
+    const slot: DonationSlots = {
+      id: id,
+      startDate: this.rangeForm.controls.startDate.value,
+      endDate: this.rangeForm.controls.endDate.value,
+      startTime: this.rangeForm.controls.startTime.value?.toString().substring(16, 24),
+      endTime: this.rangeForm.controls.endTime.value?.toString().substring(16, 24)
+    }
+
+    console.log(slot);
+
+    this.bloodbankService.addAvailableSlots(slot).subscribe(() => {
+      console.log("Disponibilidade salva com sucesso");
+    })
   }
 }

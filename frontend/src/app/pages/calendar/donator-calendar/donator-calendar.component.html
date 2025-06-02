@@ -5,10 +5,38 @@
             <i class="fa-solid fa-calendar-days app-card-icon"></i>
             <h2 class="app-card-title">Agende sua doação!</h2>
         </div>
-      <div>
-        <mat-calendar [headerComponent]="customHeader" [selected]="selected" (selectedChange)="onDateSelected($event)"></mat-calendar>
+        <div>
+            <label>Selecione o banco de sangue disponível: </label>
+            <mat-form-field appearance="outline" class="custom-form-field select">
+            <mat-select formControlName="availableBloodBanks" required (selectionChange)="onBloodBankSelect($event.value)">
+                <mat-option *ngFor="let bloodBank of availableBloodBanks" [value]="bloodBank.id"> {{bloodBank.name}} </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+        <div *ngIf="selectedBloodBankId">
+            <label>Selecione uma data disponível: </label>
+            <mat-form-field >
+                <input matInput 
+                    [matDatepicker]="datepicker" 
+                    (dateChange)="onDateSelected($event.value)"
+                    [matDatepickerFilter]="availableDonationDates"
+                    formControlName="selectedDate"
+                    >
+                <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+                <mat-datepicker #datepicker [calendarHeaderComponent]="customHeader"></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <label>Selecione um horário disponível: </label>
+            <mat-form-field *ngIf="availableDonationHours">
+            <mat-select formControlName="donationTime" placeholder="Selecione o horário">
+                <mat-option *ngFor="let hour of availableDonationHours" [value]="hour">
+                {{ hour }}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </div>
         <div class="date-wrapper">
-          <p class="selected-date">Data selecionada: {{ selected | date: 'fullDate' }}</p>
           <button class="schedule-btn" (click)="scheduleDonation()">Agendar</button>
         </div>
       </div>

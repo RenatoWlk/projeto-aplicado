@@ -2,18 +2,25 @@ package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
 import com.projeto.aplicado.backend.dto.CampaignDTO;
+import com.projeto.aplicado.backend.dto.DonationScheduleDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.*;
 import com.projeto.aplicado.backend.model.Campaign;
+import com.projeto.aplicado.backend.model.DonationAppointment;
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.model.users.BloodBank;
 import com.projeto.aplicado.backend.model.users.User;
+import com.projeto.aplicado.backend.model.AvailabilitySlot;
+import com.projeto.aplicado.backend.model.users.UserBase;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
+import com.projeto.aplicado.backend.repository.DonationAppointmentRepository;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Normalizer;
 import java.util.*;
@@ -26,6 +33,7 @@ public class BloodBankService {
     private final UserRepository userRepository;
     private final GeolocationService geolocationService;
     private final PasswordEncoder passwordEncoder;
+    private final DonationAppointmentRepository donationAppointmentRepository;
 
     /**
      * Creates a new blood bank based on the provided request data. <br>
@@ -288,5 +296,59 @@ public class BloodBankService {
         dto.setPhone(bloodBank.getPhone());
         dto.setDistance(distance);
         return dto;
+    }
+    public void addAvailabilitySlots(BloodBankAvailabilityDTO dto) {
+        BloodBank bloodBank = bloodBankRepository.findBloodBankById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("Banco de sangue não encontrado"));
+
+        AvailabilitySlot slot = new AvailabilitySlot();
+        slot.setStartDate(dto.getStartDate());
+        slot.setEndDate(dto.getEndDate());
+        slot.setStartTime(dto.getStartTime());
+        slot.setEndTime(dto.getEndTime());
+
+        bloodBank.getAvailabilitySlots().add(slot);
+        bloodBankRepository.save(bloodBank);
+    }
+    @Transactional
+    public void scheduleDonation(DonationScheduleDTO dto) {
+        DonationAppointment appointment = new DonationAppointment();
+        appointment.setUserId(dto.getUserId());
+        appointment.setBloodBankId(dto.getBloodBankId());
+        appointment.setDateTime(dto.getDateTime());
+        donationAppointmentRepository.save(appointment);
+
+        Optional<User> optionalUser = userRepository.findById(dto.getUserId());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setLastDonationDate(dto.getDateTime().toLocalDate());
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Usuário não encotnrado");
+        }
+
+        Optional<BloodBank> optionalBloodBank = bloodBankRepository.findById(dto.getBloodBankId());
+        if (optionalBloodBank.isPresent()) {
+            BloodBank bank = optionalBloodBank.get();
+
+            bank.setScheduledDonations(bank.getScheduledDonations() + 1);
+
+            bloodBankRepository.save(bank);
+        } else {
+            throw new RuntimeException("Banco de sangue não encotrnado");
+        }
+
+    }
+
+    public List<BloodBank> findBloodBanksWithAvailableSlots() {
+        return bloodBankRepository.findByAvailabilitySlotsNotNull();
+    }
+
+    public List<BloodBank> findAvailableDates() {
+        return bloodBankRepository.findAvailableDatesOnly();
+    }
+
+    public List<BloodBank> findAvailableHours() {
+        return bloodBankRepository.findAvailableHoursOnly();
     }
 }
