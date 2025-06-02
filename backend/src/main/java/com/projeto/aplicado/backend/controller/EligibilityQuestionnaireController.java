@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/questionnaire")
 public class EligibilityQuestionnaireController {
+    @Autowired
     private EligibilityQuestionnaireService questionnaireService;
 
     @PostMapping
@@ -20,6 +21,10 @@ public class EligibilityQuestionnaireController {
 
     @GetMapping("/{userId}")
     public List<EligibilityQuestionnaire> getUserQuestionnaires(@PathVariable String userId) {
-        return questionnaireService.getAllByUser(userId);
-    }
+        System.out.println("✅ [Controller] Requisição recebida para /api/questionnaire/" + userId);
+        List<EligibilityQuestionnaire> list = questionnaireService.getAllByUser(userId);
+        System.out.println("📦 [Controller] Questionários retornados: " + list.size());
+        return list;
+}
+
 }

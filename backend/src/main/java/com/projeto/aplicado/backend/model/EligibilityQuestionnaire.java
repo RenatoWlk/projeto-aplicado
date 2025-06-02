@@ -23,13 +23,13 @@ public class EligibilityQuestionnaire {
     private String medications;
     private String procedures;
     private String drugs;
-    private String sexualPartners;
-    private String tattoo;
+    private String partners;
+    private String tattooOrPiercing;
     private String lastDonationMale;
     private String lastDonationFemale;
     private String covidVaccine;
     private String yellowFeverVaccine;
-    private String riskTravel;
+    private String travelRiskArea;
     private boolean isEligible;
     private String resultMessage;
 }

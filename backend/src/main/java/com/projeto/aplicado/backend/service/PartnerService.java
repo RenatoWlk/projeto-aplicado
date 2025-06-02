@@ -76,4 +76,26 @@ public class PartnerService {
         dto.setOffers(partner.getOffers());
         return dto;
     }
-}
+
+    /**
+     * Updates an existing partner.
+     * 
+     * @param id  the ID of the partner to update
+     * @param dto the partner request DTO containing the updated details
+     * @return the updated partner response DTO
+     */
+    public PartnerResponseDTO update(String id, PartnerRequestDTO dto) {
+        Partner partner = partnerRepository.findPartnerById(id)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+
+        partner.setName(dto.getName());
+        partner.setEmail(dto.getEmail());
+        partner.setAddress(dto.getAddress());
+        partner.setPhone(dto.getPhone());
+        partner.setCnpj(dto.getCnpj());
+        partner.setOffers(dto.getOffers());
+       partner = partnerRepository.save(partner);
+        return toResponseDTO(partner);
+        }
+
+    }

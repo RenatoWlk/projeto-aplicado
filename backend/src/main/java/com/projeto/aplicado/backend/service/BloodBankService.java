@@ -395,4 +395,25 @@ public class BloodBankService {
     public List<BloodBank> findAvailableHours() {
         return bloodBankRepository.findAvailableHoursOnly();
     }
-}
+
+    /**
+     * Updates an existing blood bank's information.
+     *
+     * @param id  the ID of the blood bank to update
+     * @param dto the DTO containing the updated information
+     * @return the updated blood bank response DTO
+     */
+    public BloodBankResponseDTO update(String id, BloodBankRequestDTO dto) {
+        BloodBank bloodBank = bloodBankRepository.findBloodBankById(id)
+                .orElseThrow(() -> new RuntimeException(Messages.USER_NOT_FOUND));
+
+        bloodBank.setName(dto.getName());
+        bloodBank.setEmail(dto.getEmail());
+        bloodBank.setAddress(dto.getAddress());
+        bloodBank.setPhone(dto.getPhone());
+        bloodBank.setCnpj(dto.getCnpj());
+
+        bloodBank = bloodBankRepository.save(bloodBank);
+        return toResponseDTO(bloodBank);
+        }
+    }
