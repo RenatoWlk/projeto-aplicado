@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BloodBank, Campaign, BloodBankAccountService } from './bloodbank-account.service';
 import { CommonModule } from '@angular/common';
+import { BloodBankDashboardService } from '../../dashboard/bloodbank-dashboard/bloodbank-dashboard.service'; 
 
 @Component({
   selector: 'app-bloodbank-account',
@@ -31,6 +32,7 @@ export class BloodBankAccountComponent implements OnInit {
     { value: 'medium', label: 'Medium' },
     { value: 'high', label: 'High' },
   ];
+isLoadingBloodbankCampaigns: any;
 
   constructor(
     private fb: FormBuilder,
@@ -79,7 +81,7 @@ export class BloodBankAccountComponent implements OnInit {
     this.profileForm.patchValue({
       name: data.name,
       email: data.email,
-      address: data.address,
+      address: data.address?.street || '',
       phone: data.phone,
       cnpj: data.cnpj,
       description: data.description || '',
@@ -235,6 +237,18 @@ export class BloodBankAccountComponent implements OnInit {
   }
 
   onPhotoSelected(event: Event): void {
-    // Optional: implement photo upload handling here
+  const file = (event.target as HTMLInputElement).files?.[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (this.bloodBank) {
+        this.bloodBank.photoUrl = reader.result as string;
+      }
+    };
+
+    reader.readAsDataURL(file); // Lê a imagem como Base64
   }
+}
 }

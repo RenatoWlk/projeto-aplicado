@@ -26,6 +26,7 @@
       background: #f5f5f5;
       box-shadow: 0 8px 24px rgba(183, 28, 28, 0.15);
       transition: transform 0.3s ease;
+      margin-top: 30%;
 
       &:hover {
         transform: scale(1.05);
@@ -98,6 +99,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 2px 8px rgba(183, 28, 28, 0.3);
+       
 
         &:hover {
           background: linear-gradient(135deg, #a31515 0%, #c62828 100%);

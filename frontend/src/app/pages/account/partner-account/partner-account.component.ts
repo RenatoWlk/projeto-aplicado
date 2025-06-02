@@ -82,7 +82,7 @@ export class PartnerAccountComponent implements OnInit {
     this.profileForm.patchValue({
       name: this.partnerUser.name,
       email: this.partnerUser.email,
-      address: this.partnerUser.address || '',
+      address: this.partnerUser.address?.street || '',
       phone: this.partnerUser.phone,
       cnpj: this.partnerUser.cnpj
     });
@@ -152,32 +152,20 @@ export class PartnerAccountComponent implements OnInit {
   }
 
   onPhotoSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files?.length) return;
+  const file = (event.target as HTMLInputElement).files?.[0];
 
-    const file = input.files[0];
-    if (!file.type.startsWith('image/')) {
-      this.error = 'Selected file is not an image.';
-      return;
-    }
+  if (file) {
+    const reader = new FileReader();
 
-    this.isLoading = true;
-    this.partnerService.uploadPhoto(file).subscribe({
-      next: (updatedPhotoUrl) => {
-        if (this.partnerUser) {
-          this.partnerUser.photoUrl = updatedPhotoUrl;
-        }
-        this.successMessage = 'Photo updated successfully.';
-        this.error = null;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.error = 'Failed to upload photo.';
-        this.successMessage = null;
-        this.isLoading = false;
+    reader.onload = () => {
+      if (this.partnerUser) {
+        this.partnerUser.photoUrl = reader.result as string;
       }
-    });
+    };
+
+    reader.readAsDataURL(file); // Lê a imagem como Base64
   }
+}
 
   addOffer(): void {
     this.addOfferMode = true;
