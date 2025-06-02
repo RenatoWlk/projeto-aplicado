@@ -1,72 +1,256 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { User, Questionnaire, AccountService } from '../account.service';
+import { User, UserAccountService } from './user-account.service';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Achievement } from '../../dashboard/dashboard.service';
 
 @Component({
   selector: 'app-user-account',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './user-account.component.html',
   styleUrls: ['./user-account.component.scss'],
 })
-export class UserAccountComponent {
-  @Input() user?: User;
-  @Input() lastQuestionnaire?: Questionnaire;
-  @Output() userChange = new EventEmitter<User>();
+export class UserAccountComponent implements OnInit {
+  user: User | null = null;
+  profileForm!: FormGroup;
+  passwordForm!: FormGroup;
 
-  editUser?: User;
+  isLoading = false;
+  error: string | null = null;
+  successMessage: string | null = null;
+
   editProfileMode = false;
   changePasswordMode = false;
-  newPassword = '';
   showAchievements = false;
   showQuestionnaires = false;
 
-  constructor(private accountService: AccountService) {}
+  genderOptions = [
+    { value: 'Masculino', label: 'Masculino' },
+    { value: 'Feminino', label: 'Feminino' },
+    { value: 'Outro', label: 'Outro' },
+  ];
 
-  onEditProfile() {
-    this.editUser = { ...this.user! };
-    this.editProfileMode = true;
+  userAchievements: Achievement[] = [];
+  hasAchievements = false;
+  achievementsCount = 0;
+
+  lastQuestionnaire: any = null;
+
+  constructor(
+    private userService: UserAccountService,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    this.loadUser();
+    this.initForms();
   }
 
-  saveProfile() {
-    if (!this.editUser) return;
-    this.user = { ...this.editUser };
-    this.userChange.emit(this.user);
-    this.editProfileMode = false;
-  }
-
-  cancelEdit() {
-    this.editProfileMode = false;
-    this.editUser = { ...this.user! };
-  }
-
-  onChangePassword() {
-    this.changePasswordMode = true;
-  }
-
-  savePassword() {
-    if (!this.user) return;
-    this.accountService.changePassword(this.user.id, this.newPassword).subscribe(() => {
-      this.changePasswordMode = false;
-      this.newPassword = '';
+  private loadUser(): void {
+    this.isLoading = true;
+    this.userService.getUser().subscribe({
+      next: (userData) => {
+        this.user = userData;
+        this.patchProfileForm();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.error = 'Failed to load user data';
+        this.isLoading = false;
+      }
     });
   }
 
-  cancelPassword() {
-    this.changePasswordMode = false;
-    this.newPassword = '';
+  private initForms(): void {
+    this.profileForm = this.fb.group({
+      name: ['', Validators.required],
+      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+      address: [''],
+      phone: [''],
+      cpf: [''],
+      gender: [''],
+    });
+
+    this.passwordForm = this.fb.group({
+      currentPassword: ['', Validators.required],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required],
+    }, { validators: this.passwordMatchValidator });
   }
 
-  onPhotoSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.user = { ...(this.user as User), photoUrl: reader.result as string };
-        this.userChange.emit(this.user);
-      };
-      reader.readAsDataURL(file);
-    }
+  private patchProfileForm(): void {
+    if (!this.user) return;
+
+    this.profileForm.patchValue({
+      name: this.user.name,
+      email: this.user.email,
+      address: this.user.address?.street || '',
+      phone: this.user.phone,
+      cpf: this.user.cpf,
+      gender: this.user.gender,
+    });
+  }
+
+  passwordMatchValidator(group: FormGroup) {
+    const newPass = group.get('newPassword')?.value;
+    const confirmPass = group.get('confirmPassword')?.value;
+    return newPass === confirmPass ? null : { mismatch: true };
+  }
+
+  onEditProfile(): void {
+    this.editProfileMode = true;
+    this.changePasswordMode = false;
+    this.showAchievements = false;
+    this.showQuestionnaires = false;
+  }
+
+  onChangePassword(): void {
+    this.changePasswordMode = true;
+    this.editProfileMode = false;
+    this.showAchievements = false;
+    this.showQuestionnaires = false;
+  }
+
+  showAchievementsView(): void {
+    this.showAchievements = true;
+    this.editProfileMode = false;
+    this.changePasswordMode = false;
+    this.showQuestionnaires = false;
+
+    // Load achievements logic here
+  }
+
+  showQuestionnairesView(): void {
+    this.showQuestionnaires = true;
+    this.showAchievements = false;
+    this.editProfileMode = false;
+    this.changePasswordMode = false;
+
+    // Load questionnaires logic here
+  }
+
+  hideViews(): void {
+    this.editProfileMode = false;
+    this.changePasswordMode = false;
+    this.showAchievements = false;
+    this.showQuestionnaires = false;
+    this.successMessage = null;
+    this.error = null;
+  }
+
+  saveProfile(): void {
+    if (this.profileForm.invalid) return;
+
+    this.isLoading = true;
+    const updatedData = {
+      ...this.user,
+      ...this.profileForm.getRawValue(),
+      address: { street: this.profileForm.value.address }
+    };
+
+    this.userService.updateUser(updatedData).subscribe({
+      next: (updatedUser) => {
+        this.user = updatedUser;
+        this.successMessage = 'Profile updated successfully';
+        this.isLoading = false;
+        this.editProfileMode = false;
+      },
+      error: () => {
+        this.error = 'Failed to update profile';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  savePassword(): void {
+    if (this.passwordForm.invalid) return;
+
+    this.isLoading = true;
+    const { currentPassword, newPassword } = this.passwordForm.value;
+
+    this.userService.changePassword(currentPassword, newPassword).subscribe({
+      next: () => {
+        this.successMessage = 'Password changed successfully';
+        this.isLoading = false;
+        this.changePasswordMode = false;
+        this.passwordForm.reset();
+      },
+      error: () => {
+        this.error = 'Failed to change password';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  cancelEdit(): void {
+    this.editProfileMode = false;
+    this.error = null;
+    this.successMessage = null;
+    this.patchProfileForm();
+  }
+
+  cancelPassword(): void {
+    this.changePasswordMode = false;
+    this.error = null;
+    this.successMessage = null;
+    this.passwordForm.reset();
+  }
+
+  onPhotoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    this.isLoading = true;
+
+    this.userService.uploadPhoto(file).subscribe({
+      next: (photoUrl) => {
+        if (this.user) {
+          this.user.photoUrl = photoUrl;
+        }
+        this.successMessage = 'Photo updated successfully';
+        this.isLoading = false;
+      },
+      error: () => {
+        this.error = 'Failed to upload photo';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Placeholder methods to be implemented with actual logic
+  calculateDaysSinceLastDonation(): number | null {
+    // logic here
+    return null;
+  }
+
+  calculateDaysUntilNextDonation(): number | null {
+    // logic here
+    return null;
+  }
+
+  canDonateNow(): boolean {
+    // logic here
+    return false;
+  }
+
+  isFieldInvalid(form: FormGroup, field: string): boolean {
+    const control = form.get(field);
+    return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  getFieldError(form: FormGroup, field: string): string | null {
+    const control = form.get(field);
+    if (!control || !control.errors) return null;
+
+    if (control.errors['required']) return 'This field is required';
+    if (control.errors['email']) return 'Invalid email format';
+    if (control.errors['minlength']) return `Minimum length is ${control.errors['minlength'].requiredLength}`;
+    if (field === 'confirmPassword' && this.passwordForm.errors?.['mismatch']) return 'Passwords do not match';
+
+    return null;
   }
 }

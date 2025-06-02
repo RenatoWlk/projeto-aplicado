@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Achievement } from '../account/account.service';
 import { DashboardConstants } from './constants/dashboard.constants';
 import { BloodType } from '../../shared/app.enums';
 import { AuthService } from '../../core/services/auth/auth.service';
@@ -11,6 +10,14 @@ export interface Address {
     city: string;
     state: string;
     zipCode: string;
+}
+
+export interface Achievement {
+    title: string;
+    description: string;
+    points: number;
+    rarity: string;
+    imageUrl: string;
 }
 
 export interface Offer {

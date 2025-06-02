@@ -1,95 +1,274 @@
- <ng-container *ngIf="user?.role === 'BLOODBANK'">
-    <ng-container *ngIf="bloodBankUser as bb">
-      <div *ngIf="!editProfileMode">
-        <div class="app-card">
-          <div class="app-card-header">
-            <i class="fa-solid fa-hospital app-card-icon"></i>
-            <h2 class="app-card-title">Perfil do Banco de Sangue</h2>
-          </div>
-          <div class="account-header">
-            <div class="profile-photo-wrapper">
-              <img [src]="bb.photoUrl || 'assets/bloodbank.png'" alt="Foto do Banco" class="profile-photo" />
-              <input #fileInput type="file" (change)="onPhotoSelected($event)" accept="image/*" hidden>
-              <button type="button" class="profile-photo-edit-btn" (click)="fileInput.click()">
-                Trocar Foto
-              </button>
-            </div>
-            <div class="account-info">
-              <p><strong>Nome:</strong> {{ bb.name }}</p>
-              <p><strong>Email:</strong> {{ bb.email }}</p>
-              <p><strong>Endereço:</strong> {{ bb.address }}</p>
-              <p><strong>Telefone:</strong> {{ bb.phone }}</p>
-              <p><strong>CNPJ:</strong> {{ bb.cnpj }}</p>
-              <button type="button" (click)="onEditProfile()">Editar Perfil</button>
-            </div>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="app-card-header">
-            <i class="fa-solid fa-hand-holding-medical app-card-icon"></i>
-            <h2 class="app-card-title">Campanhas de Doação</h2>
-          </div>
-          <!-- Formulário de adicionar/editar campanha -->
-          <form *ngIf="addCampaignMode || editCampaignMode" (ngSubmit)="saveCampaign()" style="margin-bottom: 1.5rem;">
-            <label>
-              Título:
-              <input type="text" [(ngModel)]="campaignForm.title" name="campaignTitle" required />
-            </label>
-            <label>
-              Descrição:
-              <input type="text" [(ngModel)]="campaignForm.description" name="campaignDescription" required />
-            </label>
-            <label>
-              Ativa:
-              <input type="checkbox" [(ngModel)]="campaignForm.active" name="campaignActive" />
-            </label>
-            <label>
-              <button type="submit">Salvar</button>
-              <button type="button" (click)="cancelCampaignForm()">Cancelar</button>
-            </label>
-          </form>
-          <ul>
-            <li *ngFor="let campaign of bb.campaigns; let i = index">
-              <div class="campaign-info">
-                <strong>{{ campaign.title }}</strong> - {{ campaign.description }}
-                <span *ngIf="campaign.active" style="color: green;">(Ativa)</span>
-              </div>
-              <div class="campaign-actions">
-                <button (click)="editCampaign(campaign, i)">Editar</button>
-                <button (click)="removeCampaign(campaign)">Remover</button>
-              </div>
-            </li>
-          </ul>
-          <button (click)="addCampaign()" *ngIf="!addCampaignMode && !editCampaignMode">Adicionar Nova Campanha</button>
-        </div>
-      </div>
 
-      <!-- Formulário de edição -->
-      <form *ngIf="editProfileMode && editUser">
-        <label>
-          Nome:
-          <input type="text" [(ngModel)]="bb.name" name="name" />
-        </label>
-        <label>
-          Email:
-          <input type="email" [(ngModel)]="bb.email" name="email" />
-        </label>
-        <label>
-          Endereço:
-          <input type="text" [(ngModel)]="bb.address" name="address" />
-        </label>
-        <label>
-          Telefone:
-          <input type="text" [(ngModel)]="bb.phone" name="phone" />
-        </label>
-        <label>
-          CNPJ:
-          <input type="text" [(ngModel)]="bb.cnpj" name="cnpj" />
-        </label>
-        <label>
-          <button type="button" (click)="saveProfile()">Salvar</button>
-          <button type="button" (click)="cancelEdit()">Cancelar</button>
-        </label>
-      </form>
-    </ng-container>
-  </ng-container>
+<!-- Loading e mensagens -->
+<div *ngIf="isLoading" class="loading-spinner">
+  <i class="fa-solid fa-spinner fa-spin"></i>
+  Carregando...
+</div>
+
+<div *ngIf="error" class="error-message">
+  <i class="fa-solid fa-exclamation-triangle"></i>
+  {{ error }}
+</div>
+
+<div *ngIf="successMessage" class="success-message">
+  <i class="fa-solid fa-check-circle"></i>
+  {{ successMessage }}
+</div>
+
+<!-- Modo Visualização -->
+<div *ngIf="!editProfileMode">
+  
+  <!-- Card do Perfil -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <i class="fa-solid fa-hospital app-card-icon"></i>
+      <h2 class="app-card-title">Perfil do Banco de Sangue</h2>
+    </div>
+    
+    <div class="account-header">
+      <div class="profile-photo-wrapper">
+        <img [src]="bloodBank?.photoUrl || 'assets/bloodbank.png'" 
+              alt="Foto do Banco" 
+              class="profile-photo" />
+        <input #fileInput 
+                type="file" 
+                (change)="onPhotoSelected($event)" 
+                accept="image/*" 
+                hidden>
+        <button type="button" 
+                class="profile-photo-edit-btn" 
+                (click)="fileInput.click()"
+                [disabled]="isLoading">
+          <i class="fa-solid fa-camera"></i>
+          Trocar Foto
+        </button>
+      </div>
+      
+      <div class="account-info">
+        <p><strong>Nome:</strong> {{ bloodBank?.name }}</p>
+        <p><strong>Email:</strong> {{ bloodBank?.email }}</p>
+        <p><strong>Endereço:</strong> {{ bloodBank?.address }}</p>
+        <p><strong>Telefone:</strong> {{ bloodBank?.phone }}</p>
+        <p><strong>CNPJ:</strong> {{ bloodBank?.cnpj }}</p>
+        <p *ngIf="bloodBank?.description"><strong>Descrição:</strong> {{ bloodBank?.description }}</p>
+        <p *ngIf="bloodBank?.website"><strong>Website:</strong> {{ bloodBank?.website }}</p>
+        <button type="button" 
+                (click)="onEditProfile()"
+                [disabled]="isLoading">
+          <i class="fa-solid fa-edit"></i>
+          Editar Perfil
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card das Campanhas -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <i class="fa-solid fa-hand-holding-medical app-card-icon"></i>
+      <h2 class="app-card-title">Campanhas de Doação</h2>
+    </div>
+
+    <!-- Formulário de Campanha usando ReactiveFormsModule -->
+    <form *ngIf="addCampaignMode || editCampaignMode" 
+          [formGroup]="campaignForm" 
+          (ngSubmit)="saveCampaign()">
+      
+      <label>
+        <span>Título da Campanha</span>
+        <input type="text" 
+                formControlName="title"
+                placeholder="Ex: Doe Sangue, Salve Vidas"
+                [class.invalid]="isFieldInvalid(campaignForm, 'title')" />
+        <div *ngIf="getFieldError(campaignForm, 'title')" class="error-text">
+          {{ getFieldError(campaignForm, 'title') }}
+        </div>
+      </label>
+      
+      <label>
+        <span>Descrição</span>
+        <textarea formControlName="description"
+                  placeholder="Descreva os detalhes da campanha"
+                  rows="3"
+                  [class.invalid]="isFieldInvalid(campaignForm, 'description')"></textarea>
+        <div *ngIf="getFieldError(campaignForm, 'description')" class="error-text">
+          {{ getFieldError(campaignForm, 'description') }}
+        </div>
+      </label>
+
+      <label>
+        <span>Prioridade</span>
+        <select formControlName="priority">
+          <option *ngFor="let option of priorityOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </label>
+      
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="active" />
+        <span>Campanha Ativa</span>
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" 
+                class="primary"
+                [disabled]="isLoading || campaignForm.invalid">
+          <i class="fa-solid fa-save"></i>
+          {{ addCampaignMode ? 'Criar Campanha' : 'Salvar Alterações' }}
+        </button>
+        <button type="button" 
+                class="secondary" 
+                (click)="cancelCampaignForm()"
+                [disabled]="isLoading">
+          <i class="fa-solid fa-times"></i>
+          Cancelar
+        </button>
+      </div>
+    </form>
+
+    <!-- Lista de Campanhas -->
+    <ul *ngIf="bloodBank?.campaigns; else noCampaigns">
+      <li *ngFor="let campaign of bloodBank?.campaigns; let i = index">
+        <div class="campaign-info">
+          <strong>{{ campaign.title }}</strong>
+          <div class="campaign-description">{{ campaign.description }}</div>
+          <div class="campaign-status" 
+                [ngClass]="{'active': campaign.active, 'inactive': !campaign.active}">
+            <i class="fa-solid" 
+                [ngClass]="campaign.active ? 'fa-check-circle' : 'fa-times-circle'"></i>
+            {{ campaign.active ? 'Ativa' : 'Inativa' }}
+          </div>
+          <div *ngIf="campaign.priority" class="campaign-priority">
+            Prioridade: {{ getPriorityLabel(campaign.priority) }}
+          </div>
+        </div>
+        
+        <div class="campaign-actions">
+          <button class="edit-btn" 
+                  (click)="editCampaign(campaign, i)"
+                  [disabled]="isLoading">
+            <i class="fa-solid fa-edit"></i>
+            Editar
+          </button>
+          <button class="delete-btn" 
+                  (click)="removeCampaign(campaign)"
+                  [disabled]="isLoading">
+            <i class="fa-solid fa-trash"></i>
+            Remover
+          </button>
+        </div>
+      </li>
+    </ul>
+
+    <ng-template #noCampaigns>
+      <div class="empty-state">
+        <i class="fa-solid fa-bullhorn" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+        <p>Nenhuma campanha criada ainda</p>
+        <p style="color: #666; font-size: 0.9rem;">Crie sua primeira campanha para começar a atrair doadores</p>
+      </div>
+    </ng-template>
+
+    <button (click)="addCampaign()" 
+            *ngIf="!addCampaignMode && !editCampaignMode"
+            [disabled]="isLoading">
+      <i class="fa-solid fa-plus"></i>
+      Nova Campanha
+    </button>
+  </div>
+</div>
+
+<!-- Formulário de Edição do Perfil usando ReactiveFormsModule -->
+<div *ngIf="editProfileMode" class="app-card">
+  <div class="app-card-header">
+    <i class="fa-solid fa-user-edit app-card-icon"></i>
+    <h2 class="app-card-title">Editar Perfil</h2>
+  </div>
+
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+    <label>
+      <span>Nome do Banco</span>
+      <input type="text" 
+              formControlName="name"
+              placeholder="Nome completo do banco de sangue"
+              [class.invalid]="isFieldInvalid(profileForm, 'name')" />
+      <div *ngIf="getFieldError(profileForm, 'name')" class="error-text">
+        {{ getFieldError(profileForm, 'name') }}
+      </div>
+    </label>
+    
+    <label>
+      <span>Email</span>
+      <input type="email" 
+              formControlName="email"
+              placeholder="email@exemplo.com"
+              [class.invalid]="isFieldInvalid(profileForm, 'email')" />
+      <div *ngIf="getFieldError(profileForm, 'email')" class="error-text">
+        {{ getFieldError(profileForm, 'email') }}
+      </div>
+    </label>
+    
+    <label>
+      <span>Endereço</span>
+      <input type="text" 
+              formControlName="address"
+              placeholder="Endereço completo"
+              [class.invalid]="isFieldInvalid(profileForm, 'address')" />
+      <div *ngIf="getFieldError(profileForm, 'address')" class="error-text">
+        {{ getFieldError(profileForm, 'address') }}
+      </div>
+    </label>
+    
+    <label>
+      <span>Telefone</span>
+      <input type="tel" 
+              formControlName="phone"
+              placeholder="(11) 99999-9999"
+              [class.invalid]="isFieldInvalid(profileForm, 'phone')" />
+      <div *ngIf="getFieldError(profileForm, 'phone')" class="error-text">
+        {{ getFieldError(profileForm, 'phone') }}
+      </div>
+    </label>
+    
+    <label>
+      <span>CNPJ</span>
+      <input type="text" 
+              formControlName="cnpj"
+              placeholder="00.000.000/0000-00"
+              [class.invalid]="isFieldInvalid(profileForm, 'cnpj')" />
+      <div *ngIf="getFieldError(profileForm, 'cnpj')" class="error-text">
+        {{ getFieldError(profileForm, 'cnpj') }}
+      </div>
+    </label>
+
+    <label>
+      <span>Descrição (Opcional)</span>
+      <textarea formControlName="description"
+                placeholder="Descreva o banco de sangue..."
+                rows="3"></textarea>
+    </label>
+
+    <label>
+      <span>Website (Opcional)</span>
+      <input type="url" 
+              formControlName="website"
+              placeholder="https://exemplo.com" />
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" 
+              class="primary"
+              [disabled]="isLoading || profileForm.invalid">
+        <i class="fa-solid fa-save"></i>
+        Salvar Alterações
+      </button>
+      <button type="button" 
+              class="secondary" 
+              (click)="cancelEdit()"
+              [disabled]="isLoading">
+        <i class="fa-solid fa-times"></i>
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

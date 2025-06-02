@@ -24,8 +24,8 @@ public class UserController {
      * @param dto the user request DTO
      * @return the created user response DTO
      */
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO dto) {
+    @PostMapping("/create")
+    public ResponseEntity<UserResponseDTO> create(@RequestBody UserRequestDTO dto) {
         return ResponseEntity.ok(userService.create(dto));
     }
 

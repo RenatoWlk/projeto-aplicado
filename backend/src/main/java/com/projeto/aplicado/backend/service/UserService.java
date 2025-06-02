@@ -1,7 +1,7 @@
 package com.projeto.aplicado.backend.service;
 
 import com.projeto.aplicado.backend.constants.Messages;
-import com.projeto.aplicado.backend.dto.bloodbank.BloodBankMapDTO;
+import com.projeto.aplicado.backend.dto.ChangePasswordDTO;
 import com.projeto.aplicado.backend.dto.user.UserLocationDTO;
 import com.projeto.aplicado.backend.dto.user.UserStatsDTO;
 import com.projeto.aplicado.backend.dto.user.UserRequestDTO;
@@ -10,11 +10,11 @@ import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import com.projeto.aplicado.backend.service.EmailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,8 +25,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final AchievementService achievementService;
     private final EmailService emailService;
-    private final PasswordEncoder passwordEncoder;
     private final GeolocationService geolocationService;
+
+    // Diretório para upload de fotos
+    private static final String UPLOAD_DIR = "uploads/users/";
 
     /**
      * Creates a new user in the system.
@@ -47,7 +49,7 @@ public class UserService {
         user.setBloodType(dto.getBloodType());
         user.setTimesDonated(0);
         user.setTimeUntilNextDonation(0);
-        user.setLastDonationDate(dto.getLastDonationDate());
+        user.setLastDonationDate(null);
         user.setUnlockedAchievements(List.of());
         user.setTotalPoints(0);
 
@@ -174,4 +176,46 @@ public class UserService {
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
         return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
+
+    /*
+     * Account
+     */
+
+     public UserResponseDTO update(String id, UserRequestDTO dto) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        
+        // Verificar se email mudou e já existe
+        if (!user.getEmail().equals(dto.getEmail()) && 
+            userRepository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("Email já cadastrado");
+        }
+        
+        toResponseDTO(user);
+        
+        User updatedUser = userRepository.save(user);
+        return toResponseDTO(updatedUser);
+    }
+
+    public void delete(String id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+        userRepository.deleteById(id);
+    }
+
+    public void changePassword(String id, ChangePasswordDTO dto) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        
+        // Verificar senha atual
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+            throw new RuntimeException("Senha atual incorreta");
+        }
+        
+        // Atualizar senha
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepository.save(user);
+    }
+
 }

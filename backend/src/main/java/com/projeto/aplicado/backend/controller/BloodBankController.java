@@ -30,7 +30,7 @@ public class BloodBankController {
      * @param dto the blood bank request DTO
      * @return the created blood bank response DTO
      */
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<BloodBankResponseDTO> create(@RequestBody BloodBankRequestDTO dto) {
         return ResponseEntity.ok(bloodBankService.create(dto));
     }

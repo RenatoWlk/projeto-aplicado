@@ -6,11 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class RegisterService {
-  private baseUrl = 'http://localhost:8080';
-
-  private apiUrlPartner = `${this.baseUrl}/api/partners`;
-  private apiUrlDonator = `${this.baseUrl}/api/users`;
-  private apiUrlBloodBank = `${this.baseUrl}/api/bloodbanks`;
+  private apiUrlPartner = `/api/partners/create`;
+  private apiUrlDonator = `/api/users/create`;
+  private apiUrlBloodBank = `/api/bloodbanks/create`;
 
   constructor(private http: HttpClient) {}
 
