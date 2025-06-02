@@ -342,6 +342,7 @@ public class BloodBankService {
     public void scheduleDonation(DonationScheduleDTO dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        
         BloodBank bloodBank = bloodBankRepository.findBloodBankById(dto.getBloodBankId())
                 .orElseThrow(() -> new RuntimeException("Banco de sangue não encontrado"));
 
@@ -394,5 +395,9 @@ public class BloodBankService {
      */
     public List<BloodBank> findAvailableHours() {
         return bloodBankRepository.findAvailableHoursOnly();
+    }
+
+    public BloodBank findEntityById(String id) {
+        return bloodBankRepository.findById(id).orElse(null);
     }
 }

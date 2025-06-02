@@ -39,8 +39,10 @@ export class DonationService {
         return this.http.get<DonationSlots[]>(`${this.API}/available-dates`);
     }
 
-    getAvailableDonationDates(): Observable<{ startDate: string; endDate: string }[]> {
-    return this.http.get<{ startDate: string; endDate: string }[]>(`${this.API}/available-dates`);
+    getAvailableDonationDates(bloodBankId: string): Observable<{ startDate: string; endDate: string }[]> {
+    return this.http.get<{ startDate: string; endDate: string }[]>(`${this.API}/available-dates`, {
+        params: { bloodBankId }
+        });
     }
 
     getAvailableDonationHours(): Observable<{ startTime: string; endTime: string }[]> {

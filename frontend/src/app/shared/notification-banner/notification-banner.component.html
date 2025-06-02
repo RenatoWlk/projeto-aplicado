@@ -1,6 +1,5 @@
 <div *ngIf="visible" 
-    class="banner" 
-    [ngClass]="[bannerClass, fadingOut ? 'fade-out' : 'fade-in']"
-    >
-    <strong> {{ type | uppercase}} </strong>: {{ message }}
+     class="banner" 
+     [ngClass]="bannerClass">
+  <strong>{{ type | uppercase }}</strong>: {{ message }}
 </div>

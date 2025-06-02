@@ -1,32 +1,51 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { NotificationBannerService } from './notification-banner.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-notification-banner',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './notification-banner.component.html',
-  styleUrl: './notification-banner.component.scss'
+  styleUrls: ['./notification-banner.component.scss']
 })
-export class NotificationBannerComponent {
+export class NotificationBannerComponent implements OnDestroy {
   @Input() message: string = '';
-  @Input() type: 'sucess' | 'warning' | 'error' = 'sucess';
+  @Input() type: 'success' | 'warning' | 'error' = 'success';
   @Input() duration: number = 5000;
 
-  visible: boolean = true;
-  fadingOut: boolean = false;
+  visible = false;
+  fadingOut = false;
 
-  ngOnInit():void {
-    setTimeout(() => {
-      this.fadingOut = true;
+  private destroy$ = new Subject<void>();
 
+  constructor(private notificationService: NotificationBannerService) {}
 
-      this.visible = false;
-    }, this.duration)
+  ngOnInit(): void {
+    this.notificationService.notification$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((notification) => {
+        this.message = notification.message;
+        this.type = notification.type;
+        this.visible = true;
+        this.fadingOut = false;
+
+        setTimeout(() => {
+          this.fadingOut = true;
+          setTimeout(() => {
+            this.visible = false;
+          }, 500); 
+        }, notification.duration || this.duration);
+      });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   get bannerClass(): string {
-    return `banner-${this.type}`;
+    return `banner-${this.type} ${this.fadingOut ? 'fade-out' : ''}`;
   }
-
 }

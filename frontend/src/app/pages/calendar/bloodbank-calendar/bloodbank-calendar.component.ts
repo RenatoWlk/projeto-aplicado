@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { CustomHeaderComponent } from '../custom-header/custom-header.component';
 import { CalendarStats } from '../calendar.service';
 import { BloodbankService, DonationSlots } from './bloodbank-calendar.service';
@@ -22,6 +22,7 @@ import { AuthService } from '../../../core/services/auth/auth.service';
   styleUrl: './bloodbank-calendar.component.scss',
   providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class BloodbankCalendarComponent {
 
@@ -66,8 +67,6 @@ export class BloodbankCalendarComponent {
       startTime: this.rangeForm.controls.startTime.value?.toString().substring(16, 24),
       endTime: this.rangeForm.controls.endTime.value?.toString().substring(16, 24)
     }
-
-    console.log(slot);
 
     this.bloodbankService.addAvailableSlots(slot).subscribe(() => {
       console.log("Disponibilidade salva com sucesso");

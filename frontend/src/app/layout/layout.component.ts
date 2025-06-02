@@ -12,7 +12,7 @@ import { AuthService } from '../core/services/auth/auth.service';
   standalone: true,
   selector: 'app-layout',
   imports: [HeaderComponent, FooterComponent, MatIconModule, RouterModule,
-    SubheaderComponent, CommonModule
+    SubheaderComponent, CommonModule,
   ],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss',]

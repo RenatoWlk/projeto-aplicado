@@ -103,11 +103,12 @@ public class BloodBankController {
     }
 
     @GetMapping("/available-dates")
-    public List<Map<String, Object>> getBloodAvailableDates() {
-        List<BloodBank> banks = bloodBankService.findAvailableDates();
+    public List<Map<String, Object>> getBloodAvailableDates(@RequestParam("bloodBankId") String bloodBankId) {
+        BloodBank bank = bloodBankService.findEntityById(bloodBankId);
+        //List<BloodBank> banks = bloodBankService.findAvailableDates();
         List<Map<String, Object>> slots = new ArrayList<>();
 
-        for (BloodBank bank : banks) {
+        if (bank != null) {
             for (AvailabilitySlot slot: bank.getAvailabilitySlots()) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("startDate", slot.getStartDate());
