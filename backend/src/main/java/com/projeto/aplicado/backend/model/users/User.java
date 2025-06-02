@@ -26,7 +26,7 @@ public class User extends UserBase {
     private int timesDonated;
     private int timeUntilNextDonation;
     private LocalDate lastDonationDate;
-    private List<UnlockedAchievement> unlockedAchievements; // IDs and unlocked date of achievements
+    private List<UnlockedAchievement> unlockedAchievements = new ArrayList<>();
     private int totalPoints;
-    private List<ScheduledDonation> scheduledDonations;
+    private List<ScheduledDonation> scheduledDonations = new ArrayList<>();
 }

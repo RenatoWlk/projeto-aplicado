@@ -5,7 +5,6 @@ import com.projeto.aplicado.backend.dto.CampaignDTO;
 import com.projeto.aplicado.backend.dto.DonationScheduleDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.*;
 import com.projeto.aplicado.backend.model.Campaign;
-import com.projeto.aplicado.backend.model.DonationAppointment;
 import com.projeto.aplicado.backend.model.ScheduledDonation;
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
@@ -13,7 +12,6 @@ import com.projeto.aplicado.backend.model.users.BloodBank;
 import com.projeto.aplicado.backend.model.users.User;
 import com.projeto.aplicado.backend.model.AvailabilitySlot;
 import com.projeto.aplicado.backend.repository.BloodBankRepository;
-import com.projeto.aplicado.backend.repository.DonationAppointmentRepository;
 import com.projeto.aplicado.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -340,36 +338,35 @@ public class BloodBankService {
      * @param dto the donation scheduling request DTO
      * @throws RuntimeException if user or blood bank is not found
      */
+    @Transactional
     public void scheduleDonation(DonationScheduleDTO dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        System.out.println(dto.getBloodBankId());
         BloodBank bloodBank = bloodBankRepository.findBloodBankById(dto.getBloodBankId())
                 .orElseThrow(() -> new RuntimeException("Banco de sangue não encontrado"));
 
-        DonationAppointment appointment = new DonationAppointment();
-        appointment.setUserId(user.getId());
-        appointment.setBloodBankId(bloodBank.getId());
-        appointment.setDate(dto.getDate());
-        appointment.setHour(dto.getHour());
+        if (user.getScheduledDonations() == null) {
+            user.setScheduledDonations(new ArrayList<>());
+        }
 
-        ScheduledDonation sd = new ScheduledDonation();
-        sd.setBloodBankId(bloodBank.getId());
-        sd.setDate(dto.getDate());
-        sd.setHour(dto.getHour());
+        boolean alreadyScheduled = user.getScheduledDonations().stream()
+                .anyMatch(d -> d.getDate().equals(dto.getDate()) && d.getHour().equals(dto.getHour()));
+        if (alreadyScheduled) {
+            throw new RuntimeException("Usuário já possui agendamento nesse horário.");
+        }
 
-        List<ScheduledDonation> scheduledDonations = user.getScheduledDonations();
-        scheduledDonations.add(sd);
+        ScheduledDonation scheduledDonation = new ScheduledDonation();
+        scheduledDonation.setBloodBankId(bloodBank.getId());
+        scheduledDonation.setDate(dto.getDate());
+        scheduledDonation.setHour(dto.getHour());
 
-        user.setScheduledDonations(scheduledDonations);
-
+        user.getScheduledDonations().add(scheduledDonation);
         user.setLastDonationDate(dto.getDate());
         userRepository.save(user);
 
-        bloodBank.setScheduledDonations(bloodBank.getScheduledDonations() + 1); //Ele tem que adicionar aqui
+        int current = bloodBank.getScheduledDonations() != null ? bloodBank.getScheduledDonations() : 0;
+        bloodBank.setScheduledDonations(current + 1);
         bloodBankRepository.save(bloodBank);
-
     }
 
     /**

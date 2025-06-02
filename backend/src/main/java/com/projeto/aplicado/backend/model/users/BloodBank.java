@@ -23,7 +23,7 @@ public class BloodBank extends UserBase {
     private String cnpj;
     private List<Campaign> campaigns = new ArrayList<>();
     private int totalDonations;
-    private int scheduledDonations;
+    private Integer scheduledDonations;
     private List<DonationsOverTime> donationsOverTime;
     private Map<BloodType, Integer> bloodTypeBloodBags;
     private List<AvailabilitySlot> availabilitySlots = new ArrayList<>();

@@ -2,7 +2,7 @@ package com.projeto.aplicado.backend.controller;
 
 import com.projeto.aplicado.backend.model.CalendarEvent;
 import com.projeto.aplicado.backend.service.CalendarEventService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +10,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/calendar")
 public class CalendarEventController {
-
-    @Autowired
     private CalendarEventService service;
+
+    public CalendarEventController(CalendarEventService service) {
+        this.service = service;
+    }
 
     @PostMapping("/event")
     public CalendarEvent createEvent(@RequestBody CalendarEvent event) {
@@ -22,9 +25,7 @@ public class CalendarEventController {
     }
 
     @GetMapping("/event")
-    public List<CalendarEvent> getEventsByDate(
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-    ) {
+    public List<CalendarEvent> getEventsByDate(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return service.getEventsByDate(date);
     }
 

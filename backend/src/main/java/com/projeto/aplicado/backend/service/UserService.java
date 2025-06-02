@@ -49,6 +49,7 @@ public class UserService {
         user.setTimeUntilNextDonation(0);
         user.setLastDonationDate(null);
         user.setUnlockedAchievements(List.of());
+        user.setScheduledDonations(List.of());
         user.setTotalPoints(0);
 
         user = userRepository.save(user);
@@ -140,17 +141,17 @@ public class UserService {
     }
 
     private void mapDtoToEntity(UserRequestDTO dto, User user) {
-    if (dto.getName() != null) user.setName(dto.getName());
-    if (dto.getEmail() != null) user.setEmail(dto.getEmail());
-    if (dto.getPhone() != null) user.setPhone(dto.getPhone());
-    if (dto.getGender() != null) user.setGender(dto.getGender());
+        if (dto.getName() != null) user.setName(dto.getName());
+        if (dto.getEmail() != null) user.setEmail(dto.getEmail());
+        if (dto.getPhone() != null) user.setPhone(dto.getPhone());
+        if (dto.getGender() != null) user.setGender(dto.getGender());
 
-    if (dto.getAddress() != null) {
-        if (user.getAddress() == null) user.setAddress(new Address());
-        Address address = user.getAddress();
-        if (dto.getAddress().getStreet() != null) address.setStreet(dto.getAddress().getStreet());
+        if (dto.getAddress() != null) {
+            if (user.getAddress() == null) user.setAddress(new Address());
+            Address address = user.getAddress();
+            if (dto.getAddress().getStreet() != null) address.setStreet(dto.getAddress().getStreet());
+        }
     }
-}
 
     private UserStatsDTO toStatsDTO(User user) {
         UserStatsDTO dto = new UserStatsDTO();
