@@ -10,40 +10,47 @@ import java.util.List;
 
 @Service
 public class EligibilityQuestionnaireService {
+    private final EligibilityQuestionnaireRepository questionnaireRepository;
 
     @Autowired
-    private EligibilityQuestionnaireRepository repository;
+    public EligibilityQuestionnaireService(EligibilityQuestionnaireRepository questionnaireRepository) {
+        this.questionnaireRepository = questionnaireRepository;
+    }
 
-    public EligibilityQuestionnaire saveQuestionnaire(String userId, EligibilityQuestionnaireDTO dto) {
-        EligibilityQuestionnaire questionnaire = new EligibilityQuestionnaire();
+    public EligibilityQuestionnaire saveQuestionnaire(EligibilityQuestionnaireDTO dto) {
+        EligibilityQuestionnaire questionnaire = questionnaireRepository
+                .findByUserId(dto.getUserId())
+                .stream()
+                .findFirst()
+                .orElse(new EligibilityQuestionnaire());
 
-        questionnaire.setUserId(userId);
-        questionnaire.setSexo(dto.getSexo());
-        questionnaire.setIdade(dto.getIdade());
-        questionnaire.setDoacaoAntesDos60(dto.getDoacaoAntesDos60());
-        questionnaire.setPeso(dto.getPeso());
-        questionnaire.setSaudavel(dto.getSaudavel());
-        questionnaire.setGravida(dto.getGravida());
-        questionnaire.setPartoRecente(dto.getPartoRecente());
-        questionnaire.setSintomas(dto.getSintomas());
-        questionnaire.setDoencas(dto.getDoencas());
-        questionnaire.setMedicamentos(dto.getMedicamentos());
-        questionnaire.setProcedimentos(dto.getProcedimentos());
-        questionnaire.setDrogas(dto.getDrogas());
-        questionnaire.setParceiros(dto.getParceiros());
-        questionnaire.setTatuagem(dto.getTatuagem());
-        questionnaire.setHomemUltimaDoacao(dto.getHomemUltimaDoacao());
-        questionnaire.setMulherUltimaDoacao(dto.getMulherUltimaDoacao());
-        questionnaire.setVacinaCovid(dto.getVacinaCovid());
-        questionnaire.setVacinaFebre(dto.getVacinaFebre());
-        questionnaire.setViagemRisco(dto.getViagemRisco());
+        questionnaire.setUserId(dto.getUserId());
+        questionnaire.setGender(dto.getGender());
+        questionnaire.setAge(dto.getAge());
+        questionnaire.setDonationBefore60(dto.getDonationBefore60());
+        questionnaire.setWeight(dto.getWeight());
+        questionnaire.setHealthy(dto.getHealthy());
+        questionnaire.setPregnant(dto.getPregnant());
+        questionnaire.setRecentChildbirth(dto.getRecentChildbirth());
+        questionnaire.setSymptoms(dto.getSymptoms());
+        questionnaire.setDiseases(dto.getDiseases());
+        questionnaire.setMedications(dto.getMedications());
+        questionnaire.setProcedures(dto.getProcedures());
+        questionnaire.setDrugs(dto.getDrugs());
+        questionnaire.setSexualPartners(dto.getSexualPartners());
+        questionnaire.setTattoo(dto.getTattoo());
+        questionnaire.setLastDonationMale(dto.getLastDonationMale());
+        questionnaire.setLastDonationFemale(dto.getLastDonationFemale());
+        questionnaire.setCovidVaccine(dto.getCovidVaccine());
+        questionnaire.setYellowFeverVaccine(dto.getYellowFeverVaccine());
+        questionnaire.setRiskTravel(dto.getRiskTravel());
         questionnaire.setEligible(dto.isEligible());
         questionnaire.setResultMessage(dto.getResultMessage());
 
-        return repository.save(questionnaire);
+        return questionnaireRepository.save(questionnaire);
     }
 
     public List<EligibilityQuestionnaire> getAllByUser(String userId) {
-        return repository.findByUserId(userId);
+        return questionnaireRepository.findByUserId(userId);
     }
 }

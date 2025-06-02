@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface EligibilityQuestionnaireRepository extends MongoRepository<EligibilityQuestionnaire, String> {
-
     List<EligibilityQuestionnaire> findByUserId(String userId);
 
     @Query("{ 'isEligible': true }")

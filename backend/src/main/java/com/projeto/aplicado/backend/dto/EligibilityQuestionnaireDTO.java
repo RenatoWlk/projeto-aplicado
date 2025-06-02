@@ -2,29 +2,29 @@ package com.projeto.aplicado.backend.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+
 @Getter @Setter
 public class EligibilityQuestionnaireDTO {
     private String userId;
-    private String sexo;
-    private String idade;
-    private String doacaoAntesDos60;
-    private String peso;
-    private String saudavel;
-    private String gravida;
-    private String partoRecente;
-    private String sintomas;
-    private String doencas;
-    private String medicamentos;
-    private String procedimentos;
-    private String drogas;
-    private String parceiros;
-    private String tatuagem;
-    private String homemUltimaDoacao;
-    private String mulherUltimaDoacao;
-    private String vacinaCovid;
-    private String vacinaFebre;
-    private String viagemRisco;
+    private String gender;
+    private String age;
+    private String donationBefore60;
+    private String weight;
+    private String healthy;
+    private String pregnant;
+    private String recentChildbirth;
+    private String symptoms;
+    private String diseases;
+    private String medications;
+    private String procedures;
+    private String drugs;
+    private String sexualPartners;
+    private String tattoo;
+    private String lastDonationMale;
+    private String lastDonationFemale;
+    private String covidVaccine;
+    private String yellowFeverVaccine;
+    private String riskTravel;
     private boolean isEligible;
     private String resultMessage;
-    
 }

@@ -23,8 +23,8 @@ public class OfferService {
      * @param dto the offer DTO containing offer details
      * @return the created offer DTO
      */
-    public OfferDTO create(OfferDTO dto, String partnerEmail) {
-        var partner = partnerRepository.findByEmail(partnerEmail)
+    public OfferDTO create(OfferDTO dto) {
+        var partner = partnerRepository.findByEmail(dto.getPartnerEmail())
                 .orElseThrow(() -> new RuntimeException("Partner name not found"));
 
         Offer offer = new Offer();
@@ -33,7 +33,6 @@ public class OfferService {
         offer.setValidUntil(dto.getValidUntil());
         offer.setDiscountPercentage(dto.getDiscountPercentage());
 
-        // Add offer to partner
         partner.getOffers().add(offer);
         partnerRepository.save(partner);
 

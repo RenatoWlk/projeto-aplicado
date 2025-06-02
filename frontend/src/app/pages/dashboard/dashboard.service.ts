@@ -54,6 +54,15 @@ export interface Bloodbank {
     distance: number;
 }
 
+export interface NewOffer {
+    partnerEmail: string;
+    partnerName: string;
+    title: string;
+    body: string;
+    validUntil: Date;
+    discountPercentage: number;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -76,8 +85,9 @@ export class DashboardService {
         return this.http.get<UserStats>(`/api/users/${userId}/stats`);
     }
 
-    createOffer(offer: Offer): Observable<Offer> {
-        const data = {offer, partnerEmail: this.auth.getCurrentUserEmail()};
-        return this.http.post<Offer>(DashboardConstants.CREATE_OFFER_ENDPOINT, data);
+    createOffer(offer: NewOffer): Observable<NewOffer> {
+        offer.partnerEmail = this.auth.getCurrentUserEmail();
+        offer.partnerName = this.auth.getCurrentUserName();
+        return this.http.post<NewOffer>(DashboardConstants.CREATE_OFFER_ENDPOINT, offer);
     }
 }

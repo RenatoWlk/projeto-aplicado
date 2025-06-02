@@ -63,8 +63,8 @@ public class DashboardContentController {
      * @return the new offer created
      */
     @PostMapping("/offer/create")
-    public ResponseEntity<OfferDTO> createOffer(OfferDTO offerDTO, String partnerName) {
-        return ResponseEntity.ok(offerService.create(offerDTO, partnerName));
+    public ResponseEntity<OfferDTO> createOffer(@RequestBody OfferDTO offerDTO) {
+        return ResponseEntity.ok(offerService.create(offerDTO));
     }
 
     /**

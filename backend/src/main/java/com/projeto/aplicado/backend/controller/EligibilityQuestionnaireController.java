@@ -10,20 +10,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/questionnaire")
-@CrossOrigin(origins = "*")
 public class EligibilityQuestionnaireController {
-
-    @Autowired
-    private EligibilityQuestionnaireService service;
+    private EligibilityQuestionnaireService questionnaireService;
 
     @PostMapping
-    public EligibilityQuestionnaire submitQuestionnaire(
-        @RequestBody EligibilityQuestionnaireDTO dto) {
-        return service.saveQuestionnaire(userId, dto);
+    public EligibilityQuestionnaire submitQuestionnaire(@RequestBody EligibilityQuestionnaireDTO dto) {
+        return questionnaireService.saveQuestionnaire(dto);
     }
 
     @GetMapping("/{userId}")
     public List<EligibilityQuestionnaire> getUserQuestionnaires(@PathVariable String userId) {
-        return service.getAllByUser(userId);
+        return questionnaireService.getAllByUser(userId);
     }
 }

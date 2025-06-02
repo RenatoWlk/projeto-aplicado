@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class OfferDTO {
+    private String partnerEmail;
     private String partnerName;
     private String title;
     private String body;

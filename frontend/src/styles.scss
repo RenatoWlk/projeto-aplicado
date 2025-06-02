@@ -64,9 +64,19 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 24px;
 }
 
-.cards-grid-overflow {
+.cards-grid-overflow-large {
+  max-height: 330px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.cards-grid-overflow-medium {
   max-height: 280px;
   overflow-y: auto;
+  scroll-behavior: smooth;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
   margin-bottom: 1rem;
