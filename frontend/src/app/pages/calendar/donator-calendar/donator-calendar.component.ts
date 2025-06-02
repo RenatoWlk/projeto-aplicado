@@ -9,16 +9,15 @@ import { BloodBank, DonationDate, DonationService } from './donator-calendar.ser
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FormControl, FormGroup, RangeValueAccessor, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, RangeValueAccessor, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatInputModule } from '@angular/material/input';
-import { DonationSlots } from '../bloodbank-calendar/bloodbank-calendar.service';
-import { DatasetController } from 'chart.js';
+
 
 @Component({
   selector: 'app-donator-calendar',
   standalone: true,
-  imports: [MatDatepickerModule, MatCardModule, CommonModule, MatFormFieldModule, MatSelectModule, MatTimepickerModule, MatInputModule],
+  imports: [MatDatepickerModule, MatCardModule, CommonModule, MatFormFieldModule, MatSelectModule, MatTimepickerModule, MatInputModule, FormsModule, ReactiveFormsModule],
   templateUrl: './donator-calendar.component.html',
   styleUrl: './donator-calendar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,10 +39,11 @@ export class DonatorCalendarComponent implements OnInit{
 
   }
 
-  form = new FormGroup({
+  scheduleForm = new FormGroup({
     availableBloodBanks: new FormControl('', Validators.required),
     donationTime: new FormControl('', Validators.required),
     selectedDate: new FormControl('', Validators.required),
+    scheduleForm: new FormControl('', Validators.required),
   })
 
   availableDonationHours: string[] = [];
@@ -132,10 +132,10 @@ export class DonatorCalendarComponent implements OnInit{
   }
 
   scheduleDonation() {
-    const selectedDate = this.form.get('selectedDate')?.value;
-    const selectedHour = this.form.get('donationTime')?.value;
+    const selectedDate = this.scheduleForm.get('selectedDate')?.value; 
+    const selectedHour = this.scheduleForm.get('donationTime')?.value;
 
-    if (!selectedDate || !selectedHour)  {
+    if (!selectedDate || !selectedHour)  { //ele cai aqui por que o selectDate e o selectHour tao vindo vazios
       console.log("primerio if");
       console.log("data", selectedDate);
       console.log("hora", selectedHour);
@@ -147,14 +147,18 @@ export class DonatorCalendarComponent implements OnInit{
     appointmentDate.setHours(hour, minute, 0, 0);
 
     const appointment: DonationDate = {
-      id: this.authService.getCurrentUserId(),
+      userId: this.authService.getCurrentUserId(),
+      bloodBankId: this.selectedBloodBankId,
       date: appointmentDate.toISOString(),
+      hour: appointmentDate.toString().substring(16, 24),
     };
 
     this.donationService.scheduleDonation(appointment).subscribe({
       next: () => console.log(appointment),
       error: (err) => {console.error(err);}
     });
+    console.log("data", selectedDate);
+    console.log("hora", selectedHour);
     console.log(appointment);
   }
 

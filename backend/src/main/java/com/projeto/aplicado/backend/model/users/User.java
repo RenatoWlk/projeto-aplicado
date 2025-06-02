@@ -1,5 +1,7 @@
 package com.projeto.aplicado.backend.model.users;
 
+import com.projeto.aplicado.backend.model.DonationAppointment;
+import com.projeto.aplicado.backend.model.ScheduledDonation;
 import com.projeto.aplicado.backend.model.achievement.UnlockedAchievement;
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import lombok.AllArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "users")
@@ -25,4 +28,5 @@ public class User extends UserBase {
     private LocalDate lastDonationDate;
     private List<UnlockedAchievement> unlockedAchievements; // IDs and unlocked date of achievements
     private int totalPoints;
+    private List<ScheduledDonation> scheduledDonations;
 }

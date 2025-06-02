@@ -12,8 +12,10 @@ export interface BloodBank {
 }
 
 export interface DonationDate {
-    id: string;
+    userId: string;
+    bloodBankId: string | null;
     date: string;
+    hour: string; 
 }
 
 @Injectable({

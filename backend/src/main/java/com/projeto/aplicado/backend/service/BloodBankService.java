@@ -6,6 +6,7 @@ import com.projeto.aplicado.backend.dto.DonationScheduleDTO;
 import com.projeto.aplicado.backend.dto.bloodbank.*;
 import com.projeto.aplicado.backend.model.Campaign;
 import com.projeto.aplicado.backend.model.DonationAppointment;
+import com.projeto.aplicado.backend.model.ScheduledDonation;
 import com.projeto.aplicado.backend.model.enums.BloodType;
 import com.projeto.aplicado.backend.model.enums.Role;
 import com.projeto.aplicado.backend.model.users.BloodBank;
@@ -30,7 +31,6 @@ public class BloodBankService {
     private final UserRepository userRepository;
     private final GeolocationService geolocationService;
     private final PasswordEncoder passwordEncoder;
-    private final DonationAppointmentRepository donationAppointmentRepository;
 
     /**
      * Creates a new blood bank with default values and saves it to the database.
@@ -340,33 +340,35 @@ public class BloodBankService {
      * @param dto the donation scheduling request DTO
      * @throws RuntimeException if user or blood bank is not found
      */
-    @Transactional
     public void scheduleDonation(DonationScheduleDTO dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        System.out.println(dto.getBloodBankId());
+        BloodBank bloodBank = bloodBankRepository.findBloodBankById(dto.getBloodBankId())
+                .orElseThrow(() -> new RuntimeException("Banco de sangue não encontrado"));
+
         DonationAppointment appointment = new DonationAppointment();
-        appointment.setUserId(dto.getUserId());
-        appointment.setBloodBankId(dto.getBloodBankId());
-        appointment.setDateTime(dto.getDateTime());
-        donationAppointmentRepository.save(appointment);
+        appointment.setUserId(user.getId());
+        appointment.setBloodBankId(bloodBank.getId());
+        appointment.setDate(dto.getDate());
+        appointment.setHour(dto.getHour());
 
-        Optional<User> optionalUser = userRepository.findById(dto.getUserId());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setLastDonationDate(dto.getDateTime().toLocalDate());
-            userRepository.save(user);
-        } else {
-            throw new RuntimeException("Usuário não encotnrado");
-        }
+        ScheduledDonation sd = new ScheduledDonation();
+        sd.setBloodBankId(bloodBank.getId());
+        sd.setDate(dto.getDate());
+        sd.setHour(dto.getHour());
 
-        Optional<BloodBank> optionalBloodBank = bloodBankRepository.findById(dto.getBloodBankId());
-        if (optionalBloodBank.isPresent()) {
-            BloodBank bank = optionalBloodBank.get();
+        List<ScheduledDonation> scheduledDonations = user.getScheduledDonations();
+        scheduledDonations.add(sd);
 
-            bank.setScheduledDonations(bank.getScheduledDonations() + 1);
+        user.setScheduledDonations(scheduledDonations);
 
-            bloodBankRepository.save(bank);
-        } else {
-            throw new RuntimeException("Banco de sangue não encotrnado");
-        }
+        user.setLastDonationDate(dto.getDate());
+        userRepository.save(user);
+
+        bloodBank.setScheduledDonations(bloodBank.getScheduledDonations() + 1); //Ele tem que adicionar aqui
+        bloodBankRepository.save(bloodBank);
 
     }
 

@@ -9,9 +9,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data @NoArgsConstructor @AllArgsConstructor
-public class DonationAppointment {
+public class ScheduledDonation {
 
-    private String userId;
     private String bloodBankId;
     private LocalDate date;
     private LocalTime hour;
