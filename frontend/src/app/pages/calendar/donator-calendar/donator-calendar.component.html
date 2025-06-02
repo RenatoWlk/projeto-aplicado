@@ -1,3 +1,5 @@
+<app-notification-banner></app-notification-banner>
+
 <div>
   <div class="calendar-layout">
     <div class="app-card schedule-card">
@@ -5,7 +7,7 @@
             <i class="fa-solid fa-calendar-days app-card-icon"></i>
             <h2 class="app-card-title">Agende sua doação!</h2>
         </div>
-        <form [formGroup]="scheduleForm" (ngSubmit)="scheduleDonation" style="margin-top:50px">
+        <form [formGroup]="scheduleForm" (ngSubmit)="scheduleDonation()" style="margin-top:50px">
             <!-- Select bloodbank -->
             <div class="form-body">
                 <mat-form-field appearance="outline" class="custom-form-field select full-width">

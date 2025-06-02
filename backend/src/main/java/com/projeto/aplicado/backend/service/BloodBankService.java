@@ -397,12 +397,10 @@ public class BloodBankService {
         return bloodBankRepository.findAvailableHoursOnly();
     }
 
-<<<<<<< HEAD
     public BloodBank findEntityById(String id) {
         return bloodBankRepository.findById(id).orElse(null);
     }
-}
-=======
+
     /**
      * Updates an existing blood bank's information.
      *
@@ -424,4 +422,3 @@ public class BloodBankService {
         return toResponseDTO(bloodBank);
         }
     }
->>>>>>> 507bdf98e37c234fc7b25dc02ecb99242960368b

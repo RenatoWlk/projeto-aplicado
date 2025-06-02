@@ -8,21 +8,17 @@ import { BloodBank, DonationDate, DonationService } from './donator-calendar.ser
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FormControl, FormGroup, FormsModule, RangeValueAccessor, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatInputModule } from '@angular/material/input';
-import { DashboardService } from '../../dashboard/dashboard.service';
 import { UserStats } from '../../dashboard/dashboard.service';
-import { RouterStateSnapshot } from '@angular/router';
 import { NotificationBannerService } from '../../../shared/notification-banner/notification-banner.service';
-import { NotificationBannerComponent } from '../../../shared/notification-banner/notification-banner.component';
-
+import { NotificationBannerComponent } from "../../../shared/notification-banner/notification-banner.component";
 
 @Component({
   selector: 'app-donator-calendar',
   standalone: true,
-  imports: [MatDatepickerModule, MatCardModule, CommonModule, MatFormFieldModule, MatSelectModule, MatTimepickerModule, MatInputModule, FormsModule, ReactiveFormsModule,
-  ],
+  imports: [MatDatepickerModule, MatCardModule, CommonModule, MatFormFieldModule, MatSelectModule, MatTimepickerModule, MatInputModule, FormsModule, ReactiveFormsModule, NotificationBannerComponent],
   templateUrl: './donator-calendar.component.html',
   styleUrl: './donator-calendar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
