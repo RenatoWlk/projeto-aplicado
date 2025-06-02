@@ -18,17 +18,21 @@
       aria-required="true"
     />
     <div *ngIf="hasError('discountPercentage')" role="alert">Desconto precisa ser entre 1 e 100.</div>
+
+    <label for="validUntil">Data de Término</label>
+    <input id="validUntil" class="date-picker" type="date" formControlName="validUntil" aria-required="true" />
+    <div *ngIf="hasError('validUntil')" role="alert">Data de término é obrigatória.</div>
   </div>
 
   <ng-container *ngIf="isPost">
     <label for="startDate">Data de Início</label>
     <input id="startDate" class="date-picker" type="date" formControlName="startDate" aria-required="true" />
     <div *ngIf="hasError('startDate')" role="alert">Data de início é obrigatória.</div>
-  </ng-container>
 
-  <label for="endDate">Data de Término</label>
-  <input id="endDate" class="date-picker" type="date" formControlName="endDate" aria-required="true" />
-  <div *ngIf="hasError('endDate')" role="alert">Data de término é obrigatória.</div>
+    <label for="endDate">Data de Término</label>
+    <input id="endDate" class="date-picker" type="date" formControlName="endDate" aria-required="true" />
+    <div *ngIf="hasError('endDate')" role="alert">Data de término é obrigatória.</div>
+  </ng-container>
 
   <button type="submit" class="app-button" [disabled]="form.invalid">Criar</button>
 </form>

@@ -34,31 +34,40 @@ export class FormCreateItemComponent implements OnInit, OnChanges {
       title: ['', Validators.required],
       body: ['', Validators.required],
       startDate: [''],
-      endDate: ['', Validators.required],
+      endDate: [''],
+      validUntil: [''],
       discountPercentage: [0]
     });
   }
 
   private updateValidators(): void {
     const discountControl = this.form.get('discountPercentage');
+    const validUntil = this.form.get('validUntil');
     const startControl = this.form.get('startDate');
+    const endControl = this.form.get('endDate');
 
-    if (!discountControl || !startControl) return;
+    if (!discountControl || !startControl || !validUntil || !endControl) return;
 
     if (this.isOffer) {
       discountControl.setValidators([Validators.min(1), Validators.max(100)]);
+      validUntil.setValidators([Validators.required]);
     } else {
       discountControl.clearValidators();
+      validUntil.clearValidators();
     }
 
     if (this.isPost) {
       startControl.setValidators([Validators.required]);
+      endControl.setValidators([Validators.required])
     } else {
       startControl.clearValidators();
+      endControl.clearValidators();
     }
 
     discountControl.updateValueAndValidity();
+    validUntil.updateValueAndValidity();
     startControl.updateValueAndValidity();
+    endControl.updateValueAndValidity();
   }
 
   get isOffer(): boolean {
