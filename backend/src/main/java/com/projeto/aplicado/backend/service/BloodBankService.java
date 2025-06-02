@@ -168,7 +168,7 @@ public class BloodBankService {
         double userLat = userCoordinates[0];
         double userLon = userCoordinates[1];
 
-        final double MAX_DISTANCE_KM = 40.0;
+        final double MAX_DISTANCE_KM = 80.0;
 
         return bloodBankRepository.findAllBloodBanks().stream().map(bloodBank -> {
             BloodBankNearbyDTO dto = toNearbyDTO(bloodBank, 0.0);

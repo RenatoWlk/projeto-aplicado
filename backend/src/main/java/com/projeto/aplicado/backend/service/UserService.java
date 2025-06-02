@@ -25,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final AchievementService achievementService;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
     private final GeolocationService geolocationService;
 
     // Diretório para upload de fotos
