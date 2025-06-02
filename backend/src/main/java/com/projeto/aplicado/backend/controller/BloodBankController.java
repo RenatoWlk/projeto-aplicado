@@ -139,4 +139,11 @@ public class BloodBankController {
         bloodBankService.scheduleDonation(scheduleDTO);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BloodBankResponseDTO> updateBloodBank(
+            @PathVariable String id,
+            @RequestBody BloodBankRequestDTO dto) {
+        return ResponseEntity.ok(bloodBankService.update(id, dto));
+    }
 }
