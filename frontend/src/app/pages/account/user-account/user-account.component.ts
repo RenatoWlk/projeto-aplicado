@@ -219,26 +219,22 @@ export class UserAccountComponent implements OnInit {
   }
 
   onPhotoSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
+  const file = (event.target as HTMLInputElement).files?.[0];
 
-    const file = input.files[0];
-    this.isLoading = true;
+  if (file) {
+    const reader = new FileReader();
 
-    this.userService.uploadPhoto(file).subscribe({
-      next: (photoUrl) => {
-        if (this.user) {
-          this.user.photoUrl = photoUrl;
-        }
-        this.successMessage = 'Photo updated successfully';
-        this.isLoading = false;
-      },
-      error: () => {
-        this.error = 'Failed to upload photo';
-        this.isLoading = false;
+    reader.onload = () => {
+      if (this.user) {
+        this.user.photoUrl = reader.result as string;
       }
-    });
+    };
+
+    reader.readAsDataURL(file); // Lê a imagem como Base64
   }
+}
+
+
 
   calculateDaysSinceLastDonation(): number | null {
     return null;

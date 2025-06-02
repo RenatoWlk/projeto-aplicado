@@ -14,7 +14,7 @@ export interface User {
   bloodType: string;
   address?: Address;
   achievements?: Achievement[];
-  photoUrl: string;
+  photoUrl: string | null;
   lastDonation: string;
   nextEligibleDonation: string;
 }
