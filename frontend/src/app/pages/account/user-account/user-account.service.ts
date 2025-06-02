@@ -19,6 +19,32 @@ export interface User {
   nextEligibleDonation: string;
 }
 
+export interface EligibilityQuestionnaireDTO {
+  userId: string;
+  gender: string;
+  age: string;
+  donationBefore60: string;
+  weight: string;
+  healthy: string;
+  pregnant?: string;
+  recentChildbirth?: string;
+  symptoms: string;
+  diseases: string;
+  medications: string;
+  procedures: string;
+  drugs: string;
+  partner: string;
+  tattooOrPiercing: string;
+  lastDonationMale?: string;
+  lastDonationFemale?: string;
+  covidVaccine: string;
+  yellowFeverVaccine: string;
+  travelRiskArea: string;
+  isEligible: boolean;
+  resultMessage: string;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,6 +62,12 @@ export class UserAccountService {
     const id = this.authService.getCurrentUserId();
     return this.http.put<User>(`${this.API}/${id}`, user);
   }
+
+  getQuestionnairesByUser(): Observable<EligibilityQuestionnaireDTO[]> {
+    const userId = this.authService.getCurrentUserId();
+    return this.http.get<EligibilityQuestionnaireDTO[]>(`/api/questionnaire/${userId}`);
+  }
+
 
   changePassword(userId: string, password: string): Observable<any> {
     return new Observable<any>;

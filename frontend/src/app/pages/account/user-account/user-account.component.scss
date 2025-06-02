@@ -358,64 +358,528 @@ form {
 }
 
 
-// === QUESTIONNAIRES PAGE ===
+// === QUESTIONNAIRES PAGE STYLES ===
 .questionnaires-page {
-  .questionnaire-content {
-    .questionnaire-header {
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background: #f8f9fa;
-      border-radius: 8px;
-      border-left: 4px solid #b71c1c;
+  max-width: 1000px;
+  margin: 0 auto;
 
-      p {
-        margin: 0;
-        font-size: 1.1rem;
-        color: #333;
+  .questionnaire-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  // === ELIGIBILITY BANNER ===
+  .eligibility-banner {
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 6px solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    &.eligible {
+      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      border-color: #4caf50;
+      color: #2e7d32;
+
+      i {
+        color: #4caf50;
+        font-size: 2rem;
       }
     }
 
-    .questionnaire-answers {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    &.not-eligible {
+      background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+      border-color: #f44336;
+      color: #c62828;
 
-      .answer-item {
+      i {
+        color: #f44336;
+        font-size: 2rem;
+      }
+    }
+
+    .banner-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
+
+      .banner-text {
+        h3 {
+          margin: 0 0 0.5rem 0;
+          font-size: 1.3rem;
+          font-weight: 700;
+        }
+
+        p {
+          margin: 0;
+          font-size: 1rem;
+          opacity: 0.9;
+        }
+      }
+    }
+
+    .banner-date {
+      text-align: right;
+      
+      small {
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  // === QUESTIONNAIRE SECTIONS ===
+  .questionnaire-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+
+    h4 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0 0 1.5rem 0;
+      color: #b71c1c;
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid rgba(183, 28, 28, 0.1);
+
+      i {
+        color: #b71c1c;
+        font-size: 1.1rem;
+        padding: 0.5rem;
+        background: rgba(183, 28, 28, 0.1);
+        border-radius: 50%;
+      }
+    }
+
+    // Info Grid for basic information
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #b71c1c;
+
+        .label {
+          font-weight: 600;
+          color: #666;
+          font-size: 0.9rem;
+        }
+
+        .value {
+          font-weight: 700;
+          color: #333;
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    // Questions List
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .question-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        margin-bottom: 1rem;
-        background: #fff;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        border-left: 4px solid #e0e0e0;
+        border: 2px solid;
+        transition: all 0.3s ease;
 
-        .question {
+        &.positive {
+          background: #e8f5e8;
+          border-color: #4caf50;
+          
+          .answer-badge {
+            background: #4caf50;
+            color: white;
+          }
+        }
+
+        &.negative {
+          background: #ffebee;
+          border-color: #f44336;
+          
+          .answer-badge {
+            background: #f44336;
+            color: white;
+          }
+        }
+
+        &.neutral {
+          background: #f8f9fa;
+          border-color: #e0e0e0;
+          
+          .answer-badge {
+            background: #757575;
+            color: white;
+          }
+        }
+
+        .question-text {
           flex: 1;
           font-weight: 500;
           color: #333;
           margin-right: 1rem;
+          line-height: 1.4;
         }
 
-        .answer {
+        .answer-badge {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          font-weight: 600;
           padding: 0.5rem 1rem;
           border-radius: 20px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          min-width: 80px;
+          justify-content: center;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-          &.answer-yes {
-            background: #e8f5e8;
-            color: #2e7d32;
-          }
-
-          &.answer-no {
-            background: #ffebee;
-            color: #d32f2f;
+          i {
+            font-size: 0.9rem;
           }
         }
+      }
+    }
+  }
+
+  // === ELIGIBILITY ACTIONS ===
+  .eligibility-actions {
+    margin-top: 2rem;
+
+    .action-card {
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+      &.eligible-card {
+        background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+        border: 2px solid #4caf50;
+
+        i {
+          font-size: 3rem;
+          color: #4caf50;
+          margin-bottom: 1rem;
+        }
+
+        h4 {
+          color: #2e7d32;
+          margin-bottom: 1rem;
+          border: none;
+          padding: 0;
+        }
+
+        p {
+          color: #2e7d32;
+          margin-bottom: 1.5rem;
+          font-size: 1.1rem;
+        }
+      }
+
+      &.not-eligible-card {
+        background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+        border: 2px solid #f44336;
+
+        i {
+          font-size: 3rem;
+          color: #f44336;
+          margin-bottom: 1rem;
+        }
+
+        h4 {
+          color: #c62828;
+          margin-bottom: 1rem;
+          border: none;
+          padding: 0;
+        }
+
+        p {
+          color: #c62828;
+          margin-bottom: 1.5rem;
+          font-size: 1.1rem;
+        }
+
+        .recommendation {
+          text-align: left;
+          margin: 1.5rem 0;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.7);
+          border-radius: 8px;
+
+          h5 {
+            color: #c62828;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+          }
+
+          ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            color: #666;
+
+            li {
+              margin-bottom: 0.5rem;
+              line-height: 1.4;
+            }
+          }
+        .action-buttons {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+      }
+    }
+
+    .action-button {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+      &.primary {
+        background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+        color: white;
+
+        &:hover {
+          background: linear-gradient(135deg, #43a047 0%, #5cb85c 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+      }
+
+      &.secondary {
+        background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+        color: white;
+
+        &:hover {
+          background: linear-gradient(135deg, #f57c00 0%, #ff9800 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+      }
+    }
+  }
+
+  // === QUESTIONNAIRE FOOTER ===
+  .questionnaire-footer {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+
+    .footer-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .info-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+        border-left: 4px solid #b71c1c;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+        &.apto {
+          border-color: #4caf50;
+          
+          i {
+            color: #4caf50;
+          }
+        }
+
+        &.não.apto {
+          border-color: #f44336;
+          
+          i {
+            color: #f44336;
+          }
+        }
+
+        i {
+          font-size: 1.5rem;
+          color: #b71c1c;
+        }
+
+        div {
+          strong {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+          }
+
+          span {
+            color: #666;
+            font-size: 0.95rem;
+          }
+        }
+      }
+    }
+
+    .validity-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+      border-radius: 8px;
+      border-left: 4px solid #ff9800;
+
+      i {
+        color: #ff9800;
+        font-size: 1.2rem;
+        margin-top: 0.1rem;
+      }
+
+      p {
+        margin: 0;
+        color: #e65100;
+        line-height: 1.5;
+
+        strong {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  }
+
+  .back-button {
+    margin-top: 2rem;
+    align-self: flex-start;
+  }
+}
+
+// === RESPONSIVE DESIGN ===
+@media (max-width: 768px) {
+  .questionnaires-page {
+    .eligibility-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+
+      .banner-content {
+        width: 100%;
+      }
+
+      .banner-date {
+        align-self: flex-end;
+      }
+    }
+
+    .questionnaire-section {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .questions-list .question-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+
+        .question-text {
+          margin-right: 0;
+        }
+
+        .answer-badge {
+          align-self: center;
+        }
+      }
+    }
+
+    .eligibility-actions .action-card {
+      padding: 1.5rem;
+
+      .recommendation {
+        margin: 1rem 0;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    .questionnaire-footer {
+       .validity-notice {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .questionnaires-page {
+    .questionnaire-section {
+      padding: 1rem;
+
+      h4 {
+        font-size: 1.1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+
+    .eligibility-actions .action-card {
+      padding: 1rem;
+
+      i {
+        font-size: 2rem !important;
+      }
+
+      h4 {
+        font-size: 1.1rem;
+      }
+
+      .action-button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    .questionnaire-footer {
+      padding: 1rem;
+
+      .footer-info .info-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
       }
     }
   }

@@ -37,20 +37,26 @@ public class EligibilityQuestionnaireService {
         questionnaire.setMedications(dto.getMedications());
         questionnaire.setProcedures(dto.getProcedures());
         questionnaire.setDrugs(dto.getDrugs());
-        questionnaire.setSexualPartners(dto.getSexualPartners());
-        questionnaire.setTattoo(dto.getTattoo());
+        questionnaire.setPartners(dto.getPartners());
+        questionnaire.setTattooOrPiercing(dto.getTattooOrPiercing());
         questionnaire.setLastDonationMale(dto.getLastDonationMale());
         questionnaire.setLastDonationFemale(dto.getLastDonationFemale());
         questionnaire.setCovidVaccine(dto.getCovidVaccine());
         questionnaire.setYellowFeverVaccine(dto.getYellowFeverVaccine());
-        questionnaire.setRiskTravel(dto.getRiskTravel());
+        questionnaire.setTravelRiskArea(dto.getTravelRiskArea());
         questionnaire.setEligible(dto.isEligible());
         questionnaire.setResultMessage(dto.getResultMessage());
+
+        System.out.println("DTO recebido: " + dto);
 
         return questionnaireRepository.save(questionnaire);
     }
 
     public List<EligibilityQuestionnaire> getAllByUser(String userId) {
-        return questionnaireRepository.findByUserId(userId);
-    }
+    System.out.println("📥 [Service] Buscando questionários para usuário: " + userId);
+    List<EligibilityQuestionnaire> questionnaires = questionnaireRepository.findByUserId(userId);
+    System.out.println("📊 [Service] Total encontrado: " + questionnaires.size());
+    return questionnaires;
+}
+
 }
