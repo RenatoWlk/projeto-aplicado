@@ -1,49 +1,56 @@
-<div>
-  <div class="calendar-layout">
-    <div class="app-card">
+<div class="calendar-layout">
+    <div class="app-card schedule-card">
         <div class="app-card-header">
             <i class="fa-solid fa-calendar-days app-card-icon"></i>
             <h2 class="app-card-title">Agende sua doação!</h2>
         </div>
-        <form [formGroup]="scheduleForm">
-            <div>
-                <label>Selecione o banco de sangue disponível: </label>
-                <mat-form-field appearance="outline" class="custom-form-field select">
+
+        <form [formGroup]="scheduleForm" (ngSubmit)="scheduleDonation()" style="margin-top: 50px;">
+
+            <!-- Select blood bank -->
+            <div class="form-body">
+            <mat-form-field appearance="outline" class="custom-form-field select full-width">
+                <mat-label>Banco de sangue disponível</mat-label>
                 <mat-select formControlName="availableBloodBanks" required (selectionChange)="onBloodBankSelect($event.value)">
-                    <mat-option *ngFor="let bloodBank of availableBloodBanks" [value]="bloodBank.id"> {{bloodBank.name}} </mat-option>
+                    <mat-option *ngFor="let bloodBank of availableBloodBanks" [value]="bloodBank.id">
+                        {{ bloodBank.name }}
+                    </mat-option>
                 </mat-select>
-                </mat-form-field>
+            </mat-form-field>
             </div>
-            <div>
-            <div *ngIf="selectedBloodBankId">
-                <label>Selecione uma data disponível: </label>
-                <mat-form-field >
+
+            <!-- Select date -->
+            <div *ngIf="selectedBloodBankId" class="form-body">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Data disponível</mat-label>
                     <input matInput 
                         [matDatepicker]="datepicker" 
-                        (dateChange)="onDateSelected($event.value)"
                         [matDatepickerFilter]="availableDonationDates"
                         formControlName="selectedDate"
-                        >
+                        (dateChange)="onDateSelected($event.value)" />
                     <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
                     <mat-datepicker #datepicker [calendarHeaderComponent]="customHeader"></mat-datepicker>
                 </mat-form-field>
-                <br>
-                <label>Selecione um horário disponível: </label>
-                <mat-form-field *ngIf="availableDonationHours">
-                <mat-select formControlName="donationTime" placeholder="Selecione o horário">
-                    <mat-option *ngFor="let hour of availableDonationHours" [value]="hour">
-                    {{ hour }}
-                    </mat-option>
-                </mat-select>
+
+                <!-- Select time -->
+                <mat-form-field *ngIf="availableDonationHours" appearance="outline" class="full-width">
+                    <mat-label>Horário disponível</mat-label>
+                    <mat-select formControlName="donationTime">
+                        <mat-option *ngFor="let hour of availableDonationHours" [value]="hour">
+                            {{ hour }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
-            <div class="date-wrapper">
-            <button class="schedule-btn" (click)="scheduleDonation()">Agendar</button> <!--botao pra agendar-->
-            </div>
-            </div>
-        </form>
 
+            <!-- Submit -->
+            <div class="schedule-button-container">
+                <button type="submit" class="schedule-btn">Agendar doação</button>
+            </div>
+            
+        </form>
     </div>
+
 
     <div class="app-card">
     <div class="app-card-header">
@@ -77,5 +84,4 @@
             </div>
         </div>
     </div>
-  </div>
 </div>
