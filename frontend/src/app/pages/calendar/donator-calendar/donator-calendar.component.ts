@@ -145,8 +145,8 @@ export class DonatorCalendarComponent implements OnInit{
     this.donationService.scheduleDonation(appointment).subscribe({
       next: () => {
         this.visible = true;
-        console.log("Agendado")
-        this.notificationService.show('"Agendamento realizado com sucesso"', 'success', 3000);  
+        this.notificationService.show('"Agendamento realizado com sucesso"', 'success', 3000);
+        alert("Agendamento realizado com sucesso!");
       },
       error: (err) => {
         this.visible = true;

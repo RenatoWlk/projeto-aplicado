@@ -1,5 +1,6 @@
-<div *ngIf="visible" 
-     class="banner" 
-     [ngClass]="bannerClass">
+<div *ngIf="visible"
+     class="banner"
+     [ngClass]="bannerClass"
+     aria-live="polite">
   <strong>{{ type | uppercase }}</strong>: {{ message }}
 </div>

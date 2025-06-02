@@ -46,6 +46,6 @@ export class NotificationBannerComponent implements OnDestroy {
   }
 
   get bannerClass(): string {
-    return `banner-${this.type} ${this.fadingOut ? 'fade-out' : ''}`;
+    return `banner-${this.type} ${this.fadingOut ? 'fade-out' : 'fade-in'}`;
   }
 }

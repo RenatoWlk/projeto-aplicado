@@ -1,24 +1,25 @@
 .banner {
-    padding: 12px 16px;
-    margin: 10px 0;
-    border-radius: 8px;
-    color: white;
-    font-weight: 500;
-    font-family: 'Poppins', sans-serif;
-    opacity: 1;
-    transition: opacity 0.5 ease;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.5s ease-out;
+  opacity: 0;
 }
 
-.banner-sucess {
-    background-color: #4caf50;
+.banner-success {
+  background-color: #4caf50;
 }
 
 .banner-warning {
-    background-color: #ff9800;
+  background-color: #ff9800;
 }
 
 .banner-error {
-    background-color: #f44336;
+  background-color: #f44336;
 }
 
 .fade-in {
